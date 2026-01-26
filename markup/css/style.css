@@ -41,3 +41,27 @@
 }
 
 /* #endregion */
+
+/* #region Global */
+
+:root {
+  --text-primary-color: #ffffff;
+  --text-primary-color-70: rgba(255, 255, 255, 0.7);
+  --text-secondary-color: #687fad;
+  --text-additional-color: #212126;
+  --background-primary-color: #121213;
+  --background-secondary-color: #212126;
+  --background-additional-color: #f6f6f6;
+  --background-special-color-1: rgba(0, 46, 255, 0.4);
+  --background-special-color-2: rgba(255, 255, 255, 0.1);
+  --outline-color: #31353f;
+  --outline-color-strong: #979797;
+  --muted-color: #7c7c7c;
+  --muted-color-70: rgba(124, 124, 124, 0.7);
+  --accent-color: #ffe800;
+  --accent-color-70: rgba(255, 232, 0, 0.7);
+  --special-color-1: #7bc549;
+  --special-color-2: #8da5aa;
+}
+
+/* #endregion */
