@@ -83,6 +83,43 @@
 
 /* #endregion */
 
+/* #region button */
+
+.button {
+  display: inline-block;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-weight: 400;
+  transition: opacity 200ms linear;
+}
+
+.button:enabled {
+  cursor: pointer;
+}
+
+.button:enabled:hover {
+  opacity: 0.7;
+}
+
+.button--secondary {
+  border: 1px solid var(--outline-color);
+  color: inherit;
+  background: none;
+}
+
+/* sizes */
+
+.button--size_m {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.button--size_m.button--secondary {
+  padding: 19px;
+}
+
+/* #endregion */
+
 /* #region checker */
 
 .checker {
