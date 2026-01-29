@@ -24,6 +24,244 @@
     </header>
     <main>
       <h1 class="visually-hidden">CINEMADDICT &mdash; movie discovery, personal watchlist, and film discussions.</h1>
+      <section class="catalog">
+        <div class="catalog__container container">
+          <h2 class="visually-hidden">Movie library</h2>
+          <div class="catalog__filter-wrapper">
+            <form class="catalog__filter catalog-filter" action="https://echo.htmlacademy.ru/courses" method="get">
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="all" type="radio" checked>
+                <span class="checker__label">All movies</span>
+              </label>
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="to-watch" type="radio">
+                <span class="checker__label">
+                  Watchlist <span class="checker__counter">12</span>
+                </span>
+              </label>
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="watched" type="radio">
+                <span class="checker__label">
+                  History <span class="checker__counter">7</span>
+                </span>
+              </label>
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="favorite" type="radio">
+                <span class="checker__label">
+                  Favorites <span class="checker__counter">3</span>
+                </span>
+              </label>
+            </form>
+          </div>
+          <form class="catalog__sorting catalog-sorting" action="https://echo.htmlacademy.ru/courses" method="get">
+            <label class="checker checker--simple checker--size_m">
+              <input class="checker__control visually-hidden" name="criterion" value="default" type="radio" checked>
+              <span class="checker__label">Sort by default</span>
+            </label>
+            <label class="checker checker--simple checker--size_m">
+              <input class="checker__control visually-hidden" name="criterion" value="date" type="radio">
+              <span class="checker__label">Sort by date</span>
+            </label>
+            <label class="checker checker--simple checker--size_m">
+              <input class="checker__control visually-hidden" name="criterion" value="rating" type="radio">
+              <span class="checker__label">Sort by rating</span>
+            </label>
+          </form>
+          <ul class="catalog__list movies-list">
+            <li class="movies-list__item">
+              <article class="movie-card">
+                <div>
+                  <h3 class="movie-card__title">
+                    <a class="movie-card__link" href="#">The Dance of Life</a>
+                  </h3>
+                  <p class="movie-card__rating">
+                    <span class="visually-hidden">Rating:</span> 8.3
+                  </p>
+                </div>
+                <img class="movie-card__poster" src="images/posters/the-dance-of-life.jpg" width="232" height="342" alt="Poster." loading="lazy">
+                <dl class="movie-card__details">
+                  <dt class="visually-hidden">Release year:</dt>
+                  <dd class="movie-card__details-value">
+                    <time>1929</time>
+                  </dd>
+                  <dt class="visually-hidden">Duration:</dt>
+                  <dd class="movie-card__details-value">1h 55m</dd>
+                  <dt class="visually-hidden">Genre:</dt>
+                  <dd class="movie-card__details-value">Musical</dd>
+                </dl>
+                <p class="movie-card__description">
+                  Burlesque comic Ralph "Skid" Johnson (Skelly), and specialty dancer Bonny Lee King (Carroll), end up together on a cold, rainy night at a tr…
+                </p>
+                <p class="movie-card__comments-count">5 comments</p>
+                <div class="movie-card__actions">
+                  <button class="icon-button icon-button--icon_list-add icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Add to watchlist</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_checkmark icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Already watched</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_star icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Add to favorites</span>
+                  </button>
+                </div>
+              </article>
+            </li>
+            <li class="movies-list__item">
+              <article class="movie-card">
+                <div>
+                  <h3 class="movie-card__title">
+                    <a class="movie-card__link" href="#">Sagebrush Trail</a>
+                  </h3>
+                  <p class="movie-card__rating">
+                    <span class="visually-hidden">Rating:</span> 3.2
+                  </p>
+                </div>
+                <img class="movie-card__poster" src="images/posters/sagebrush-trail.jpg" width="232" height="342" alt="Poster." loading="lazy">
+                <dl class="movie-card__details">
+                  <dt class="visually-hidden">Release year:</dt>
+                  <dd class="movie-card__details-value">
+                    <time>1933</time>
+                  </dd>
+                  <dt class="visually-hidden">Duration:</dt>
+                  <dd class="movie-card__details-value">54m</dd>
+                  <dt class="visually-hidden">Genre:</dt>
+                  <dd class="movie-card__details-value">Western</dd>
+                </dl>
+                <p class="movie-card__description">
+                  Sentenced for a murder he did not commit, John Brant escapes from prison determined to find the real killer. By chance Brant's narrow escap…
+                </p>
+                <p class="movie-card__comments-count">89 comments</p>
+                <div class="movie-card__actions">
+                  <button class="icon-button icon-button--icon_list-add icon-button--compact" aria-pressed="true">
+                    <span class="icon-button__text">Add to watchlist</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_checkmark icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Already watched</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_star icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Add to favorites</span>
+                  </button>
+                </div>
+              </article>
+            </li>
+            <li class="movies-list__item">
+              <article class="movie-card">
+                <div>
+                  <h3 class="movie-card__title">
+                    <a class="movie-card__link" href="#">The Man with the Golden Arm</a>
+                  </h3>
+                  <p class="movie-card__rating">
+                    <span class="visually-hidden">Rating:</span> 9.0
+                  </p>
+                </div>
+                <img class="movie-card__poster" src="images/posters/the-man-with-the-golden-arm.jpg" width="232" height="342" alt="Poster." loading="lazy">
+                <dl class="movie-card__details">
+                  <dt class="visually-hidden">Release year:</dt>
+                  <dd class="movie-card__details-value">
+                    <time>1955</time>
+                  </dd>
+                  <dt class="visually-hidden">Duration:</dt>
+                  <dd class="movie-card__details-value">1h 59m</dd>
+                  <dt class="visually-hidden">Genre:</dt>
+                  <dd class="movie-card__details-value">Drama</dd>
+                </dl>
+                <p class="movie-card__description">
+                  Frankie Machine (Frank Sinatra) is released from the federal Narcotic Farm in Lexington, Kentucky with a set of drums and a new outlook on…
+                </p>
+                <p class="movie-card__comments-count">1 comment</p>
+                <div class="movie-card__actions">
+                  <button class="icon-button icon-button--icon_list-add icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Add to watchlist</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_checkmark icon-button--compact" aria-pressed="true">
+                    <span class="icon-button__text">Already watched</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_star icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Add to favorites</span>
+                  </button>
+                </div>
+              </article>
+            </li>
+            <li class="movies-list__item">
+              <article class="movie-card">
+                <div>
+                  <h3 class="movie-card__title">
+                    <a class="movie-card__link" href="#">Santa Claus Conquers the Martians</a>
+                  </h3>
+                  <p class="movie-card__rating">
+                    <span class="visually-hidden">Rating:</span> 2.3
+                  </p>
+                </div>
+                <img class="movie-card__poster" src="images/posters/santa-claus-conquers-the-martians.jpg" width="232" height="342" alt="Poster." loading="lazy">
+                <dl class="movie-card__details">
+                  <dt class="visually-hidden">Release year:</dt>
+                  <dd class="movie-card__details-value">
+                    <time>1964</time>
+                  </dd>
+                  <dt class="visually-hidden">Duration:</dt>
+                  <dd class="movie-card__details-value">1h 21m</dd>
+                  <dt class="visually-hidden">Genre:</dt>
+                  <dd class="movie-card__details-value">Comedy</dd>
+                </dl>
+                <p class="movie-card__description">
+                  The Martians Momar ("Mom Martian") and Kimar ("King Martian") are worried that their children Girmar ("Girl Martian") and Bomar ("Boy Marti…
+                </p>
+                <p class="movie-card__comments-count">465 comments</p>
+                <div class="movie-card__actions">
+                  <button class="icon-button icon-button--icon_list-add icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Add to watchlist</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_checkmark icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Already watched</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_star icon-button--compact" aria-pressed="true">
+                    <span class="icon-button__text">Add to favorites</span>
+                  </button>
+                </div>
+              </article>
+            </li>
+            <li class="movies-list__item">
+              <article class="movie-card">
+                <div>
+                  <h3 class="movie-card__title">
+                    <a class="movie-card__link" href="#">Popeye the Sailor Meets Sindbad the Sailor</a>
+                  </h3>
+                  <p class="movie-card__rating">
+                    <span class="visually-hidden">Rating:</span> 6.3
+                  </p>
+                </div>
+                <img class="movie-card__poster" src="images/posters/popeye-meets-sinbad.png" width="232" height="342" alt="Poster." loading="lazy">
+                <dl class="movie-card__details">
+                  <dt class="visually-hidden">Release year:</dt>
+                  <dd class="movie-card__details-value">
+                    <time>1936</time>
+                  </dd>
+                  <dt class="visually-hidden">Duration:</dt>
+                  <dd class="movie-card__details-value">16m</dd>
+                  <dt class="visually-hidden">Genre:</dt>
+                  <dd class="movie-card__details-value">Cartoon</dd>
+                </dl>
+                <p class="movie-card__description">
+                  In this short, Sindbad the Sailor (presumably Bluto playing a "role") proclaims himself, in song, to be the greatest sailor, adventurer and…
+                </p>
+                <p class="movie-card__comments-count">5 comments</p>
+                <div class="movie-card__actions">
+                  <button class="icon-button icon-button--icon_list-add icon-button--compact" aria-pressed="true">
+                    <span class="icon-button__text">Add to watchlist</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_checkmark icon-button--compact" aria-pressed="true">
+                    <span class="icon-button__text">Already watched</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_star icon-button--compact" aria-pressed="true">
+                    <span class="icon-button__text">Add to favorites</span>
+                  </button>
+                </div>
+              </article>
+            </li>
+          </ul>
+          <button class="catalog__show-more-button button button--secondary button--size_m">Show more</button>
+        </div>
+      </section>
     </main>
     <footer class="page__site-footer site-footer">
       <div class="site-footer__container container">
