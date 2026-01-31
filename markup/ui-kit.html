@@ -132,6 +132,67 @@
       </label>
     </div>
   </section>
+  <section>
+    <div class="container">
+      <h2>Comment-form</h2>
+      Default
+      <form class="comment-form" action="https://echo.htmlacademy.ru/courses" method="post">
+        <div class="comment-form__reaction-wrapper" aria-hidden="true"></div>
+        <label class="comment-form__field text-area">
+          <textarea class="text-area__control" name="comment" rows="1" placeholder="Good movie!" required></textarea>
+          <span class="text-area__label">Select reaction below and write comment here</span>
+        </label>
+        <fieldset class="comment-form__reactions">
+          <legend class="visually-hidden">Emotion:</legend>
+          <label class="checker checker--icon">
+            <input class="checker__control visually-hidden" name="emotion" value="smile" type="radio" required>
+            <img class="checker__label" src="images/emoji/smile.png" width="30" height="30" alt="Smile emoji.">
+          </label>
+          <label class="checker checker--icon">
+            <input class="checker__control visually-hidden" name="emotion" value="sleeping" type="radio" required>
+            <img class="checker__label" src="images/emoji/sleeping.png" width="30" height="30" alt="Sleeping emoji.">
+          </label>
+          <label class="checker checker--icon">
+            <input class="checker__control visually-hidden" name="emotion" value="puke" type="radio" required>
+            <img class="checker__label" src="images/emoji/puke.png" width="30" height="30" alt="Puke emoji.">
+          </label>
+          <label class="checker checker--icon">
+            <input class="checker__control visually-hidden" name="emotion" value="angry" type="radio" required>
+            <img class="checker__label" src="images/emoji/angry.png" width="30" height="30" alt="Angry emoji.">
+          </label>
+        </fieldset>
+      </form>
+      Filled
+      <form class="comment-form" action="https://echo.htmlacademy.ru/courses" method="post">
+        <div class="comment-form__reaction-wrapper" aria-hidden="true">
+          <img class="comment-form__reaction" src="images/emoji/smile.png" width="55" height="55" alt="">
+        </div>
+        <label class="comment-form__field text-area">
+          <textarea class="text-area__control" name="comment" rows="1" placeholder="Good movie!" required>Loved it!</textarea>
+          <span class="text-area__label">Select reaction below and write comment here</span>
+        </label>
+        <fieldset class="comment-form__reactions">
+          <legend class="visually-hidden">Emotion:</legend>
+          <label class="checker checker--icon">
+            <input class="checker__control visually-hidden" name="emotion" value="smile" type="radio" required checked>
+            <img class="checker__label" src="images/emoji/smile.png" width="30" height="30" alt="Smile emoji.">
+          </label>
+          <label class="checker checker--icon">
+            <input class="checker__control visually-hidden" name="emotion" value="sleeping" type="radio" required>
+            <img class="checker__label" src="images/emoji/sleeping.png" width="30" height="30" alt="Sleeping emoji.">
+          </label>
+          <label class="checker checker--icon">
+            <input class="checker__control visually-hidden" name="emotion" value="puke" type="radio" required>
+            <img class="checker__label" src="images/emoji/puke.png" width="30" height="30" alt="Puke emoji.">
+          </label>
+          <label class="checker checker--icon">
+            <input class="checker__control visually-hidden" name="emotion" value="angry" type="radio" required>
+            <img class="checker__label" src="images/emoji/angry.png" width="30" height="30" alt="Angry emoji.">
+          </label>
+        </fieldset>
+      </form>
+    </div>
+  </section>
 </body>
 
 </html>
