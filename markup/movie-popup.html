@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html class="page" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+  <title>CINEMADDICT</title>
+  <link rel="icon" href="favicon.ico">
+  <meta name="description" content="CINEMADDICT is a movie service for true film fans. Discover new releases, explore detailed movie info, create personal watchlists, and discuss films.">
+  <meta name="keywords" content="CINEMADDICT, movie service, film database, movie watchlist, cinema reviews">
+</head>
+
+<body class="page__body">
+  <div class="page__inner">
+    <header class="page__site-header site-header">
+      <div class="site-header__container container">
+        <p class="site-header__logo logo logo--size_l">CINEMADDICT</p>
+        <div class="site-header__user user">
+          <p class="user__rank">Movie Buff</p>
+          <img class="user__avatar" src="images/avatar.png" width="35" height="35" alt="User avatar.">
+        </div>
+      </div>
+    </header>
+    <main>
+      <h1 class="visually-hidden">CINEMADDICT &mdash; movie discovery, personal watchlist, and film discussions.</h1>
+      <section class="catalog">
+        <div class="catalog__container container">
+          <h2 class="visually-hidden">Movie library</h2>
+          <div class="catalog__filter-wrapper">
+            <form class="catalog__filter catalog-filter" action="https://echo.htmlacademy.ru/courses" method="get">
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="all" type="radio" checked>
+                <span class="checker__label">All movies</span>
+              </label>
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="to-watch" type="radio">
+                <span class="checker__label">
+                  Watchlist <span class="checker__counter">0</span>
+                </span>
+              </label>
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="watched" type="radio">
+                <span class="checker__label">
+                  History <span class="checker__counter">0</span>
+                </span>
+              </label>
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="favorite" type="radio">
+                <span class="checker__label">
+                  Favorites <span class="checker__counter">0</span>
+                </span>
+              </label>
+            </form>
+          </div>
+          <form class="catalog__sorting catalog-sorting" action="https://echo.htmlacademy.ru/courses" method="get">
+            <label class="checker checker--simple checker--size_m">
+              <input class="checker__control visually-hidden" name="criterion" value="default" type="radio" checked>
+              <span class="checker__label">Sort by default</span>
+            </label>
+            <label class="checker checker--simple checker--size_m">
+              <input class="checker__control visually-hidden" name="criterion" value="date" type="radio">
+              <span class="checker__label">Sort by date</span>
+            </label>
+            <label class="checker checker--simple checker--size_m">
+              <input class="checker__control visually-hidden" name="criterion" value="rating" type="radio">
+              <span class="checker__label">Sort by rating</span>
+            </label>
+          </form>
+          <ul class="catalog__list movies-list">
+            <li class="movies-list__item">
+              <article class="movie-card">
+                <div>
+                  <h3 class="movie-card__title">
+                    <a class="movie-card__link" href="#">The Great Flamarion</a>
+                  </h3>
+                  <p class="movie-card__rating">
+                    <span class="visually-hidden">Rating:</span> 8.9
+                  </p>
+                </div>
+                <img class="movie-card__poster" src="images/posters/the-great-flamarion.jpg" width="232" height="342" alt="Poster." loading="lazy">
+                <dl class="movie-card__details">
+                  <dt class="visually-hidden">Release year:</dt>
+                  <dd class="movie-card__details-value">
+                    <time>1945</time>
+                  </dd>
+                  <dt class="visually-hidden">Duration:</dt>
+                  <dd class="movie-card__details-value">1h 18m</dd>
+                  <dt class="visually-hidden">Genre:</dt>
+                  <dd class="movie-card__details-value">Mystery</dd>
+                </dl>
+                <p class="movie-card__description">
+                  The film opens following a murder at a cabaret in Mexico City in 1936, and then presents the events leading up to it in flashback. The Grea…
+                </p>
+                <p class="movie-card__comments-count">12 comments</p>
+                <div class="movie-card__actions">
+                  <button class="icon-button icon-button--icon_list-add icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Add to watchlist</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_checkmark icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Already watched</span>
+                  </button>
+                  <button class="icon-button icon-button--icon_star icon-button--compact" aria-pressed="false">
+                    <span class="icon-button__text">Add to favorites</span>
+                  </button>
+                </div>
+              </article>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+    <footer class="page__site-footer site-footer">
+      <div class="site-footer__container container">
+        <p class="site-footer__logo logo logo--size_s">CINEMADDICT</p>
+        <p class="site-footer__movies-count">1 movie inside</p>
+      </div>
+    </footer>
+  </div>
+  <dialog class="popup popup--position_right" open>
+    <div class="popup__inner">
+      <button class="popup__close-button">
+        <span class="visually-hidden">Close</span>
+      </button>
+      <article class="popup__movie movie">
+        <h2 class="movie__title title title--size_xxl">The Great Flamarion</h2>
+        <p class="movie__subtitle">Original: The Great Flamarion</p>
+        <p class="movie__rating">
+          <span class="visually-hidden">Rating:</span> 8.9
+        </p>
+        <div class="movie__poster-wrapper">
+          <img class="movie__poster" src="images/posters/the-great-flamarion.jpg" width="338" height="500" alt="Poster.">
+          <p class="movie__age-rating">
+            <span class="visually-hidden">Age rating:</span> 18+
+          </p>
+        </div>
+        <dl class="movie__details">
+          <dt>Director</dt>
+          <dd class="movie__details-value">Anthony Mann</dd>
+          <dt>Writers</dt>
+          <dd class="movie__details-value">Anne Wigton, Heinz Herald, Richard Weil</dd>
+          <dt>Actors</dt>
+          <dd class="movie__details-value">Erich von Stroheim, Mary Beth Hughes, Dan Duryea</dd>
+          <dt>Release Date</dt>
+          <dd class="movie__details-value">
+            <time datetime="1945-03-30">30 March 1945</time>
+          </dd>
+          <dt>Duration</dt>
+          <dd class="movie__details-value">1h 18m</dd>
+          <dt>Country</dt>
+          <dd class="movie__details-value">USA</dd>
+          <dt>Genres</dt>
+          <dd class="movie__details-value movie__details-value--list">
+            <span>Drama</span>
+            <span>Film-Noir</span>
+            <span>Mystery</span>
+          </dd>
+        </dl>
+        <p class="movie__description">
+          The film opens following a murder at a cabaret in Mexico City in 1936, and then presents the events leading up to it in flashback. The Great Flamarion (Erich von Stroheim) is an arrogant, friendless, and misogynous marksman who displays his trick gunshot act in the vaudeville circuit. His show features a beautiful assistant, Connie (Mary Beth Hughes) and her drunken husband Al (Dan Duryea), Flamarion's other assistant. Flamarion falls in love with Connie, the movie's femme fatale, and is soon manipulated by her into killing her no good husband during one of their acts.
+        </p>
+        <div class="movie__actions">
+          <button class="icon-button icon-button--icon_list-add" aria-pressed="false">
+            <span class="icon-button__text">Add to watchlist</span>
+          </button>
+          <button class="icon-button icon-button--icon_checkmark" aria-pressed="true">
+            <span class="icon-button__text">Already watched</span>
+          </button>
+          <button class="icon-button icon-button--icon_star" aria-pressed="false">
+            <span class="icon-button__text">Add to favorites</span>
+          </button>
+        </div>
+        <section class="movie__comments comments">
+          <h3 class="comments__title title title--size_m">Comments 4</h3>
+          <ul class="comments__list comments-list">
+            <li class="comment">
+              <img class="comment__reaction" src="images/emoji/smile.png" width="55" height="55" alt="Smile emoji." loading="lazy">
+              <blockquote class="comment__text">Interesting setting and a good cast</blockquote>
+              <p class="comment__author">Emily Carter</p>
+              <time class="comment__date" datetime="2024-01-30T20:58">2026/01/30 20:58</time>
+              <button class="comment__delete-button link" type="button">Delete</button>
+            </li>
+            <li class="comment">
+              <img class="comment__reaction" src="images/emoji/sleeping.png" width="55" height="55" alt="Sleeping emoji." loading="lazy">
+              <blockquote class="comment__text">Booooooooooring</blockquote>
+              <p class="comment__author">Jason Miller</p>
+              <time class="comment__date" datetime="2026-01-31T22:22:22">yesterday</time>
+              <button class="comment__delete-button link" type="button">Delete</button>
+            </li>
+            <li class="comment">
+              <img class="comment__reaction" src="images/emoji/puke.png" width="55" height="55" alt="Puke emoji." loading="lazy">
+              <blockquote class="comment__text">Very very old. Meh</blockquote>
+              <p class="comment__author">Sophie Laurent</p>
+              <time class="comment__date" datetime="2026-02-01T20:07:14">a few seconds ago</time>
+              <button class="comment__delete-button link" type="button">Delete</button>
+            </li>
+            <li class="comment">
+              <img class="comment__reaction" src="images/emoji/angry.png" width="55" height="55" alt="Angry emoji." loading="lazy">
+              <blockquote class="comment__text">Almost two hours? Seriously?</blockquote>
+              <p class="comment__author">Daniel Brooks</p>
+              <time class="comment__date" datetime="2026-02-01T20:07:16">now</time>
+              <button class="comment__delete-button link" type="button">Delete</button>
+            </li>
+          </ul>
+          <form class="comment-form" action="https://echo.htmlacademy.ru/courses" method="post">
+            <div class="comment-form__reaction-wrapper" aria-hidden="true"></div>
+            <label class="comment-form__field text-area">
+              <textarea class="text-area__control" name="comment" rows="1" placeholder="Good movie!" required></textarea>
+              <span class="text-area__label">Select reaction below and write comment here</span>
+            </label>
+            <fieldset class="comment-form__reactions">
+              <legend class="visually-hidden">Emotion:</legend>
+              <label class="checker checker--icon">
+                <input class="checker__control visually-hidden" name="emotion" value="smile" type="radio" required>
+                <img class="checker__label" src="images/emoji/smile.png" width="30" height="30" alt="Smile emoji.">
+              </label>
+              <label class="checker checker--icon">
+                <input class="checker__control visually-hidden" name="emotion" value="sleeping" type="radio" required>
+                <img class="checker__label" src="images/emoji/sleeping.png" width="30" height="30" alt="Sleeping emoji.">
+              </label>
+              <label class="checker checker--icon">
+                <input class="checker__control visually-hidden" name="emotion" value="puke" type="radio" required>
+                <img class="checker__label" src="images/emoji/puke.png" width="30" height="30" alt="Puke emoji.">
+              </label>
+              <label class="checker checker--icon">
+                <input class="checker__control visually-hidden" name="emotion" value="angry" type="radio" required>
+                <img class="checker__label" src="images/emoji/angry.png" width="30" height="30" alt="Angry emoji.">
+              </label>
+            </fieldset>
+          </form>
+        </section>
+      </article>
+    </div>
+  </dialog>
+  <script>
+    const popupElement = document.querySelector('.popup');
+
+    document.querySelector('.movie-card__link').addEventListener('click', (evt) => {
+      evt.preventDefault();
+      popupElement.show();
+    });
+
+    document.querySelector('.popup__close-button').addEventListener('click', () => {
+      popupElement.close();
+    });
+  </script>
+</body>
+
+</html>
