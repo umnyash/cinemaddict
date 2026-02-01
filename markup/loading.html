@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html class="page" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
+  <title>CINEMADDICT</title>
+  <link rel="icon" href="favicon.ico">
+  <meta name="description" content="CINEMADDICT is a movie service for true film fans. Discover new releases, explore detailed movie info, create personal watchlists, and discuss films.">
+  <meta name="keywords" content="CINEMADDICT, movie service, film database, movie watchlist, cinema reviews">
+</head>
+
+<body class="page__body">
+  <div class="page__inner">
+    <header class="page__site-header site-header">
+      <div class="site-header__container container">
+        <p class="site-header__logo logo logo--size_l">CINEMADDICT</p>
+        <div class="site-header__user user">
+          <img class="user__avatar" src="images/avatar.png" width="35" height="35" alt="User avatar.">
+        </div>
+      </div>
+    </header>
+    <main>
+      <h1 class="visually-hidden">CINEMADDICT &mdash; movie discovery, personal watchlist, and film discussions.</h1>
+      <section class="catalog">
+        <div class="catalog__container container">
+          <h2 class="visually-hidden">Movie library</h2>
+          <div class="catalog__filter-wrapper">
+            <form class="catalog__filter catalog-filter" action="https://echo.htmlacademy.ru/courses" method="get">
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="all" type="radio" checked>
+                <span class="checker__label">All movies</span>
+              </label>
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="to_watch" type="radio">
+                <span class="checker__label">Watchlist</span>
+              </label>
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="watched" type="radio">
+                <span class="checker__label">History</span>
+              </label>
+              <label class="catalog-filter__button checker checker--simple checker--size_l">
+                <input class="checker__control visually-hidden" name="status" value="favorite" type="radio">
+                <span class="checker__label">Favorites</span>
+              </label>
+            </form>
+          </div>
+          <p class="catalog__message title title--size_s">
+            Loading<span class="animated-ellipsis"><span>...</span></span>
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer class="page__site-footer site-footer">
+      <div class="site-footer__container container">
+        <p class="site-footer__logo logo logo--size_s">CINEMADDICT</p>
+      </div>
+    </footer>
+  </div>
+</body>
+
+</html>
