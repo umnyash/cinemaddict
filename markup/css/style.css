@@ -93,6 +93,26 @@
 
 /* #endregion */
 
+/* #region animated-ellipsis */
+
+.animated-ellipsis {
+  display: inline-grid;
+  justify-items: start;
+}
+
+.animated-ellipsis span {
+  grid-area: 1 / 1 / 2 / 2;
+  color: transparent;
+}
+
+.animated-ellipsis::after {
+  content: "";
+  grid-area: 1 / 1 / 2 / 2;
+  animation: ellipsis 1000ms linear infinite;
+}
+
+/* #endregion */
+
 /* #region button */
 
 .button {
@@ -148,6 +168,10 @@
 .catalog__show-more-button {
   margin: 36px 0 0;
   width: 100%;
+}
+
+.catalog__message {
+  margin: 20px 0;
 }
 
 /* #endregion */
@@ -1040,3 +1064,22 @@
 }
 
 /* #endregion */
+
+/* #region animations */
+
+@keyframes ellipsis {
+  0% {
+    content: "";
+  }
+  25% {
+    content: ".";
+  }
+  50% {
+    content: "..";
+  }
+  75% {
+    content: "...";
+  }
+}
+
+/* #endregion*/
