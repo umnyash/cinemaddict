@@ -10,6 +10,9 @@
     "lint": "eslint src/",
     "build": "webpack --mode production"
   },
+  "dependencies": {
+    "dayjs": "1.11.19"
+  },
   "devDependencies": {
     "@babel/core": "7.29.0",
     "@babel/preset-env": "7.29.0",
