@@ -5,21 +5,22 @@ import CatalogShowMoreButtonView from '../view/catalog-show-more-button-view.js'
 import CatalogSortingView from '../view/catalog-sorting-view.js';
 import MovieCardView from '../view/movie-card-view.js';
 
-const MOVIES_COUNT = 5;
-
 export default class CatalogPresenter {
   movieListComponent = new CatalogListView();
 
-  constructor({ containerElement }) {
+  constructor({ containerElement, model }) {
     this.containerElement = containerElement;
+    this.model = model;
   }
 
   init() {
+    this.movies = this.model.getMovies();
+
     render(new CatalogFilterView(), this.containerElement);
     render(new CatalogSortingView(), this.containerElement);
     render(this.movieListComponent, this.containerElement);
 
-    for (let i = 0; i < MOVIES_COUNT; i++) {
+    for (let i = 0; i < this.movies.length; i++) {
       render(new MovieCardView(), this.movieListComponent.getElement());
     }
 
