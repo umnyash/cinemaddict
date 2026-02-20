@@ -21,7 +21,7 @@ export default class CatalogPresenter {
     render(this.catalogListComponent, this.catalogContainerElement);
 
     for (let i = 0; i < this.movies.length; i++) {
-      render(new MovieCardView(), this.catalogListComponent.getElement());
+      render(new MovieCardView({ movie: this.movies[i] }), this.catalogListComponent.getElement());
     }
 
     render(new CatalogShowMoreButtonView(), this.catalogContainerElement);
