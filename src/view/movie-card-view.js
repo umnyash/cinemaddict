@@ -1,4 +1,4 @@
-import { createElement } from '../framework';
+import { AbstractView } from '../framework';
 import { formatRating, formatYear, formatDuration } from '../utils.js';
 
 const DESCRIPTION_MAX_LENGTH = 140;
@@ -82,26 +82,13 @@ function createMovieCardTemplate(movie) {
   );
 }
 
-export default class MovieCardView {
-  #element = null;
-
+export default class MovieCardView extends AbstractView {
   constructor({ movie }) {
+    super();
     this.movie = movie;
   }
 
   _getTemplate() {
     return createMovieCardTemplate(this.movie);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this._getTemplate());
-    }
-
-    return this.#element;
-  }
-
-  getElement() {
-    return this.element;
   }
 }
