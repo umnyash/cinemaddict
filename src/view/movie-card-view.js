@@ -83,19 +83,25 @@ function createMovieCardTemplate(movie) {
 }
 
 export default class MovieCardView {
+  #element = null;
+
   constructor({ movie }) {
     this.movie = movie;
   }
 
-  getTemplate() {
+  _getTemplate() {
     return createMovieCardTemplate(this.movie);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this._getTemplate());
     }
 
+    return this.#element;
+  }
+
+  getElement() {
     return this.element;
   }
 }

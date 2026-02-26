@@ -20,15 +20,21 @@ function createCatalogSortTemplate() {
 }
 
 export default class CatalogSortView {
-  getTemplate() {
+  #element = null;
+
+  _getTemplate() {
     return createCatalogSortTemplate();
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this._getTemplate());
     }
 
+    return this.#element;
+  }
+
+  getElement() {
     return this.element;
   }
 }
