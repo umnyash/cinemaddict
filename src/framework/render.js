@@ -1,3 +1,5 @@
+import AbstractView from './view/abstract-view.js';
+
 /** @enum {string} Перечисление возможных позиций для отрисовки */
 const RenderPosition = {
   BEFOREBEGIN: 'beforebegin',
@@ -25,11 +27,15 @@ function createElement(template) {
  * @param {string} position Позиция компонента относительно элемента. По умолчанию – `beforeend`
  */
 function render(component, element, position = RenderPosition.BEFOREEND) {
+  if (!(component instanceof AbstractView)) {
+    throw new Error('Can render only components');
+  }
+
   if (element === null) {
     throw new Error('Target element doesn\'t exist');
   }
 
-  element.insertAdjacentElement(position, component.getElement());
+  element.insertAdjacentElement(position, component.element);
 }
 
 export { RenderPosition, createElement, render };

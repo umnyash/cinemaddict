@@ -1,25 +1,11 @@
-import { createElement } from '../framework';
+import { AbstractView } from '../framework';
 
 function createCatalogListTemplate() {
   return '<ul class="catalog__list movies-list"></ul>';
 }
 
-export default class CatalogListView {
-  #element = null;
-
+export default class CatalogListView extends AbstractView {
   _getTemplate() {
     return createCatalogListTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this._getTemplate());
-    }
-
-    return this.#element;
-  }
-
-  getElement() {
-    return this.element;
   }
 }

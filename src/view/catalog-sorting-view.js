@@ -1,4 +1,4 @@
-import { createElement } from '../framework';
+import { AbstractView } from '../framework';
 
 function createCatalogSortingTemplate() {
   return (
@@ -19,22 +19,8 @@ function createCatalogSortingTemplate() {
   );
 }
 
-export default class CatalogSortingView {
-  #element = null;
-
+export default class CatalogSortingView extends AbstractView {
   _getTemplate() {
     return createCatalogSortingTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this._getTemplate());
-    }
-
-    return this.#element;
-  }
-
-  getElement() {
-    return this.element;
   }
 }
