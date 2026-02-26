@@ -1,4 +1,4 @@
-import { createElement } from '../framework';
+import { AbstractView } from '../framework';
 
 function createCatalogShowMoreButtonTemplate() {
   return (
@@ -8,22 +8,8 @@ function createCatalogShowMoreButtonTemplate() {
   );
 }
 
-export default class CatalogShowMoreButtonView {
-  #element = null;
-
+export default class CatalogShowMoreButtonView extends AbstractView {
   _getTemplate() {
     return createCatalogShowMoreButtonTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this._getTemplate());
-    }
-
-    return this.#element;
-  }
-
-  getElement() {
-    return this.element;
   }
 }

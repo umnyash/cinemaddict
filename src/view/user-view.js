@@ -1,4 +1,4 @@
-import { createElement } from '../framework';
+import { AbstractView } from '../framework';
 
 function createUserTemplate() {
   return (
@@ -9,22 +9,8 @@ function createUserTemplate() {
   );
 }
 
-export default class UserView {
-  #element = null;
-
+export default class UserView extends AbstractView {
   _getTemplate() {
     return createUserTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this._getTemplate());
-    }
-
-    return this.#element;
-  }
-
-  getElement() {
-    return this.element;
   }
 }

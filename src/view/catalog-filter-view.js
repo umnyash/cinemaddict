@@ -1,4 +1,4 @@
-import { createElement } from '../framework';
+import { AbstractView } from '../framework';
 
 function createCatalogFilterTemplate() {
   return (
@@ -31,22 +31,8 @@ function createCatalogFilterTemplate() {
   );
 }
 
-export default class CatalogFilterView {
-  #element = null;
-
+export default class CatalogFilterView extends AbstractView {
   _getTemplate() {
     return createCatalogFilterTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this._getTemplate());
-    }
-
-    return this.#element;
-  }
-
-  getElement() {
-    return this.element;
   }
 }
