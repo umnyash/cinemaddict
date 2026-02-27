@@ -38,4 +38,21 @@ function render(component, element, position = RenderPosition.BEFOREEND) {
   element.insertAdjacentElement(position, component.element);
 }
 
-export { RenderPosition, createElement, render };
+/**
+ * Функция для удаления компонента
+ * @param {AbstractView} component Компонент, который нужно удалить
+ */
+function remove(component) {
+  if (component === null) {
+    return;
+  }
+
+  if (!(component instanceof AbstractView)) {
+    throw new Error('Can remove only components');
+  }
+
+  component.element.remove();
+  component.removeElement();
+}
+
+export { RenderPosition, createElement, render, remove };
