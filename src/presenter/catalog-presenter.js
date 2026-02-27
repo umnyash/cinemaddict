@@ -19,7 +19,10 @@ export default class CatalogPresenter {
 
   init() {
     this.#movies = this.#model.movies;
+    this.#render();
+  }
 
+  #render() {
     render(new CatalogFilterView(), this.#containerElement);
     render(new CatalogSortView(), this.#containerElement);
     render(this.#movieListComponent, this.#containerElement);
