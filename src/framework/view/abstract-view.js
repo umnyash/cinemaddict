@@ -30,4 +30,9 @@ export default class AbstractView {
   _getTemplate() {
     throw new Error('Abstract method not implemented: _getTemplate');
   }
+
+  /** Метод для удаления элемента */
+  removeElement() {
+    this.#element = null;
+  }
 }
