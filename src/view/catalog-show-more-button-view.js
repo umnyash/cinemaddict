@@ -9,7 +9,19 @@ function createCatalogShowMoreButtonTemplate() {
 }
 
 export default class CatalogShowMoreButtonView extends AbstractView {
+  #onButtonClick = null;
+
+  constructor({ onButtonClick }) {
+    super();
+    this.#onButtonClick = onButtonClick;
+    this.element.addEventListener('click', this.#buttonClickHandler);
+  }
+
   _getTemplate() {
     return createCatalogShowMoreButtonTemplate();
   }
+
+  #buttonClickHandler = () => {
+    this.#onButtonClick();
+  };
 }
