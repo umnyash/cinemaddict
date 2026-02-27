@@ -1,6 +1,7 @@
 import { render } from '../framework';
 import CatalogFilterView from '../view/catalog-filter-view.js';
 import CatalogListView from '../view/catalog-list-view.js';
+import CatalogMessage, { MessageVariant } from '../view/catalog-message-view.js';
 import CatalogShowMoreButtonView from '../view/catalog-show-more-button-view.js';
 import CatalogSortingView from '../view/catalog-sorting-view.js';
 import MovieCardView from '../view/movie-card-view.js';
@@ -10,7 +11,7 @@ export default class CatalogPresenter {
   #model = null;
   #movies = [];
 
-  #movieListComponent = new CatalogListView();
+  #movieListComponent = null;
 
   constructor({ containerElement, model }) {
     this.#containerElement = containerElement;
@@ -24,7 +25,18 @@ export default class CatalogPresenter {
 
   #render() {
     render(new CatalogFilterView(), this.#containerElement);
+
+    if (!this.#movies.length) {
+      render(
+        new CatalogMessage({ variant: MessageVariant.CatalogEmpty }),
+        this.#containerElement,
+      );
+
+      return;
+    }
+
     render(new CatalogSortingView(), this.#containerElement);
+    this.#movieListComponent = new CatalogListView();
     render(this.#movieListComponent, this.#containerElement);
 
     for (let i = 0; i < this.#movies.length; i++) {
