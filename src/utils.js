@@ -1,8 +1,15 @@
+import dayjs from 'dayjs';
+
 const MINUTES_PER_HOUR = 60;
+const DATE_FORMAT = 'D MMMM YYYY';
 
 const KeyCode = {
   ESCAPE: 'Escape',
 };
+
+function formatDate(date) {
+  return dayjs(date).format(DATE_FORMAT);
+}
 
 function formatDuration(minutes) {
   const hours = Math.floor(minutes / MINUTES_PER_HOUR);
@@ -32,4 +39,4 @@ function isEscapeEvent(evt) {
   return evt.code === KeyCode.ESCAPE;
 }
 
-export { formatDuration, formatRating, formatYear, isEscapeEvent };
+export { formatDate, formatDuration, formatRating, formatYear, isEscapeEvent };
