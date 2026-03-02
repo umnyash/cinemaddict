@@ -11,6 +11,7 @@ const catalogContainerElement = document.body.querySelector('.catalog__container
 const catalogModel = new CatalogModel();
 const catalogPresenter = new CatalogPresenter({
   containerElement: catalogContainerElement,
+  popupContainerElement: document.body,
   model: catalogModel,
 });
 

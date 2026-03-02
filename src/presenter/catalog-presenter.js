@@ -1,24 +1,29 @@
 import { render, remove } from '../framework';
+import { isEscapeEvent } from '../utils.js';
 import CatalogFilterView from '../view/catalog-filter-view.js';
 import CatalogListView from '../view/catalog-list-view.js';
 import CatalogMessage, { MessageVariant } from '../view/catalog-message-view.js';
 import CatalogShowMoreButtonView from '../view/catalog-show-more-button-view.js';
 import CatalogSortView from '../view/catalog-sort-view.js';
 import MovieCardView from '../view/movie-card-view.js';
+import MoviePopupView from '../view/movie-popup-view.js';
 
 const MOVIES_COUNT_PER_STEP = 5;
 
 export default class CatalogPresenter {
   #containerElement = null;
+  #popupContainerElement = null;
   #model = null;
   #movies = [];
   #renderedMoviesCount = 0;
 
   #movieListComponent = null;
   #showMoreButtonComponent = null;
+  #moviePopupComponent = null;
 
-  constructor({ containerElement, model }) {
+  constructor({ containerElement, popupContainerElement, model }) {
     this.#containerElement = containerElement;
+    this.#popupContainerElement = popupContainerElement;
     this.#model = model;
   }
 
@@ -35,7 +40,16 @@ export default class CatalogPresenter {
 
     for (let i = this.#renderedMoviesCount; i < renderedMoviesMaxCount; i++) {
       render(
-        new MovieCardView({ movie: this.#movies[i] }),
+        new MovieCardView({
+          movie: this.#movies[i],
+          onLinkClick: () => {
+            if (this.#moviePopupComponent) {
+              return;
+            }
+
+            this.#openMoviePopup();
+          },
+        }),
         this.#movieListComponent.element,
       );
     }
@@ -69,12 +83,44 @@ export default class CatalogPresenter {
     }
   }
 
+  #openMoviePopup() {
+    this.#moviePopupComponent = new MoviePopupView({
+      onCloseButtonClick: this.#moviePopupCloseButtonClickHandler,
+    });
+
+    render(this.#moviePopupComponent, this.#popupContainerElement);
+
+    requestAnimationFrame(() => {
+      this.#moviePopupComponent.open();
+    });
+
+    document.addEventListener('keydown', this.#documentKeyDownHandler);
+  }
+
+  async #closeMoviePopup() {
+    document.removeEventListener('keydown', this.#documentKeyDownHandler);
+    await this.#moviePopupComponent.close();
+    remove(this.#moviePopupComponent);
+    this.#moviePopupComponent = null;
+  }
+
   #showMoreButtonClickHandler = () => {
     this.#renderNextMovies();
 
     if (this.#renderedMoviesCount === this.#movies.length) {
       remove(this.#showMoreButtonComponent);
       this.#showMoreButtonComponent = null;
+    }
+  };
+
+  #moviePopupCloseButtonClickHandler = () => {
+    this.#closeMoviePopup();
+  };
+
+  #documentKeyDownHandler = (evt) => {
+    if (isEscapeEvent(evt)) {
+      evt.preventDefault();
+      this.#closeMoviePopup();
     }
   };
 }

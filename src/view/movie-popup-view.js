@@ -62,7 +62,38 @@ function createMoviePopupTemplate() {
 }
 
 export default class MoviePopupView extends AbstractView {
+  #onCloseButtonClick = null;
+
+  constructor({ onCloseButtonClick }) {
+    super();
+    this.#onCloseButtonClick = onCloseButtonClick;
+    this.element.querySelector('.popup__close-button')
+      .addEventListener('click', this.#closeButtonClickHandler, { once: true });
+  }
+
   _getTemplate() {
     return createMoviePopupTemplate();
   }
+
+  open() {
+    this.element.show();
+  }
+
+  close() {
+    return new Promise((resolve) => {
+      const popupTransitionEndHandler = (evt) => {
+        if (evt.target === this.element && evt.propertyName === 'visibility') {
+          this.element.removeEventListener('transitionend', popupTransitionEndHandler);
+          resolve();
+        }
+      };
+
+      this.element.addEventListener('transitionend', popupTransitionEndHandler);
+      this.element.close();
+    });
+  }
+
+  #closeButtonClickHandler = () => {
+    this.#onCloseButtonClick();
+  };
 }

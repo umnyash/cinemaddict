@@ -83,12 +83,22 @@ function createMovieCardTemplate(movie) {
 }
 
 export default class MovieCardView extends AbstractView {
-  constructor({ movie }) {
+  #onLinkClick = null;
+
+  constructor({ movie, onLinkClick }) {
     super();
     this.movie = movie;
+    this.#onLinkClick = onLinkClick;
+    this.element.querySelector('.movie-card__link')
+      .addEventListener('click', this.#linkClickHandler);
   }
 
   _getTemplate() {
     return createMovieCardTemplate(this.movie);
   }
+
+  #linkClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#onLinkClick();
+  };
 }
