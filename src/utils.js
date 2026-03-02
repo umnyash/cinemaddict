@@ -1,5 +1,9 @@
 const MINUTES_PER_HOUR = 60;
 
+const KeyCode = {
+  ESCAPE: 'Escape',
+};
+
 function formatDuration(minutes) {
   const hours = Math.floor(minutes / MINUTES_PER_HOUR);
 
@@ -24,4 +28,8 @@ function formatYear(date) {
   return new Date(date).getFullYear();
 }
 
-export { formatDuration, formatRating, formatYear };
+function isEscapeEvent(evt) {
+  return evt.code === KeyCode.ESCAPE;
+}
+
+export { formatDuration, formatRating, formatYear, isEscapeEvent };
