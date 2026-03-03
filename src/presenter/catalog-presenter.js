@@ -37,12 +37,14 @@ export default class CatalogPresenter {
     );
 
     for (let i = this.#renderedMoviesCount; i < renderedMoviesMaxCount; i++) {
+      const movie = this.#movies[i];
+
       render(
         new MovieCardView({
-          movie: this.#movies[i],
+          movie,
           onLinkClick: () => {
             if (!this.#moviePopupComponent) {
-              this.#openMoviePopup();
+              this.#openMoviePopup(movie);
             }
           },
         }),
@@ -79,8 +81,9 @@ export default class CatalogPresenter {
     }
   }
 
-  #openMoviePopup() {
+  #openMoviePopup(movie) {
     this.#moviePopupComponent = new MoviePopupView({
+      movie,
       onCloseButtonClick: () => {
         this.#closeMoviePopup();
       },
