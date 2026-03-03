@@ -1,6 +1,30 @@
 import { AbstractView } from '../framework';
+import { formatDate, formatDuration, formatRating } from '../utils.js';
 
-function createMoviePopupTemplate() {
+function createMoviePopupTemplate(movie) {
+  const {
+    title,
+    originalTitle,
+    rating,
+    posterUrl,
+    ageRating,
+    director,
+    writers,
+    actors,
+    releaseDate,
+    releaseCountry,
+    duration,
+    description,
+    genres,
+    isOnWatchlist,
+    isWatched,
+    isFavorite,
+  } = movie;
+
+  const formattedRating = formatRating(rating);
+  const formattedReleaseDate = formatDate(releaseDate);
+  const formattedDuration = formatDuration(duration);
+
   return (
     `<dialog class="popup popup--position_right">
       <div class="popup__inner">
@@ -8,50 +32,46 @@ function createMoviePopupTemplate() {
           <span class="visually-hidden">Close</span>
         </button>
         <article class="popup__movie movie">
-          <h2 class="movie__title title title--size_xxl">The Great Flamarion</h2>
-          <p class="movie__subtitle">Original: The Great Flamarion</p>
+          <h2 class="movie__title title title--size_xxl">${title}</h2>
+          <p class="movie__subtitle">Original: ${originalTitle}</p>
           <p class="movie__rating">
-            <span class="visually-hidden">Rating:</span> 8.9
+            <span class="visually-hidden">Rating:</span> ${formattedRating}
           </p>
           <div class="movie__poster-wrapper">
-            <img class="movie__poster" src="images/posters/the-great-flamarion.jpg" width="338" height="500" alt="Poster.">
+            <img class="movie__poster" src="${posterUrl}" width="338" height="500" alt="Poster.">
             <p class="movie__age-rating">
-              <span class="visually-hidden">Age rating:</span> 18+
+              <span class="visually-hidden">Age rating:</span> ${ageRating}+
             </p>
           </div>
           <dl class="movie__details">
             <dt>Director</dt>
-            <dd class="movie__details-value">Anthony Mann</dd>
+            <dd class="movie__details-value">${director}</dd>
             <dt>Writers</dt>
-            <dd class="movie__details-value">Anne Wigton, Heinz Herald, Richard Weil</dd>
+            <dd class="movie__details-value">${writers.join(', ')}</dd>
             <dt>Actors</dt>
-            <dd class="movie__details-value">Erich von Stroheim, Mary Beth Hughes, Dan Duryea</dd>
+            <dd class="movie__details-value">${actors.join(', ')}</dd>
             <dt>Release Date</dt>
             <dd class="movie__details-value">
-              <time datetime="1945-03-30">30 March 1945</time>
+              <time datetime="${releaseDate}">${formattedReleaseDate}</time>
             </dd>
             <dt>Duration</dt>
-            <dd class="movie__details-value">1h 18m</dd>
+            <dd class="movie__details-value">${formattedDuration}</dd>
             <dt>Country</dt>
-            <dd class="movie__details-value">USA</dd>
+            <dd class="movie__details-value">${releaseCountry}</dd>
             <dt>Genres</dt>
             <dd class="movie__details-value movie__details-value--list">
-              <span>Drama</span>
-              <span>Film-Noir</span>
-              <span>Mystery</span>
+              ${genres.map((genre) => `<span>${genre}</span>`).join('')}
             </dd>
           </dl>
-          <p class="movie__description">
-            The film opens following a murder at a cabaret in Mexico City in 1936, and then presents the events leading up to it in flashback. The Great Flamarion (Erich von Stroheim) is an arrogant, friendless, and misogynous marksman who displays his trick gunshot act in the vaudeville circuit. His show features a beautiful assistant, Connie (Mary Beth Hughes) and her drunken husband Al (Dan Duryea), Flamarion's other assistant. Flamarion falls in love with Connie, the movie's femme fatale, and is soon manipulated by her into killing her no good husband during one of their acts.
-          </p>
+          <p class="movie__description">${description}</p>
           <div class="movie__actions">
-            <button class="icon-button icon-button--icon_list-add" aria-pressed="false">
+            <button class="icon-button icon-button--icon_list-add" aria-pressed="${isOnWatchlist}">
               <span class="icon-button__text">Add to watchlist</span>
             </button>
-            <button class="icon-button icon-button--icon_checkmark" aria-pressed="true">
+            <button class="icon-button icon-button--icon_checkmark" aria-pressed="${isWatched}">
               <span class="icon-button__text">Already watched</span>
             </button>
-            <button class="icon-button icon-button--icon_star" aria-pressed="false">
+            <button class="icon-button icon-button--icon_star" aria-pressed="${isFavorite}">
               <span class="icon-button__text">Add to favorites</span>
             </button>
           </div>
@@ -62,17 +82,19 @@ function createMoviePopupTemplate() {
 }
 
 export default class MoviePopupView extends AbstractView {
+  #movie = null;
   #onCloseButtonClick = null;
 
-  constructor({ onCloseButtonClick }) {
+  constructor({ movie, onCloseButtonClick }) {
     super();
+    this.#movie = movie;
     this.#onCloseButtonClick = onCloseButtonClick;
     this.element.querySelector('.popup__close-button')
       .addEventListener('click', this.#closeButtonClickHandler, { once: true });
   }
 
   _getTemplate() {
-    return createMoviePopupTemplate();
+    return createMoviePopupTemplate(this.#movie);
   }
 
   open() {
