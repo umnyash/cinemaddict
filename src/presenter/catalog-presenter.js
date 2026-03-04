@@ -14,6 +14,7 @@ export default class CatalogPresenter {
   #containerElement = null;
   #popupContainerElement = null;
   #model = null;
+  #commentsModel = null;
   #movies = [];
   #renderedMoviesCount = 0;
 
@@ -21,10 +22,11 @@ export default class CatalogPresenter {
   #showMoreButtonComponent = null;
   #moviePopupComponent = null;
 
-  constructor({ containerElement, popupContainerElement, model }) {
+  constructor({ containerElement, popupContainerElement, model, commentsModel }) {
     this.#containerElement = containerElement;
     this.#popupContainerElement = popupContainerElement;
     this.#model = model;
+    this.#commentsModel = commentsModel;
   }
 
   init() {
@@ -86,8 +88,11 @@ export default class CatalogPresenter {
   }
 
   #openMoviePopup(movie) {
+    const comments = this.#commentsModel.get(movie.id, movie.commentsCount);
+
     this.#moviePopupComponent = new MoviePopupView({
       movie,
+      comments,
       onCloseButtonClick: this.#moviePopupCloseButtonClickHandler,
     });
 
