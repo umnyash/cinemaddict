@@ -2,6 +2,7 @@ import { render } from './framework/render.js';
 import UserView from './view/user-view.js';
 import MoviesCountView from './view/movies-count-view.js';
 import CatalogModel from './model/catalog-model.js';
+import CommentsModel from './model/comments-model.js';
 import CatalogPresenter from './presenter/catalog-presenter.js';
 
 const siteHeaderContainerElement = document.body.querySelector('.site-header__container');
@@ -9,9 +10,12 @@ const siteFooterContainerElement = document.body.querySelector('.site-footer__co
 const catalogContainerElement = document.body.querySelector('.catalog__container');
 
 const catalogModel = new CatalogModel();
+const commentsModel = new CommentsModel();
+
 const catalogPresenter = new CatalogPresenter({
   containerElement: catalogContainerElement,
   model: catalogModel,
+  commentsModel: commentsModel,
 });
 
 render(new UserView(), siteHeaderContainerElement);

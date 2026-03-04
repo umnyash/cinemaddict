@@ -13,6 +13,7 @@ const MOVIES_COUNT_PER_STEP = 5;
 export default class CatalogPresenter {
   #containerElement = null;
   #model = null;
+  #commentsModel = null;
   #movies = [];
   #renderedMoviesCount = 0;
 
@@ -20,9 +21,10 @@ export default class CatalogPresenter {
   #showMoreButtonComponent = null;
   #moviePopupComponent = null;
 
-  constructor({ containerElement, model }) {
+  constructor({ containerElement, model, commentsModel }) {
     this.#containerElement = containerElement;
     this.#model = model;
+    this.#commentsModel = commentsModel;
   }
 
   init() {
@@ -82,8 +84,13 @@ export default class CatalogPresenter {
   }
 
   #openMoviePopup(movie) {
+    const comments = movie.commentsCount
+      ? this.#commentsModel.get(movie.commentsCount)
+      : [];
+
     this.#moviePopupComponent = new MoviePopupView({
       movie,
+      comments,
       onCloseButtonClick: () => {
         this.#closeMoviePopup();
       },
