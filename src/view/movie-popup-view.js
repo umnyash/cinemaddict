@@ -1,5 +1,47 @@
 import { AbstractView } from '../framework';
+import { emotions, emotionIds } from '../data';
 import { formatDate, formatDuration, formatRating } from '../utils.js';
+
+function createMoviePopupCommentListTemplate() {
+  return (
+    `<ul class="comments__list comment-list">
+      <li class="comment">
+        <img class="comment__emotion" src="images/emoji/puke.png" width="55" height="55" alt="Puke emoji." loading="lazy">
+        <blockquote class="comment__text">Very very old. Meh</blockquote>
+        <p class="comment__author">Sophie Laurent</p>
+        <time class="comment__date" datetime="2026-02-01T20:07:14">a few seconds ago</time>
+        <button class="comment__delete-button link" type="button">Delete</button>
+      </li>
+    </ul>`
+  );
+}
+
+function createMoviePopupCommentFormTemplate() {
+  return (
+    `<form class="comment-form" action="https://echo.htmlacademy.ru/courses" method="post">
+      <div class="comment-form__emotion-wrapper" aria-hidden="true"></div>
+      <label class="comment-form__field text-area">
+        <textarea class="text-area__control" name="comment" rows="1" placeholder="Good movie!" required></textarea>
+        <span class="text-area__label">Select reaction below and write comment here</span>
+      </label>
+      <fieldset class="comment-form__emotions">
+        <legend class="visually-hidden">Emotion:</legend>
+        ${emotionIds.map((id) => `
+          <label class="checker checker--icon">
+            <input class="checker__control visually-hidden" name="emotion" value="${id}" type="radio" required>
+            <img
+              class="checker__label"
+              src="${emotions[id].iconUrl}"
+              width="30"
+              height="30"
+              alt="${emotions[id].name} emoji."
+            >
+          </label>
+        `).join('')}
+      </fieldset>
+    </form>`
+  );
+}
 
 function createMoviePopupTemplate(movie) {
   const {
@@ -19,6 +61,7 @@ function createMoviePopupTemplate(movie) {
     isOnWatchlist,
     isWatched,
     isFavorite,
+    commentsCount,
   } = movie;
 
   const formattedRating = formatRating(rating);
@@ -75,6 +118,11 @@ function createMoviePopupTemplate(movie) {
               <span class="icon-button__text">Add to favorites</span>
             </button>
           </div>
+          <section class="movie__comments comments">
+            <h3 class="comments__title title title--size_m">Comments ${commentsCount}</h3>
+            ${createMoviePopupCommentListTemplate()}
+            ${createMoviePopupCommentFormTemplate()}
+          </section>
         </article>
       </div>
     </dialog>`
