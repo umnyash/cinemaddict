@@ -1,17 +1,37 @@
 import { AbstractView } from '../framework';
 import { emotions, emotionIds } from '../data';
-import { formatDate, formatDuration, formatRating } from '../utils.js';
+import { formatDate, formatDuration, formatRating, getTimeAgo } from '../utils.js';
 
-function createMoviePopupCommentListTemplate() {
+function createMoviePopupCommentTemplate(comment) {
+  const { text, emotion, date, author: { name } } = comment;
+  const timeAgo = getTimeAgo(date);
+
+  return (
+    `<li class="comment">
+      <img
+        class="comment__emotion"
+        src="${emotions[emotion].iconUrl}"
+        width="55"
+        height="55"
+        alt="${emotions[emotion].name} emoji."
+        loading="lazy"
+      >
+      <blockquote class="comment__text">${text}</blockquote>
+      <p class="comment__author">${name}</p>
+      <time class="comment__date" datetime="${date}">${timeAgo}</time>
+      <button class="comment__delete-button link" type="button">Delete</button>
+    </li>`
+  );
+}
+
+function createMoviePopupCommentListTemplate(comments) {
+  if (!comments.length) {
+    return '';
+  }
+
   return (
     `<ul class="comments__list comment-list">
-      <li class="comment">
-        <img class="comment__emotion" src="images/emoji/puke.png" width="55" height="55" alt="Puke emoji." loading="lazy">
-        <blockquote class="comment__text">Very very old. Meh</blockquote>
-        <p class="comment__author">Sophie Laurent</p>
-        <time class="comment__date" datetime="2026-02-01T20:07:14">a few seconds ago</time>
-        <button class="comment__delete-button link" type="button">Delete</button>
-      </li>
+      ${comments.map(createMoviePopupCommentTemplate).join('')}
     </ul>`
   );
 }
@@ -43,7 +63,7 @@ function createMoviePopupCommentFormTemplate() {
   );
 }
 
-function createMoviePopupTemplate(movie) {
+function createMoviePopupTemplate(movie, comments) {
   const {
     title,
     originalTitle,
@@ -120,7 +140,7 @@ function createMoviePopupTemplate(movie) {
           </div>
           <section class="movie__comments comments">
             <h3 class="comments__title title title--size_m">Comments ${commentsCount}</h3>
-            ${createMoviePopupCommentListTemplate()}
+            ${createMoviePopupCommentListTemplate(comments)}
             ${createMoviePopupCommentFormTemplate()}
           </section>
         </article>
@@ -131,18 +151,20 @@ function createMoviePopupTemplate(movie) {
 
 export default class MoviePopupView extends AbstractView {
   #movie = null;
+  #comments = [];
   #onCloseButtonClick = null;
 
-  constructor({ movie, onCloseButtonClick }) {
+  constructor({ movie, comments, onCloseButtonClick }) {
     super();
     this.#movie = movie;
+    this.#comments = comments;
     this.#onCloseButtonClick = onCloseButtonClick;
     this.element.querySelector('.popup__close-button')
       .addEventListener('click', this.#closeButtonClickHandler, { once: true });
   }
 
   _getTemplate() {
-    return createMoviePopupTemplate(this.#movie);
+    return createMoviePopupTemplate(this.#movie, this.#comments);
   }
 
   open() {
