@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import dayjsRelativeTimePlugin from 'dayjs/plugin/relativeTime';
 
 const MINUTES_PER_HOUR = 60;
 const DATE_FORMAT = 'D MMMM YYYY';
@@ -6,6 +7,8 @@ const DATE_FORMAT = 'D MMMM YYYY';
 const KeyCode = {
   ESCAPE: 'Escape',
 };
+
+dayjs.extend(dayjsRelativeTimePlugin);
 
 function formatDate(date) {
   return dayjs(date).format(DATE_FORMAT);
@@ -35,8 +38,12 @@ function formatYear(date) {
   return new Date(date).getFullYear();
 }
 
+function getTimeAgo(date) {
+  return dayjs(date).fromNow();
+}
+
 function isEscapeEvent(evt) {
   return evt.code === KeyCode.ESCAPE;
 }
 
-export { formatDate, formatDuration, formatRating, formatYear, isEscapeEvent };
+export { formatDate, formatDuration, formatRating, formatYear, getTimeAgo, isEscapeEvent };
