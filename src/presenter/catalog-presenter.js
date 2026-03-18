@@ -48,11 +48,11 @@ export default class CatalogPresenter {
         new MovieCardView({
           movie,
           onLinkClick: () => {
-            if (this.#moviePopupPresenter) {
+            if (this.#moviePopupPresenter?.movieId === movie.id) {
               return;
             }
 
-            this.#openMoviePopup(movie);
+            this.#showMoviePopup(movie);
           },
         }),
         this.#movieListComponent.element,
@@ -88,8 +88,13 @@ export default class CatalogPresenter {
     }
   }
 
-  #openMoviePopup(movie) {
+  #showMoviePopup(movie) {
     const comments = this.#commentsModel.get(movie.id, movie.commentsCount);
+
+    if (this.#moviePopupPresenter) {
+      this.#moviePopupPresenter.init({ movie, comments });
+      return;
+    }
 
     this.#moviePopupPresenter = new MoviePopupPresenter({
       containerElement: this.#popupContainerElement,

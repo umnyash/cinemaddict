@@ -15,17 +15,22 @@ export default class MoviePopupPresenter {
     this.#onPopupClose = onPopupClose;
   }
 
+  get movieId() {
+    return this.#movie?.id;
+  }
+
   init({ movie, comments }) {
     this.#movie = movie;
     this.#comments = comments;
 
-    this.#popupComponent = new MoviePopupView({
-      movie: this.#movie,
-      comments: this.#comments,
-      onCloseButtonClick: this.#closeButtonClickHandler,
-    });
+    if (!this.#popupComponent) {
+      this.#render();
+      return;
+    }
 
-    render(this.#popupComponent, this.#containerElement);
+    remove(this.#popupComponent);
+    this.#render();
+    this.#popupComponent.open();
   }
 
   open() {
@@ -41,6 +46,16 @@ export default class MoviePopupPresenter {
     await this.#popupComponent.close();
     remove(this.#popupComponent);
     this.#onPopupClose();
+  }
+
+  #render() {
+    this.#popupComponent = new MoviePopupView({
+      movie: this.#movie,
+      comments: this.#comments,
+      onCloseButtonClick: this.#closeButtonClickHandler,
+    });
+
+    render(this.#popupComponent, this.#containerElement);
   }
 
   #closeButtonClickHandler = () => {
