@@ -1,12 +1,13 @@
 import { render, remove } from '../framework';
-import { isEscapeEvent } from '../utils.js';
+
+import MoviePopupPresenter from './movie-popup-presenter.js';
+
 import CatalogFilterView from '../view/catalog-filter-view.js';
 import CatalogListView from '../view/catalog-list-view.js';
 import CatalogMessage, { MessageVariant } from '../view/catalog-message-view.js';
 import CatalogShowMoreButtonView from '../view/catalog-show-more-button-view.js';
 import CatalogSortView from '../view/catalog-sort-view.js';
 import MovieCardView from '../view/movie-card-view.js';
-import MoviePopupView from '../view/movie-popup-view.js';
 
 const MOVIES_COUNT_PER_STEP = 5;
 
@@ -20,7 +21,7 @@ export default class CatalogPresenter {
 
   #movieListComponent = null;
   #showMoreButtonComponent = null;
-  #moviePopupComponent = null;
+  #moviePopupPresenter = null;
 
   constructor({ containerElement, popupContainerElement, model, commentsModel }) {
     this.#containerElement = containerElement;
@@ -47,7 +48,7 @@ export default class CatalogPresenter {
         new MovieCardView({
           movie,
           onLinkClick: () => {
-            if (this.#moviePopupComponent) {
+            if (this.#moviePopupPresenter) {
               return;
             }
 
@@ -90,26 +91,13 @@ export default class CatalogPresenter {
   #openMoviePopup(movie) {
     const comments = this.#commentsModel.get(movie.id, movie.commentsCount);
 
-    this.#moviePopupComponent = new MoviePopupView({
-      movie,
-      comments,
-      onCloseButtonClick: this.#moviePopupCloseButtonClickHandler,
+    this.#moviePopupPresenter = new MoviePopupPresenter({
+      containerElement: this.#popupContainerElement,
+      onPopupClose: this.#moviePopupCloseHandler,
     });
 
-    render(this.#moviePopupComponent, this.#popupContainerElement);
-
-    requestAnimationFrame(() => {
-      this.#moviePopupComponent.open();
-    });
-
-    document.addEventListener('keydown', this.#documentKeyDownHandler);
-  }
-
-  async #closeMoviePopup() {
-    document.removeEventListener('keydown', this.#documentKeyDownHandler);
-    await this.#moviePopupComponent.close();
-    remove(this.#moviePopupComponent);
-    this.#moviePopupComponent = null;
+    this.#moviePopupPresenter.init({ movie, comments });
+    this.#moviePopupPresenter.open();
   }
 
   #showMoreButtonClickHandler = () => {
@@ -121,14 +109,7 @@ export default class CatalogPresenter {
     }
   };
 
-  #moviePopupCloseButtonClickHandler = () => {
-    this.#closeMoviePopup();
-  };
-
-  #documentKeyDownHandler = (evt) => {
-    if (isEscapeEvent(evt)) {
-      evt.preventDefault();
-      this.#closeMoviePopup();
-    }
+  #moviePopupCloseHandler = () => {
+    this.#moviePopupPresenter = null;
   };
 }
