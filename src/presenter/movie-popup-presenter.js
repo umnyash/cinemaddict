@@ -1,5 +1,5 @@
 import { render, remove } from '../framework';
-import { isEscapeEvent } from '../utils.js';
+import { isEscapeEvent } from '../utils';
 import MoviePopupView from '../view/movie-popup-view.js';
 
 export default class MoviePopupPresenter {
