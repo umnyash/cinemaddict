@@ -1,4 +1,4 @@
-import { render } from '../framework';
+import { render, replace } from '../framework';
 import MovieCardView from '../view/movie-card-view.js';
 
 export default class MovieCardPresenter {
@@ -16,12 +16,18 @@ export default class MovieCardPresenter {
   init(movie) {
     this.#movie = movie;
 
-    this.#cardComponent = new MovieCardView({
+    const newCardComponent = new MovieCardView({
       movie: this.#movie,
       onLinkClick: this.#linkClickHandler,
     });
 
-    render(this.#cardComponent, this.#containerElement);
+    if (this.#cardComponent) {
+      replace(newCardComponent, this.#cardComponent);
+    } else {
+      render(newCardComponent, this.#containerElement);
+    }
+
+    this.#cardComponent = newCardComponent;
   }
 
   #linkClickHandler = () => {
