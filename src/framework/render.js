@@ -39,6 +39,28 @@ function render(component, element, position = RenderPosition.BEFOREEND) {
 }
 
 /**
+ * Функция для замены одного компонента на другой
+ * @param {AbstractView} newComponent Компонент, которым нужно заменить
+ * @param {AbstractView} oldComponent Компонент, который нужно заменить
+ */
+function replace(newComponent, oldComponent) {
+  if (!(newComponent instanceof AbstractView && oldComponent instanceof AbstractView)) {
+    throw new Error('Can replace only components');
+  }
+
+  const newElement = newComponent.element;
+  const oldElement = oldComponent.element;
+
+  const parentElement = oldElement.parentElement;
+
+  if (parentElement === null) {
+    throw new Error('Parent element doesn\'t exist');
+  }
+
+  parentElement.replaceChild(newElement, oldElement);
+}
+
+/**
  * Функция для удаления компонента
  * @param {AbstractView} component Компонент, который нужно удалить
  */
@@ -55,4 +77,4 @@ function remove(component) {
   component.removeElement();
 }
 
-export { RenderPosition, createElement, render, remove };
+export { RenderPosition, createElement, render, replace, remove };
