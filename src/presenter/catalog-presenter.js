@@ -1,5 +1,6 @@
 import { render, remove } from '../framework';
 
+import MovieCardPresenter from './movie-card-presenter.js';
 import MoviePopupPresenter from './movie-popup-presenter.js';
 
 import CatalogFilterView from '../view/catalog-filter-view.js';
@@ -7,7 +8,6 @@ import CatalogListView from '../view/catalog-list-view.js';
 import CatalogMessage, { MessageVariant } from '../view/catalog-message-view.js';
 import CatalogShowMoreButtonView from '../view/catalog-show-more-button-view.js';
 import CatalogSortView from '../view/catalog-sort-view.js';
-import MovieCardView from '../view/movie-card-view.js';
 
 const MOVIES_COUNT_PER_STEP = 5;
 
@@ -42,21 +42,18 @@ export default class CatalogPresenter {
     );
 
     for (let i = this.#renderedMoviesCount; i < renderedMoviesMaxCount; i++) {
-      const movie = this.#movies[i];
+      const movieCardPresenter = new MovieCardPresenter({
+        containerElement: this.#movieListComponent.element,
+        onLinkClick: (movie) => {
+          if (this.#moviePopupPresenter?.movieId === movie.id) {
+            return;
+          }
 
-      render(
-        new MovieCardView({
-          movie,
-          onLinkClick: () => {
-            if (this.#moviePopupPresenter?.movieId === movie.id) {
-              return;
-            }
+          this.#showMoviePopup(movie);
+        },
+      });
 
-            this.#showMoviePopup(movie);
-          },
-        }),
-        this.#movieListComponent.element,
-      );
+      movieCardPresenter.init(this.#movies[i]);
     }
 
     this.#renderedMoviesCount = renderedMoviesMaxCount;
