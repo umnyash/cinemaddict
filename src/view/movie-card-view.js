@@ -1,5 +1,5 @@
 import { AbstractView } from '../framework';
-import { formatRating, formatYear, formatDuration } from '../utils.js';
+import { formatMovieDuration, formatMovieRating, formatMovieReleaseYear } from '../utils';
 
 const DESCRIPTION_MAX_LENGTH = 140;
 
@@ -36,10 +36,10 @@ function createMovieCardTemplate(movie) {
     isFavorite,
   } = movie;
 
-  const releaseYear = formatYear(releaseDate);
+  const releaseYear = formatMovieReleaseYear(releaseDate);
   const formattedDescription = formatDescription(description);
-  const formattedDuration = formatDuration(duration);
-  const formattedRating = formatRating(rating);
+  const formattedDuration = formatMovieDuration(duration);
+  const formattedRating = formatMovieRating(rating);
   const genre = genres[0];
 
   return (

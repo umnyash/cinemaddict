@@ -1,10 +1,16 @@
 import { AbstractView } from '../framework';
 import { emotions, emotionIds } from '../data';
-import { formatDate, formatDuration, formatRating, getTimeAgo } from '../utils.js';
+
+import {
+  formatCommentDate,
+  formatMovieDuration,
+  formatMovieRating,
+  formatMovieReleaseDate,
+} from '../utils';
 
 function createMoviePopupCommentTemplate(comment) {
   const { text, emotion, date, author: { name } } = comment;
-  const timeAgo = getTimeAgo(date);
+  const formattedDate = formatCommentDate(date);
 
   return (
     `<li class="comment">
@@ -18,7 +24,7 @@ function createMoviePopupCommentTemplate(comment) {
       >
       <blockquote class="comment__text">${text}</blockquote>
       <p class="comment__author">${name}</p>
-      <time class="comment__date" datetime="${date}">${timeAgo}</time>
+      <time class="comment__date" datetime="${date}">${formattedDate}</time>
       <button class="comment__delete-button link" type="button">Delete</button>
     </li>`
   );
@@ -84,9 +90,9 @@ function createMoviePopupTemplate(movie, comments) {
     commentsCount,
   } = movie;
 
-  const formattedRating = formatRating(rating);
-  const formattedReleaseDate = formatDate(releaseDate);
-  const formattedDuration = formatDuration(duration);
+  const formattedRating = formatMovieRating(rating);
+  const formattedReleaseDate = formatMovieReleaseDate(releaseDate);
+  const formattedDuration = formatMovieDuration(duration);
 
   return (
     `<dialog class="popup popup--position_right">
