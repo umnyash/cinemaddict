@@ -1,5 +1,5 @@
 export { formatCommentDate } from './comments.js';
-export { isEscapeEvent } from './common.js';
+export { isEscapeEvent, updateArrayItemById } from './common.js';
 
 export {
   formatMovieDuration,
