@@ -161,6 +161,7 @@ export default class MoviePopupView extends AbstractView {
   #onWatchlistButtonClick = null;
   #onWatchedButtonClick = null;
   #onFavoriteButtonClick = null;
+  #onPopupScroll = null;
   #onCloseButtonClick = null;
 
   constructor({
@@ -169,6 +170,7 @@ export default class MoviePopupView extends AbstractView {
     onWatchlistButtonClick,
     onWatchedButtonClick,
     onFavoriteButtonClick,
+    onPopupScroll,
     onCloseButtonClick,
   }) {
     super();
@@ -177,6 +179,7 @@ export default class MoviePopupView extends AbstractView {
     this.#onWatchlistButtonClick = onWatchlistButtonClick;
     this.#onWatchedButtonClick = onWatchedButtonClick;
     this.#onFavoriteButtonClick = onFavoriteButtonClick;
+    this.#onPopupScroll = onPopupScroll;
     this.#onCloseButtonClick = onCloseButtonClick;
 
     this.element.querySelector('.icon-button--icon_list-add')
@@ -187,6 +190,8 @@ export default class MoviePopupView extends AbstractView {
 
     this.element.querySelector('.icon-button--icon_star')
       .addEventListener('click', this.#favoriteButtonClickHandler);
+
+    this.element.addEventListener('scroll', this.#popupScrollHandler);
 
     this.element.querySelector('.popup__close-button')
       .addEventListener('click', this.#closeButtonClickHandler, { once: true });
@@ -214,6 +219,10 @@ export default class MoviePopupView extends AbstractView {
     });
   }
 
+  setScrollTop(scrollTop) {
+    this.element.scrollTop = scrollTop;
+  }
+
   #watchlistButtonClickHandler = () => {
     this.#onWatchlistButtonClick();
   };
@@ -224,6 +233,10 @@ export default class MoviePopupView extends AbstractView {
 
   #favoriteButtonClickHandler = () => {
     this.#onFavoriteButtonClick();
+  };
+
+  #popupScrollHandler = () => {
+    this.#onPopupScroll(this.element.scrollTop);
   };
 
   #closeButtonClickHandler = () => {
