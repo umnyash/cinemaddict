@@ -4,13 +4,15 @@ import MovieCardView from '../view/movie-card-view.js';
 export default class MovieCardPresenter {
   #containerElement = null;
   #onLinkClick = null;
+  #onDataChange = null;
 
   #movie = null;
   #cardComponent = null;
 
-  constructor({ containerElement, onLinkClick }) {
+  constructor({ containerElement, onLinkClick, onDataChange }) {
     this.#containerElement = containerElement;
     this.#onLinkClick = onLinkClick;
+    this.#onDataChange = onDataChange;
   }
 
   init(movie) {
@@ -19,6 +21,9 @@ export default class MovieCardPresenter {
     const newCardComponent = new MovieCardView({
       movie: this.#movie,
       onLinkClick: this.#linkClickHandler,
+      onWatchlistButtonClick: this.#watchlistButtonClickHandler,
+      onWatchedButtonClick: this.#watchedButtonClickHandler,
+      onFavoriteButtonClick: this.#favoriteButtonClickHandler,
     });
 
     if (this.#cardComponent) {
@@ -32,5 +37,26 @@ export default class MovieCardPresenter {
 
   #linkClickHandler = () => {
     this.#onLinkClick(this.#movie);
+  };
+
+  #watchlistButtonClickHandler = () => {
+    this.#onDataChange({
+      ...this.#movie,
+      isOnWatchlist: !this.#movie.isOnWatchlist,
+    });
+  };
+
+  #watchedButtonClickHandler = () => {
+    this.#onDataChange({
+      ...this.#movie,
+      isWatched: !this.#movie.isWatched,
+    });
+  };
+
+  #favoriteButtonClickHandler = () => {
+    this.#onDataChange({
+      ...this.#movie,
+      isFavorite: !this.#movie.isFavorite,
+    });
   };
 }

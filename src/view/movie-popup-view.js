@@ -158,13 +158,36 @@ function createMoviePopupTemplate(movie, comments) {
 export default class MoviePopupView extends AbstractView {
   #movie = null;
   #comments = [];
+  #onWatchlistButtonClick = null;
+  #onWatchedButtonClick = null;
+  #onFavoriteButtonClick = null;
   #onCloseButtonClick = null;
 
-  constructor({ movie, comments, onCloseButtonClick }) {
+  constructor({
+    movie,
+    comments,
+    onWatchlistButtonClick,
+    onWatchedButtonClick,
+    onFavoriteButtonClick,
+    onCloseButtonClick,
+  }) {
     super();
     this.#movie = movie;
     this.#comments = comments;
+    this.#onWatchlistButtonClick = onWatchlistButtonClick;
+    this.#onWatchedButtonClick = onWatchedButtonClick;
+    this.#onFavoriteButtonClick = onFavoriteButtonClick;
     this.#onCloseButtonClick = onCloseButtonClick;
+
+    this.element.querySelector('.icon-button--icon_list-add')
+      .addEventListener('click', this.#watchlistButtonClickHandler);
+
+    this.element.querySelector('.icon-button--icon_checkmark')
+      .addEventListener('click', this.#watchedButtonClickHandler);
+
+    this.element.querySelector('.icon-button--icon_star')
+      .addEventListener('click', this.#favoriteButtonClickHandler);
+
     this.element.querySelector('.popup__close-button')
       .addEventListener('click', this.#closeButtonClickHandler, { once: true });
   }
@@ -190,6 +213,18 @@ export default class MoviePopupView extends AbstractView {
       this.element.close();
     });
   }
+
+  #watchlistButtonClickHandler = () => {
+    this.#onWatchlistButtonClick();
+  };
+
+  #watchedButtonClickHandler = () => {
+    this.#onWatchedButtonClick();
+  };
+
+  #favoriteButtonClickHandler = () => {
+    this.#onFavoriteButtonClick();
+  };
 
   #closeButtonClickHandler = () => {
     this.#onCloseButtonClick();
