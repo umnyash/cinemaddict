@@ -84,13 +84,35 @@ function createMovieCardTemplate(movie) {
 
 export default class MovieCardView extends AbstractView {
   #onLinkClick = null;
+  #onWatchlistButtonClick = null;
+  #onWatchedButtonClick = null;
+  #onFavoriteButtonClick = null;
 
-  constructor({ movie, onLinkClick }) {
+  constructor({
+    movie,
+    onLinkClick,
+    onWatchlistButtonClick,
+    onWatchedButtonClick,
+    onFavoriteButtonClick,
+  }) {
     super();
     this.movie = movie;
     this.#onLinkClick = onLinkClick;
+    this.#onWatchlistButtonClick = onWatchlistButtonClick;
+    this.#onWatchedButtonClick = onWatchedButtonClick;
+    this.#onFavoriteButtonClick = onFavoriteButtonClick;
+
     this.element.querySelector('.movie-card__link')
       .addEventListener('click', this.#linkClickHandler);
+
+    this.element.querySelector('.icon-button--icon_list-add')
+      .addEventListener('click', this.#watchlistButtonClickHandler);
+
+    this.element.querySelector('.icon-button--icon_checkmark')
+      .addEventListener('click', this.#watchedButtonClickHandler);
+
+    this.element.querySelector('.icon-button--icon_star')
+      .addEventListener('click', this.#favoriteButtonClickHandler);
   }
 
   _getTemplate() {
@@ -100,5 +122,17 @@ export default class MovieCardView extends AbstractView {
   #linkClickHandler = (evt) => {
     evt.preventDefault();
     this.#onLinkClick();
+  };
+
+  #watchlistButtonClickHandler = () => {
+    this.#onWatchlistButtonClick();
+  };
+
+  #watchedButtonClickHandler = () => {
+    this.#onWatchedButtonClick();
+  };
+
+  #favoriteButtonClickHandler = () => {
+    this.#onFavoriteButtonClick();
   };
 }

@@ -1,4 +1,5 @@
 import { render, remove } from '../framework';
+import { updateArrayItemById } from '../utils';
 
 import MovieCardPresenter from './movie-card-presenter.js';
 import MoviePopupPresenter from './movie-popup-presenter.js';
@@ -21,6 +22,7 @@ export default class CatalogPresenter {
 
   #movieListComponent = null;
   #showMoreButtonComponent = null;
+  #movieCardPresenters = new Map();
   #moviePopupPresenter = null;
 
   constructor({ containerElement, popupContainerElement, model, commentsModel }) {
@@ -51,9 +53,11 @@ export default class CatalogPresenter {
 
           this.#showMoviePopup(movie);
         },
+        onDataChange: this.#movieChangeHandler,
       });
 
       movieCardPresenter.init(this.#movies[i]);
+      this.#movieCardPresenters.set(this.#movies[i].id, movieCardPresenter);
     }
 
     this.#renderedMoviesCount = renderedMoviesMaxCount;
@@ -96,11 +100,28 @@ export default class CatalogPresenter {
     this.#moviePopupPresenter = new MoviePopupPresenter({
       containerElement: this.#popupContainerElement,
       onPopupClose: this.#moviePopupCloseHandler,
+      onDataChange: this.#movieChangeHandler,
     });
 
     this.#moviePopupPresenter.init({ movie, comments });
     this.#moviePopupPresenter.open();
   }
+
+  #movieChangeHandler = (updatedMovie) => {
+    updateArrayItemById(this.#movies, updatedMovie);
+    this.#movieCardPresenters.get(updatedMovie.id).init(updatedMovie);
+
+    if (this.#moviePopupPresenter?.movieId !== updatedMovie.id) {
+      return;
+    }
+
+    const comments = this.#commentsModel.get(updatedMovie.id, updatedMovie.commentsCount);
+
+    this.#moviePopupPresenter.init({
+      movie: updatedMovie,
+      comments,
+    });
+  };
 
   #showMoreButtonClickHandler = () => {
     this.#renderNextMovies();
