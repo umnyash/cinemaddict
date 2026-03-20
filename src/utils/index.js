@@ -6,4 +6,5 @@ export {
   formatMovieRating,
   formatMovieReleaseDate,
   formatMovieReleaseYear,
+  sortMoviesBy,
 } from './movies.js';

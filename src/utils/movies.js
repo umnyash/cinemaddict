@@ -1,3 +1,4 @@
+import { SortType } from '../constants.js';
 import { formatDate, getYear } from './date.js';
 
 const MINUTES_PER_HOUR = 60;
@@ -31,9 +32,25 @@ function formatMovieReleaseYear(date) {
   return getYear(date);
 }
 
+const movieComparators = {
+  [SortType.DATE_DESC]: (movieA, movieB) => new Date(movieB.releaseDate) - new Date(movieA.releaseDate),
+  [SortType.RATING_DESC]: (movieA, movieB) => movieB.rating - movieA.rating,
+};
+
+function sortMoviesBy(movies, sortType) {
+  const comparator = movieComparators[sortType];
+
+  if (!comparator) {
+    throw new Error(`Unsupported sort type: ${sortType}`);
+  }
+
+  return movies.sort(comparator);
+}
+
 export {
   formatMovieDuration,
   formatMovieRating,
   formatMovieReleaseDate,
   formatMovieReleaseYear,
+  sortMoviesBy,
 };
