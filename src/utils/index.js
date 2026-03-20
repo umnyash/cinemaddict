@@ -7,3 +7,5 @@ export {
   formatMovieReleaseDate,
   formatMovieReleaseYear,
 } from './movies.js';
+
+export { sortMoviesBy } from './movie-sort.js';
