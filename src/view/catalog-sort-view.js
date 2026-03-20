@@ -27,7 +27,22 @@ function createCatalogSortTemplate(currentValue) {
 }
 
 export default class CatalogSortView extends AbstractView {
-  _getTemplate() {
-    return createCatalogSortTemplate(SortType.DEFAULT);
+  #value = null;
+  #onValueChange = null;
+
+  constructor({ value, onValueChange }) {
+    super();
+
+    this.#value = value;
+    this.#onValueChange = onValueChange;
+    this.element.addEventListener('change', this.#formChangeHandler);
   }
+
+  _getTemplate() {
+    return createCatalogSortTemplate(this.#value);
+  }
+
+  #formChangeHandler = (evt) => {
+    this.#onValueChange(evt.target.value);
+  };
 }

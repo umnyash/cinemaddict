@@ -1,4 +1,5 @@
 import { render, remove } from '../framework';
+import { SortType } from '../constants.js';
 import { updateArrayItemById } from '../utils';
 
 import MovieCardPresenter from './movie-card-presenter.js';
@@ -20,8 +21,11 @@ export default class CatalogPresenter {
   #movies = [];
   #renderedMoviesCount = 0;
 
+  #sortComponent = null;
   #movieListComponent = null;
   #showMoreButtonComponent = null;
+
+  #sortType = SortType.DEFAULT;
   #movieCardPresenters = new Map();
   #moviePopupPresenter = null;
 
@@ -35,6 +39,15 @@ export default class CatalogPresenter {
   init() {
     this.#movies = this.#model.movies;
     this.#render();
+  }
+
+  #renderSort() {
+    this.#sortComponent = new CatalogSortView({
+      value: this.#sortType,
+      onValueChange: this.#sortChangeHandler,
+    });
+
+    render(this.#sortComponent, this.#containerElement);
   }
 
   #renderNextMovies() {
@@ -75,7 +88,7 @@ export default class CatalogPresenter {
       return;
     }
 
-    render(new CatalogSortView(), this.#containerElement);
+    this.#renderSort();
     this.#movieListComponent = new CatalogListView();
     render(this.#movieListComponent, this.#containerElement);
     this.#renderNextMovies();
@@ -106,6 +119,10 @@ export default class CatalogPresenter {
     this.#moviePopupPresenter.init({ movie, comments });
     this.#moviePopupPresenter.open();
   }
+
+  #sortChangeHandler = (value) => {
+    this.#sortType = value;
+  };
 
   #movieChangeHandler = (updatedMovie) => {
     updateArrayItemById(this.#movies, updatedMovie);
