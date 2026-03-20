@@ -10,6 +10,7 @@ export default class MoviePopupPresenter {
   #movie = null;
   #comments = null;
   #popupComponent = null;
+  #popupScrollTop = 0;
 
   constructor({ containerElement, onPopupClose, onDataChange }) {
     this.#containerElement = containerElement;
@@ -22,6 +23,8 @@ export default class MoviePopupPresenter {
   }
 
   init({ movie, comments }) {
+    const isSameMovie = this.#movie?.id === movie.id;
+
     this.#movie = movie;
     this.#comments = comments;
 
@@ -33,6 +36,12 @@ export default class MoviePopupPresenter {
     remove(this.#popupComponent);
     this.#render();
     this.#popupComponent.open();
+
+    if (isSameMovie) {
+      this.#popupComponent.setScrollTop(this.#popupScrollTop);
+    } else {
+      this.#popupScrollTop = 0;
+    }
   }
 
   open() {
@@ -57,6 +66,7 @@ export default class MoviePopupPresenter {
       onWatchlistButtonClick: this.#watchlistButtonClickHandler,
       onWatchedButtonClick: this.#watchedButtonClickHandler,
       onFavoriteButtonClick: this.#favoriteButtonClickHandler,
+      onPopupScroll: this.#popupScrollHandler,
       onCloseButtonClick: this.#closeButtonClickHandler,
     });
 
@@ -82,6 +92,10 @@ export default class MoviePopupPresenter {
       ...this.#movie,
       isFavorite: !this.#movie.isFavorite,
     });
+  };
+
+  #popupScrollHandler = (scrollTop) => {
+    this.#popupScrollTop = scrollTop;
   };
 
   #closeButtonClickHandler = () => {
