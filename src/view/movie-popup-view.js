@@ -1,5 +1,6 @@
 import { AbstractView } from '../framework';
 import { emotions, emotionIds } from '../data';
+import { getDeclension } from '../utils';
 
 import {
   formatCommentDate,
@@ -93,6 +94,7 @@ function createMoviePopupTemplate(movie, comments) {
   const formattedRating = formatMovieRating(rating);
   const formattedReleaseDate = formatMovieReleaseDate(releaseDate);
   const formattedDuration = formatMovieDuration(duration);
+  const genresLabel = getDeclension(genres.length, { one: 'Genre', many: 'Genres' });
 
   return (
     `<dialog class="popup popup--position_right">
@@ -127,7 +129,7 @@ function createMoviePopupTemplate(movie, comments) {
             <dd class="movie__details-value">${formattedDuration}</dd>
             <dt>Country</dt>
             <dd class="movie__details-value">${releaseCountry}</dd>
-            <dt>Genres</dt>
+            <dt>${genresLabel}</dt>
             <dd class="movie__details-value movie__details-value--list">
               ${genres.map((genre) => `<span>${genre}</span>`).join('')}
             </dd>
