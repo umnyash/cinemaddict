@@ -2,6 +2,10 @@ const KeyCode = {
   ESCAPE: 'Escape',
 };
 
+function getDeclension(count, { one, many }) {
+  return count === 1 ? one : many;
+}
+
 function isEscapeEvent(evt) {
   return evt.code === KeyCode.ESCAPE;
 }
@@ -16,4 +20,4 @@ function updateArrayItemById(array, updatedItem) {
   array[index] = updatedItem;
 }
 
-export { isEscapeEvent, updateArrayItemById };
+export { getDeclension, isEscapeEvent, updateArrayItemById };
