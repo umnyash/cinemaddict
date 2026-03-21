@@ -78,6 +78,25 @@ export default class CatalogPresenter {
     this.#renderedMoviesCount = renderedMoviesMaxCount;
   }
 
+  #renderShowMoreButton() {
+    this.#showMoreButtonComponent = new CatalogShowMoreButtonView({
+      onButtonClick: this.#showMoreButtonClickHandler,
+    });
+
+    render(this.#showMoreButtonComponent, this.#containerElement);
+  }
+
+  #renderMovieList() {
+    this.#movieListComponent = new CatalogListView();
+    render(this.#movieListComponent, this.#containerElement);
+
+    this.#renderNextMovies();
+
+    if (this.#movies.length > this.#renderedMoviesCount) {
+      this.#renderShowMoreButton();
+    }
+  }
+
   #render() {
     render(new CatalogFilterView(), this.#containerElement);
 
@@ -91,17 +110,16 @@ export default class CatalogPresenter {
     }
 
     this.#renderSort();
-    this.#movieListComponent = new CatalogListView();
-    render(this.#movieListComponent, this.#containerElement);
-    this.#renderNextMovies();
+    this.#renderMovieList();
+  }
 
-    if (this.#movies.length > this.#renderedMoviesCount) {
-      this.#showMoreButtonComponent = new CatalogShowMoreButtonView({
-        onButtonClick: this.#showMoreButtonClickHandler,
-      });
-
-      render(this.#showMoreButtonComponent, this.#containerElement);
-    }
+  #destroyMovieList() {
+    remove(this.#showMoreButtonComponent);
+    this.#showMoreButtonComponent = null;
+    remove(this.#movieListComponent);
+    this.#movieListComponent = null;
+    this.#movieCardPresenters.clear();
+    this.#renderedMoviesCount = 0;
   }
 
   #sortMovies(sortType) {
@@ -134,12 +152,14 @@ export default class CatalogPresenter {
 
   #sortChangeHandler = (value) => {
     this.#sortMovies(value);
+    this.#destroyMovieList();
+    this.#renderMovieList();
   };
 
   #movieChangeHandler = (updatedMovie) => {
     updateArrayItemById(this.#sourceMovies, updatedMovie);
     updateArrayItemById(this.#movies, updatedMovie);
-    this.#movieCardPresenters.get(updatedMovie.id).init(updatedMovie);
+    this.#movieCardPresenters.get(updatedMovie.id)?.init(updatedMovie);
 
     if (this.#moviePopupPresenter?.movieId !== updatedMovie.id) {
       return;
