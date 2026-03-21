@@ -1,5 +1,5 @@
 import { AbstractView } from '../framework';
-import { formatMovieDuration, formatMovieRating, formatMovieReleaseYear } from '../utils';
+import { formatMovieDuration, formatMovieRating, formatMovieReleaseYear, getDeclension } from '../utils';
 
 const DESCRIPTION_MAX_LENGTH = 140;
 
@@ -10,7 +10,7 @@ function formatDescription(description) {
 }
 
 function getCommentsLabel(count) {
-  return `comment${count === 1 ? '' : 's'}`;
+  return getDeclension(count, { one: 'comment', many: 'comments' });
 }
 
 function createMovieCardCommentsTemplate(commentsCount) {
