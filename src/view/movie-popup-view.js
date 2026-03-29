@@ -1,4 +1,4 @@
-import { AbstractView } from '../framework';
+import { AbstractStatefulView } from '../framework';
 import { emotions, emotionIds } from '../data';
 import { getDeclension } from '../utils';
 
@@ -70,7 +70,7 @@ function createMoviePopupCommentFormTemplate() {
   );
 }
 
-function createMoviePopupTemplate(movie, comments) {
+function createMoviePopupTemplate({ movie, comments, state }) {
   const {
     title,
     originalTitle,
@@ -85,11 +85,14 @@ function createMoviePopupTemplate(movie, comments) {
     duration,
     description,
     genres,
+    commentsCount,
+  } = movie;
+
+  const {
     isOnWatchlist,
     isWatched,
     isFavorite,
-    commentsCount,
-  } = movie;
+  } = state;
 
   const formattedRating = formatMovieRating(rating);
   const formattedReleaseDate = formatMovieReleaseDate(releaseDate);
@@ -157,7 +160,7 @@ function createMoviePopupTemplate(movie, comments) {
   );
 }
 
-export default class MoviePopupView extends AbstractView {
+export default class MoviePopupView extends AbstractStatefulView {
   #movie = null;
   #comments = [];
   #onWatchlistButtonClick = null;
@@ -184,6 +187,24 @@ export default class MoviePopupView extends AbstractView {
     this.#onPopupScroll = onPopupScroll;
     this.#onCloseButtonClick = onCloseButtonClick;
 
+    this._setState({
+      isOnWatchlist: this.#movie.isOnWatchlist,
+      isWatched: this.#movie.isWatched,
+      isFavorite: this.#movie.isFavorite,
+    });
+
+    this._setHandlers();
+  }
+
+  _getTemplate() {
+    return createMoviePopupTemplate({
+      movie: this.#movie,
+      comments: this.#comments,
+      state: this._state,
+    });
+  }
+
+  _setHandlers() {
     this.element.querySelector('.icon-button--icon_list-add')
       .addEventListener('click', this.#watchlistButtonClickHandler);
 
@@ -197,10 +218,6 @@ export default class MoviePopupView extends AbstractView {
 
     this.element.querySelector('.popup__close-button')
       .addEventListener('click', this.#closeButtonClickHandler, { once: true });
-  }
-
-  _getTemplate() {
-    return createMoviePopupTemplate(this.#movie, this.#comments);
   }
 
   open() {
