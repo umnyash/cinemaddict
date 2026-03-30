@@ -33,8 +33,17 @@ export default class MoviePopupPresenter {
       return;
     }
 
-    remove(this.#popupComponent);
-    this.#render();
+    if (isCurrentMovie) {
+      this.#popupComponent.updateElement({
+        isWatchlisted: this.#movie.isWatchlisted,
+        isWatched: this.#movie.isWatched,
+        isFavorited: this.#movie.isFavorited,
+      });
+    } else {
+      remove(this.#popupComponent);
+      this.#render();
+    }
+
     this.#popupComponent.open();
 
     if (isCurrentMovie) {
