@@ -172,6 +172,7 @@ export default class MoviePopupView extends AbstractStatefulView {
   constructor({
     movie,
     comments,
+    isOpen,
     onWatchlistButtonClick,
     onWatchedButtonClick,
     onFavoriteButtonClick,
@@ -193,7 +194,16 @@ export default class MoviePopupView extends AbstractStatefulView {
       isFavorite: this.#movie.isFavorite,
     });
 
+    if (isOpen) {
+      this.open();
+    }
+
     this._setHandlers();
+  }
+
+  updateElement(stateUpdate) {
+    super.updateElement(stateUpdate);
+    this.open();
   }
 
   _getTemplate() {

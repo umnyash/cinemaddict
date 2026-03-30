@@ -41,10 +41,8 @@ export default class MoviePopupPresenter {
       });
     } else {
       remove(this.#popupComponent);
-      this.#render();
+      this.#render(true);
     }
-
-    this.#popupComponent.open();
 
     if (isSameMovie) {
       this.#popupComponent.setScrollTop(this.#popupScrollTop);
@@ -68,10 +66,11 @@ export default class MoviePopupPresenter {
     this.#onPopupClose();
   }
 
-  #render() {
+  #render(isOpen) {
     this.#popupComponent = new MoviePopupView({
       movie: this.#movie,
       comments: this.#comments,
+      isOpen,
       onWatchlistButtonClick: this.#watchlistButtonClickHandler,
       onWatchedButtonClick: this.#watchedButtonClickHandler,
       onFavoriteButtonClick: this.#favoriteButtonClickHandler,
