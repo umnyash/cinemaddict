@@ -9,6 +9,11 @@ import {
   formatMovieReleaseDate,
 } from '../utils';
 
+const CommentFormFieldName = {
+  EMOTION: 'emotion',
+  TEXT: 'text',
+};
+
 function createMoviePopupCommentTemplate(comment) {
   const { text, emotion, date, author: { name } } = comment;
   const formattedDate = formatCommentDate(date);
@@ -43,19 +48,28 @@ function createMoviePopupCommentListTemplate(comments) {
   );
 }
 
-function createMoviePopupCommentFormTemplate() {
+function createMoviePopupCommentFormTemplate(currentEmotionId, text) {
   return (
     `<form class="comment-form" action="https://echo.htmlacademy.ru/courses" method="post">
-      <div class="comment-form__emotion-wrapper" aria-hidden="true"></div>
+      <div class="comment-form__emotion-wrapper" aria-hidden="true">
+        ${currentEmotionId ? `<img class="comment-form__emotion" src="${emotions[currentEmotionId].iconUrl}" width="55" height="55" alt="">` : ''}
+      </div>
       <label class="comment-form__field text-area">
-        <textarea class="text-area__control" name="text" rows="1" placeholder="Good movie!" required></textarea>
+        <textarea class="text-area__control" name="${CommentFormFieldName.TEXT}" rows="1" placeholder="Good movie!" required>${text}</textarea>
         <span class="text-area__label">Select reaction below and write comment here</span>
       </label>
       <fieldset class="comment-form__emotions">
         <legend class="visually-hidden">Emotion:</legend>
         ${emotionIds.map((id) => `
           <label class="checker checker--icon">
-            <input class="checker__control visually-hidden" name="emotion" value="${id}" type="radio" required>
+            <input
+              class="checker__control visually-hidden"
+              name="${CommentFormFieldName.EMOTION}"
+              value="${id}"
+              type="radio"
+              required
+              ${id === currentEmotionId ? 'checked' : ''}
+            >
             <img
               class="checker__label"
               src="${emotions[id].iconUrl}"
@@ -92,6 +106,8 @@ function createMoviePopupTemplate({ movie, comments, state }) {
     isOnWatchlist,
     isWatched,
     isFavorite,
+    newCommentEmotionId,
+    newCommentText,
   } = state;
 
   const formattedRating = formatMovieRating(rating);
@@ -152,7 +168,7 @@ function createMoviePopupTemplate({ movie, comments, state }) {
           <section class="movie__comments comments">
             <h3 class="comments__title title title--size_m">Comments ${commentsCount}</h3>
             ${createMoviePopupCommentListTemplate(comments)}
-            ${createMoviePopupCommentFormTemplate()}
+            ${createMoviePopupCommentFormTemplate(newCommentEmotionId, newCommentText)}
           </section>
         </article>
       </div>
@@ -189,6 +205,8 @@ export default class MoviePopupView extends AbstractStatefulView {
       isOnWatchlist: this.#movie.isOnWatchlist,
       isWatched: this.#movie.isWatched,
       isFavorite: this.#movie.isFavorite,
+      newCommentEmotionId: null,
+      newCommentText: '',
       scrollTop: 0,
     });
 
@@ -222,6 +240,9 @@ export default class MoviePopupView extends AbstractStatefulView {
 
     this.element.querySelector('.icon-button--icon_star')
       .addEventListener('click', this.#favoriteButtonClickHandler);
+
+    this.element.querySelector('.comment-form')
+      .addEventListener('input', this.#commentFormInputHandler);
 
     this.element.addEventListener('scroll', this.#popupScrollHandler);
 
@@ -257,6 +278,17 @@ export default class MoviePopupView extends AbstractStatefulView {
 
   #favoriteButtonClickHandler = () => {
     this.#onFavoriteButtonClick();
+  };
+
+  #commentFormInputHandler = ({ target: { name, value } }) => {
+    switch (name) {
+      case CommentFormFieldName.TEXT:
+        this._setState({ newCommentText: value });
+        break;
+      case CommentFormFieldName.EMOTION:
+        this.updateElement({ newCommentEmotionId: value });
+        break;
+    }
   };
 
   #popupScrollHandler = () => {
