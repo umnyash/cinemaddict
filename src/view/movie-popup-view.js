@@ -166,7 +166,6 @@ export default class MoviePopupView extends AbstractStatefulView {
   #onWatchlistButtonClick = null;
   #onWatchedButtonClick = null;
   #onFavoriteButtonClick = null;
-  #onPopupScroll = null;
   #onCloseButtonClick = null;
 
   constructor({
@@ -176,7 +175,6 @@ export default class MoviePopupView extends AbstractStatefulView {
     onWatchlistButtonClick,
     onWatchedButtonClick,
     onFavoriteButtonClick,
-    onPopupScroll,
     onCloseButtonClick,
   }) {
     super();
@@ -185,13 +183,13 @@ export default class MoviePopupView extends AbstractStatefulView {
     this.#onWatchlistButtonClick = onWatchlistButtonClick;
     this.#onWatchedButtonClick = onWatchedButtonClick;
     this.#onFavoriteButtonClick = onFavoriteButtonClick;
-    this.#onPopupScroll = onPopupScroll;
     this.#onCloseButtonClick = onCloseButtonClick;
 
     this._setState({
       isOnWatchlist: this.#movie.isOnWatchlist,
       isWatched: this.#movie.isWatched,
       isFavorite: this.#movie.isFavorite,
+      scrollTop: 0,
     });
 
     if (isOpen) {
@@ -204,6 +202,7 @@ export default class MoviePopupView extends AbstractStatefulView {
   updateElement(stateUpdate) {
     super.updateElement(stateUpdate);
     this.open();
+    this.element.scrollTop = this._state.scrollTop;
   }
 
   _getTemplate() {
@@ -248,10 +247,6 @@ export default class MoviePopupView extends AbstractStatefulView {
     });
   }
 
-  setScrollTop(scrollTop) {
-    this.element.scrollTop = scrollTop;
-  }
-
   #watchlistButtonClickHandler = () => {
     this.#onWatchlistButtonClick();
   };
@@ -265,7 +260,9 @@ export default class MoviePopupView extends AbstractStatefulView {
   };
 
   #popupScrollHandler = () => {
-    this.#onPopupScroll(this.element.scrollTop);
+    this._setState({
+      scrollTop: this.element.scrollTop,
+    });
   };
 
   #closeButtonClickHandler = () => {
