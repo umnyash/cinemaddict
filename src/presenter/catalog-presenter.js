@@ -15,7 +15,7 @@ const MOVIES_COUNT_PER_STEP = 5;
 export default class CatalogPresenter {
   #containerElement = null;
   #popupContainerElement = null;
-  #model = null;
+  #moviesModel = null;
   #commentsModel = null;
   #sourceMovies = [];
   #movies = [];
@@ -29,16 +29,16 @@ export default class CatalogPresenter {
   #movieCardPresenters = new Map();
   #moviePopupPresenter = null;
 
-  constructor({ containerElement, popupContainerElement, model, commentsModel }) {
+  constructor({ containerElement, popupContainerElement, moviesModel, commentsModel }) {
     this.#containerElement = containerElement;
     this.#popupContainerElement = popupContainerElement;
-    this.#model = model;
+    this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
   }
 
   init() {
-    this.#sourceMovies = [...this.#model.movies];
-    this.#movies = [...this.#model.movies];
+    this.#sourceMovies = [...this.#moviesModel.movies];
+    this.#movies = [...this.#moviesModel.movies];
     this.#render();
   }
 

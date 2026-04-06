@@ -1,7 +1,7 @@
 import { render } from './framework/render.js';
 import UserView from './view/user-view.js';
 import MoviesCountView from './view/movies-count-view.js';
-import CatalogModel from './model/catalog-model.js';
+import MoviesModel from './model/movies-model.js';
 import CommentsModel from './model/comments-model.js';
 import CatalogPresenter from './presenter/catalog-presenter.js';
 
@@ -9,13 +9,13 @@ const siteHeaderContainerElement = document.body.querySelector('.site-header__co
 const siteFooterContainerElement = document.body.querySelector('.site-footer__container');
 const catalogContainerElement = document.body.querySelector('.catalog__container');
 
-const catalogModel = new CatalogModel();
+const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
 
 const catalogPresenter = new CatalogPresenter({
   containerElement: catalogContainerElement,
   popupContainerElement: document.body,
-  model: catalogModel,
+  moviesModel,
   commentsModel,
 });
 
