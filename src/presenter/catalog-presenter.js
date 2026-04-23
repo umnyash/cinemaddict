@@ -18,7 +18,6 @@ export default class CatalogPresenter {
   #moviesModel = null;
   #commentsModel = null;
   #sourceMovies = [];
-  #movies = [];
   #renderedMoviesCount = 0;
 
   #sortComponent = null;
@@ -36,9 +35,14 @@ export default class CatalogPresenter {
     this.#commentsModel = commentsModel;
   }
 
+  get #movies() {
+    return this.#sortType
+      ? sortMoviesBy([...this.#sourceMovies], this.#sortType)
+      : this.#sourceMovies;
+  }
+
   init() {
     this.#sourceMovies = [...this.#moviesModel.movies];
-    this.#movies = [...this.#moviesModel.movies];
     this.#render();
   }
 
@@ -121,16 +125,6 @@ export default class CatalogPresenter {
     this.#renderedMoviesCount = 0;
   }
 
-  #sortMovies(sortType) {
-    if (sortType) {
-      sortMoviesBy(this.#movies, sortType);
-    } else {
-      this.#movies = [...this.#sourceMovies];
-    }
-
-    this.#sortType = sortType;
-  }
-
   #showMoviePopup(movie) {
     const comments = this.#commentsModel.get(movie.id, movie.commentsCount);
 
@@ -150,14 +144,13 @@ export default class CatalogPresenter {
   }
 
   #sortChangeHandler = (value) => {
-    this.#sortMovies(value);
+    this.#sortType = value;
     this.#destroyMovieList();
     this.#renderMovieList();
   };
 
   #movieChangeHandler = (updatedMovie) => {
     updateArrayItemById(this.#sourceMovies, updatedMovie);
-    updateArrayItemById(this.#movies, updatedMovie);
     this.#movieCardPresenters.get(updatedMovie.id)?.init(updatedMovie);
 
     if (this.#moviePopupPresenter?.movieId !== updatedMovie.id) {
