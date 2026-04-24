@@ -1,4 +1,6 @@
-export default class CatalogFilterModel {
+import { Observable } from '../framework';
+
+export default class CatalogFilterModel extends Observable {
   #filter = {
     status: null,
   };
@@ -9,5 +11,6 @@ export default class CatalogFilterModel {
 
   set filter(filter) {
     this.#filter = filter;
+    this._notify();
   }
 }

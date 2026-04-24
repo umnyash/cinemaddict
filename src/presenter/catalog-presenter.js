@@ -35,6 +35,8 @@ export default class CatalogPresenter {
     this.#moviesModel = moviesModel;
     this.#filterModel = filterModel;
     this.#commentsModel = commentsModel;
+
+    this.#filterModel.addObserver(this.#filterModelEventHandler);
   }
 
   get #filter() {
@@ -150,6 +152,16 @@ export default class CatalogPresenter {
     this.#renderMovies();
   }
 
+  #destroyMessage() {
+    remove(this.#messageComponent);
+    this.#messageComponent = null;
+  }
+
+  #destroySort() {
+    remove(this.#sortComponent);
+    this.#sortComponent = null;
+  }
+
   #destroyShowMoreButton() {
     remove(this.#showMoreButtonComponent);
     this.#showMoreButtonComponent = null;
@@ -164,6 +176,12 @@ export default class CatalogPresenter {
   #clearMovies() {
     this.#destroyShowMoreButton();
     this.#destroyMovieList();
+  }
+
+  #clear() {
+    this.#destroyMessage();
+    this.#clearMovies();
+    this.#destroySort();
   }
 
   #showMoviePopup(movie) {
@@ -221,5 +239,12 @@ export default class CatalogPresenter {
 
   #moviePopupCloseHandler = () => {
     this.#moviePopupPresenter = null;
+  };
+
+  #filterModelEventHandler = () => {
+    this.#clear();
+    this.#sortType = null;
+    this.#renderedMoviesCount = 0;
+    this.#render();
   };
 }
