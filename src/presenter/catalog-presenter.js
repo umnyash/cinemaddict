@@ -1,5 +1,5 @@
 import { render, remove } from '../framework';
-import { sortMoviesBy } from '../utils';
+import { filterMovies, sortMoviesBy } from '../utils';
 
 import MovieCardPresenter from './movie-card-presenter.js';
 import MoviePopupPresenter from './movie-popup-presenter.js';
@@ -15,6 +15,7 @@ export default class CatalogPresenter {
   #containerElement = null;
   #popupContainerElement = null;
   #moviesModel = null;
+  #filterModel = null;
   #commentsModel = null;
   #renderedMoviesCount = 0;
 
@@ -26,17 +27,24 @@ export default class CatalogPresenter {
   #movieCardPresenters = new Map();
   #moviePopupPresenter = null;
 
-  constructor({ containerElement, popupContainerElement, moviesModel, commentsModel }) {
+  constructor({ containerElement, popupContainerElement, moviesModel, filterModel, commentsModel }) {
     this.#containerElement = containerElement;
     this.#popupContainerElement = popupContainerElement;
     this.#moviesModel = moviesModel;
+    this.#filterModel = filterModel;
     this.#commentsModel = commentsModel;
   }
 
+  get #filter() {
+    return this.#filterModel.filter;
+  }
+
   get #movies() {
+    const filteredMovies = filterMovies(this.#moviesModel.movies, this.#filter);
+
     return this.#sortType
-      ? sortMoviesBy([...this.#moviesModel.movies], this.#sortType)
-      : this.#moviesModel.movies;
+      ? sortMoviesBy(filteredMovies, this.#sortType)
+      : filteredMovies;
   }
 
   init() {

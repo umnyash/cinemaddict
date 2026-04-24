@@ -21,6 +21,7 @@ const catalogFilterModel = new CatalogFilterModel();
 const catalogPresenter = new CatalogPresenter({
   containerElement: catalogContainerElement,
   popupContainerElement: document.body,
+  filterModel: catalogFilterModel,
   moviesModel,
   commentsModel,
 });
