@@ -42,14 +42,24 @@ function createCatalogFilterTemplate(filter, movieCountsByStatus) {
 export default class CatalogFilterView extends AbstractView {
   #filter = null;
   #movieCountsByStatus = null;
+  #onFilterChange = null;
 
-  constructor({ filter, movieCountsByStatus }) {
+  constructor({ filter, movieCountsByStatus, onFilterChange }) {
     super();
     this.#filter = filter;
     this.#movieCountsByStatus = movieCountsByStatus;
+    this.#onFilterChange = onFilterChange;
+
+    this.element.addEventListener('change', this.#formChangeHandler);
   }
 
   _getTemplate() {
     return createCatalogFilterTemplate(this.#filter, this.#movieCountsByStatus);
   }
+
+  #formChangeHandler = ({ target: { value } }) => {
+    this.#onFilterChange({
+      status: value || null,
+    });
+  };
 }

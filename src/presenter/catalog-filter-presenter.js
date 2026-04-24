@@ -19,8 +19,13 @@ export default class CatalogFilterPresenter {
     this.#filterComponent = new CatalogFilterView({
       filter: this.#filterModel.filter,
       movieCountsByStatus: calcMovieCountsByStatus(this.#moviesModel.movies),
+      onFilterChange: this.#filterChangeHandler,
     });
 
     render(this.#filterComponent, this.#containerElement);
   }
+
+  #filterChangeHandler = (filter) => {
+    this.#filterModel.filter = filter;
+  };
 }
