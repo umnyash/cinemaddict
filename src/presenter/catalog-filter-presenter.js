@@ -1,4 +1,4 @@
-import { render } from '../framework';
+import { render, remove } from '../framework';
 import { calcMovieCountsByStatus } from '../utils/movie-filter.js';
 import CatalogFilterView from '../view/catalog-filter-view.js';
 
@@ -13,9 +13,13 @@ export default class CatalogFilterPresenter {
     this.#containerElement = containerElement;
     this.#filterModel = filterModel;
     this.#moviesModel = moviesModel;
+
+    this.#moviesModel.addObserver(this.#moviesModelEventHandler);
   }
 
   init() {
+    remove(this.#filterComponent);
+
     this.#filterComponent = new CatalogFilterView({
       filter: this.#filterModel.filter,
       movieCountsByStatus: calcMovieCountsByStatus(this.#moviesModel.movies),
@@ -27,5 +31,9 @@ export default class CatalogFilterPresenter {
 
   #filterChangeHandler = (filter) => {
     this.#filterModel.filter = filter;
+  };
+
+  #moviesModelEventHandler = () => {
+    this.init();
   };
 }

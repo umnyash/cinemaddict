@@ -37,6 +37,7 @@ export default class CatalogPresenter {
     this.#commentsModel = commentsModel;
 
     this.#filterModel.addObserver(this.#filterModelEventHandler);
+    this.#moviesModel.addObserver(this.#moviesModelEventHandler);
   }
 
   get #filter() {
@@ -211,18 +212,6 @@ export default class CatalogPresenter {
 
   #movieChangeHandler = (updatedMovie) => {
     this.#moviesModel.updateMovie(updatedMovie);
-    this.#movieCardPresenters.get(updatedMovie.id)?.init(updatedMovie);
-
-    if (this.#moviePopupPresenter?.movieId !== updatedMovie.id) {
-      return;
-    }
-
-    const comments = this.#commentsModel.get(updatedMovie.id, updatedMovie.commentsCount);
-
-    this.#moviePopupPresenter.init({
-      movie: updatedMovie,
-      comments,
-    });
   };
 
   #showMoreButtonClickHandler = () => {
@@ -246,5 +235,21 @@ export default class CatalogPresenter {
     this.#sortType = null;
     this.#renderedMoviesCount = 0;
     this.#render();
+  };
+
+  #moviesModelEventHandler = (_event, updatedMovie) => {
+    this.#clear();
+    this.#render();
+
+    if (this.#moviePopupPresenter?.movieId !== updatedMovie.id) {
+      return;
+    }
+
+    const comments = this.#commentsModel.get(updatedMovie.id, updatedMovie.commentsCount);
+
+    this.#moviePopupPresenter.init({
+      movie: updatedMovie,
+      comments,
+    });
   };
 }
