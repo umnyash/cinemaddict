@@ -8,4 +8,5 @@ export {
   formatMovieReleaseYear,
 } from './movies.js';
 
+export { filterMovies, calcMovieCountsByStatus } from './movie-filter.js';
 export { sortMoviesBy } from './movie-sort.js';
