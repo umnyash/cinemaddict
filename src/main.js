@@ -1,8 +1,10 @@
 import { render } from './framework/render.js';
 import UserView from './view/user-view.js';
 import MoviesCountView from './view/movies-count-view.js';
+
 import MoviesModel from './model/movies-model.js';
 import CommentsModel from './model/comments-model.js';
+import CatalogFilterModel from './model/catalog-filter-model.js';
 
 import CatalogPresenter from './presenter/catalog-presenter.js';
 import CatalogFilterPresenter from './presenter/catalog-filter-presenter.js';
@@ -14,6 +16,7 @@ const catalogFilterContainerElement = catalogContainerElement.querySelector('.ca
 
 const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
+const catalogFilterModel = new CatalogFilterModel();
 
 const catalogPresenter = new CatalogPresenter({
   containerElement: catalogContainerElement,
@@ -24,6 +27,8 @@ const catalogPresenter = new CatalogPresenter({
 
 const catalogFilterPresenter = new CatalogFilterPresenter({
   containerElement: catalogFilterContainerElement,
+  filterModel: catalogFilterModel,
+  moviesModel,
 });
 
 render(new UserView(), siteHeaderContainerElement);
