@@ -1,4 +1,5 @@
 import { render, remove } from '../framework';
+import { MovieStatus } from '../constants.js';
 import { filterMovies, sortMoviesBy } from '../utils';
 
 import MovieCardPresenter from './movie-card-presenter.js';
@@ -53,7 +54,23 @@ export default class CatalogPresenter {
   }
 
   #renderMessage() {
-    this.#messageComponent = new CatalogMessage({ variant: MessageVariant.CatalogEmpty });
+    let messageVariant;
+
+    switch (this.#filter.status) {
+      case MovieStatus.WATCHLISTED:
+        messageVariant = MessageVariant.WatchlistEmpty;
+        break;
+      case MovieStatus.WATCHED:
+        messageVariant = MessageVariant.HistoryEmpty;
+        break;
+      case MovieStatus.FAVORITED:
+        messageVariant = MessageVariant.FavoritesEmpty;
+        break;
+      default:
+        messageVariant = MessageVariant.CatalogEmpty;
+    }
+
+    this.#messageComponent = new CatalogMessage({ variant: messageVariant });
     render(this.#messageComponent, this.#containerElement);
   }
 
@@ -124,7 +141,7 @@ export default class CatalogPresenter {
   }
 
   #render() {
-    if (!this.#movies.length && !this.#filter.status) {
+    if (!this.#movies.length) {
       this.#renderMessage();
       return;
     }
