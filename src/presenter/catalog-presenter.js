@@ -19,6 +19,7 @@ export default class CatalogPresenter {
   #commentsModel = null;
   #renderedMoviesCount = 0;
 
+  #messageComponent = null;
   #sortComponent = null;
   #movieListComponent = null;
   #showMoreButtonComponent = null;
@@ -51,6 +52,11 @@ export default class CatalogPresenter {
     this.#render();
   }
 
+  #renderMessage() {
+    this.#messageComponent = new CatalogMessage({ variant: MessageVariant.CatalogEmpty });
+    render(this.#messageComponent, this.#containerElement);
+  }
+
   #renderSort() {
     this.#sortComponent = new CatalogSortView({
       value: this.#sortType,
@@ -60,30 +66,53 @@ export default class CatalogPresenter {
     render(this.#sortComponent, this.#containerElement);
   }
 
-  #renderNextMovies() {
-    const renderedMoviesMaxCount = Math.min(
-      this.#renderedMoviesCount + MOVIES_COUNT_PER_STEP,
-      this.#movies.length
-    );
+  #renderMovieCard(movie) {
+    const movieCardPresenter = new MovieCardPresenter({
+      containerElement: this.#movieListComponent.element,
+      onLinkClick: this.#movieCardLinkClickHandler,
+      onDataChange: this.#movieChangeHandler,
+    });
 
-    for (let i = this.#renderedMoviesCount; i < renderedMoviesMaxCount; i++) {
-      const movieCardPresenter = new MovieCardPresenter({
-        containerElement: this.#movieListComponent.element,
-        onLinkClick: (movie) => {
-          if (this.#moviePopupPresenter?.movieId === movie.id) {
-            return;
-          }
+    movieCardPresenter.init(movie);
+    this.#movieCardPresenters.set(movie.id, movieCardPresenter);
+  }
 
-          this.#showMoviePopup(movie);
-        },
-        onDataChange: this.#movieChangeHandler,
-      });
+  #renderMovieCards({ isNext } = {}) {
+    const from = isNext ? this.#renderedMoviesCount : 0;
 
-      movieCardPresenter.init(this.#movies[i]);
-      this.#movieCardPresenters.set(this.#movies[i].id, movieCardPresenter);
+    const count = isNext
+      ? MOVIES_COUNT_PER_STEP
+      : Math.max(this.#renderedMoviesCount, MOVIES_COUNT_PER_STEP);
+
+    const renderedMoviesMaxCount = Math.min(from + count, this.#movies.length);
+
+    for (let i = from; i < renderedMoviesMaxCount; i++) {
+      this.#renderMovieCard(this.#movies[i]);
     }
 
     this.#renderedMoviesCount = renderedMoviesMaxCount;
+  }
+
+  #renderMovieList() {
+    this.#movieListComponent = new CatalogListView();
+    render(this.#movieListComponent, this.#containerElement);
+    this.#renderMovieCards();
+  }
+
+  #renderMovies() {
+    this.#renderMovieList();
+
+    if (this.#movies.length > this.#renderedMoviesCount) {
+      this.#renderShowMoreButton();
+    }
+  }
+
+  #renderNextMovies() {
+    this.#renderMovieCards({ isNext: true });
+
+    if (this.#renderedMoviesCount === this.#movies.length) {
+      this.#destroyShowMoreButton();
+    }
   }
 
   #renderShowMoreButton() {
@@ -94,38 +123,30 @@ export default class CatalogPresenter {
     render(this.#showMoreButtonComponent, this.#containerElement);
   }
 
-  #renderMovieList() {
-    this.#movieListComponent = new CatalogListView();
-    render(this.#movieListComponent, this.#containerElement);
-
-    this.#renderNextMovies();
-
-    if (this.#movies.length > this.#renderedMoviesCount) {
-      this.#renderShowMoreButton();
-    }
-  }
-
   #render() {
-    if (!this.#movies.length) {
-      render(
-        new CatalogMessage({ variant: MessageVariant.CatalogEmpty }),
-        this.#containerElement,
-      );
-
+    if (!this.#movies.length && !this.#filter.status) {
+      this.#renderMessage();
       return;
     }
 
     this.#renderSort();
-    this.#renderMovieList();
+    this.#renderMovies();
+  }
+
+  #destroyShowMoreButton() {
+    remove(this.#showMoreButtonComponent);
+    this.#showMoreButtonComponent = null;
   }
 
   #destroyMovieList() {
-    remove(this.#showMoreButtonComponent);
-    this.#showMoreButtonComponent = null;
     remove(this.#movieListComponent);
     this.#movieListComponent = null;
     this.#movieCardPresenters.clear();
-    this.#renderedMoviesCount = 0;
+  }
+
+  #clearMovies() {
+    this.#destroyShowMoreButton();
+    this.#destroyMovieList();
   }
 
   #showMoviePopup(movie) {
@@ -148,8 +169,9 @@ export default class CatalogPresenter {
 
   #sortChangeHandler = (value) => {
     this.#sortType = value;
-    this.#destroyMovieList();
-    this.#renderMovieList();
+    this.#renderedMoviesCount = 0;
+    this.#clearMovies();
+    this.#renderMovies();
   };
 
   #movieChangeHandler = (updatedMovie) => {
@@ -170,11 +192,14 @@ export default class CatalogPresenter {
 
   #showMoreButtonClickHandler = () => {
     this.#renderNextMovies();
+  };
 
-    if (this.#renderedMoviesCount === this.#movies.length) {
-      remove(this.#showMoreButtonComponent);
-      this.#showMoreButtonComponent = null;
+  #movieCardLinkClickHandler = (movie) => {
+    if (this.#moviePopupPresenter?.movieId === movie.id) {
+      return;
     }
+
+    this.#showMoviePopup(movie);
   };
 
   #moviePopupCloseHandler = () => {
