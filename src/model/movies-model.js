@@ -11,6 +11,10 @@ export default class MoviesModel extends Observable {
     return this.#movies;
   }
 
+  getMovieById(id) {
+    return this.#movies.find((movie) => movie.id === id) ?? null;
+  }
+
   updateMovie(movieData) {
     updateArrayItemById(this.#movies, movieData);
     this._notify(undefined, movieData);

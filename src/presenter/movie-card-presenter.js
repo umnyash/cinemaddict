@@ -36,7 +36,7 @@ export default class MovieCardPresenter {
   }
 
   #linkClickHandler = () => {
-    this.#onLinkClick(this.#movie);
+    this.#onLinkClick(this.#movie.id);
   };
 
   #watchlistButtonClickHandler = () => {

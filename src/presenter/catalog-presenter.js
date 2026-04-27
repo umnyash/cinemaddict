@@ -185,21 +185,20 @@ export default class CatalogPresenter {
     this.#destroySort();
   }
 
-  #showMoviePopup(movie) {
-    const comments = this.#commentsModel.get(movie.id, movie.commentsCount);
-
+  #showMoviePopup(movieId) {
     if (this.#moviePopupPresenter) {
-      this.#moviePopupPresenter.init({ movie, comments });
+      this.#moviePopupPresenter.init(movieId);
       return;
     }
 
     this.#moviePopupPresenter = new MoviePopupPresenter({
       containerElement: this.#popupContainerElement,
+      moviesModel: this.#moviesModel,
+      commentsModel: this.#commentsModel,
       onPopupClose: this.#moviePopupCloseHandler,
-      onDataChange: this.#movieChangeHandler,
     });
 
-    this.#moviePopupPresenter.init({ movie, comments });
+    this.#moviePopupPresenter.init(movieId);
     this.#moviePopupPresenter.open();
   }
 
@@ -218,12 +217,12 @@ export default class CatalogPresenter {
     this.#renderNextMovies();
   };
 
-  #movieCardLinkClickHandler = (movie) => {
-    if (this.#moviePopupPresenter?.movieId === movie.id) {
+  #movieCardLinkClickHandler = (movieId) => {
+    if (this.#moviePopupPresenter?.movieId === movieId) {
       return;
     }
 
-    this.#showMoviePopup(movie);
+    this.#showMoviePopup(movieId);
   };
 
   #moviePopupCloseHandler = () => {
@@ -237,19 +236,8 @@ export default class CatalogPresenter {
     this.#render();
   };
 
-  #moviesModelEventHandler = (_event, updatedMovie) => {
+  #moviesModelEventHandler = () => {
     this.#clear();
     this.#render();
-
-    if (this.#moviePopupPresenter?.movieId !== updatedMovie.id) {
-      return;
-    }
-
-    const comments = this.#commentsModel.get(updatedMovie.id, updatedMovie.commentsCount);
-
-    this.#moviePopupPresenter.init({
-      movie: updatedMovie,
-      comments,
-    });
   };
 }

@@ -4,28 +4,33 @@ import MoviePopupView from '../view/movie-popup-view.js';
 
 export default class MoviePopupPresenter {
   #containerElement = null;
+  #moviesModel = null;
+  #commentsModel = null;
   #onPopupClose = null;
-  #onDataChange = null;
 
-  #movie = null;
-  #comments = null;
+  #movieId = null;
   #popupComponent = null;
 
-  constructor({ containerElement, onPopupClose, onDataChange }) {
+  constructor({ containerElement, moviesModel, commentsModel, onPopupClose }) {
     this.#containerElement = containerElement;
+    this.#moviesModel = moviesModel;
+    this.#commentsModel = commentsModel;
     this.#onPopupClose = onPopupClose;
-    this.#onDataChange = onDataChange;
+
+    this.#moviesModel.addObserver(this.#moviesModelEventHandler);
   }
 
-  get movieId() {
-    return this.#movie?.id;
+  get #movie() {
+    return this.#moviesModel.getMovieById(this.#movieId);
   }
 
-  init({ movie, comments }) {
-    const isCurrentMovie = this.#movie?.id === movie.id;
+  get #comments() {
+    return this.#commentsModel.get(this.#movieId, this.#movie.commentsCount);
+  }
 
-    this.#movie = movie;
-    this.#comments = comments;
+  init(movieId) {
+    const isCurrentMovie = this.#movieId === movieId;
+    this.#movieId = movieId;
 
     if (!this.#popupComponent) {
       this.#render();
@@ -78,21 +83,21 @@ export default class MoviePopupPresenter {
   }
 
   #watchlistButtonClickHandler = () => {
-    this.#onDataChange({
+    this.#moviesModel.updateMovie({
       ...this.#movie,
       isWatchlisted: !this.#movie.isWatchlisted,
     });
   };
 
   #watchedButtonClickHandler = () => {
-    this.#onDataChange({
+    this.#moviesModel.updateMovie({
       ...this.#movie,
       isWatched: !this.#movie.isWatched,
     });
   };
 
   #favoriteButtonClickHandler = () => {
-    this.#onDataChange({
+    this.#moviesModel.updateMovie({
       ...this.#movie,
       isFavorited: !this.#movie.isFavorited,
     });
@@ -107,5 +112,15 @@ export default class MoviePopupPresenter {
       evt.preventDefault();
       this.#close();
     }
+  };
+
+  #moviesModelEventHandler = (_eventType, updatedMovie) => {
+    const isCurrentMovie = this.#movieId === updatedMovie.id;
+
+    if (!isCurrentMovie) {
+      return;
+    }
+
+    this.init(this.#movieId);
   };
 }
