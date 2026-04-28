@@ -812,8 +812,11 @@
 
 .page__sections {
   display: grid;
-  margin-top: 80px;
   grid-template-columns: repeat(2, 1fr 60px);
+}
+
+.page__sections:not(:empty) {
+  margin-top: 80px;
 }
 
 .page__sections:has(> :nth-child(2))::after {
