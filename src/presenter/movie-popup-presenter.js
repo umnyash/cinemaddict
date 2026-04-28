@@ -71,6 +71,10 @@ export default class MoviePopupPresenter {
     });
 
     render(this.#popupComponent, this.#containerElement);
+
+    if (isOpen) {
+      document.addEventListener('keydown', this.#documentKeyDownHandler);
+    }
   }
 
   #watchlistButtonClickHandler = () => {
