@@ -40,7 +40,7 @@ export default class MoviePopupPresenter {
       });
     } else {
       remove(this.#popupComponent);
-      this.#render(true);
+      this.#render({ isOpen: true });
     }
   }
 
@@ -59,7 +59,7 @@ export default class MoviePopupPresenter {
     this.#onPopupClose();
   }
 
-  #render(isOpen) {
+  #render({ isOpen = false } = {}) {
     this.#popupComponent = new MoviePopupView({
       movie: this.#movie,
       comments: this.#comments,
