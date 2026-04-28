@@ -8,6 +8,7 @@ import CatalogFilterModel from './model/catalog-filter-model.js';
 
 import CatalogPresenter from './presenter/catalog-presenter.js';
 import CatalogFilterPresenter from './presenter/catalog-filter-presenter.js';
+import MoviePopupPresenter from './presenter/movie-popup-presenter.js';
 
 const siteHeaderContainerElement = document.body.querySelector('.site-header__container');
 const siteFooterContainerElement = document.body.querySelector('.site-footer__container');
@@ -18,12 +19,17 @@ const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
 const catalogFilterModel = new CatalogFilterModel();
 
-const catalogPresenter = new CatalogPresenter({
-  containerElement: catalogContainerElement,
-  popupContainerElement: document.body,
-  filterModel: catalogFilterModel,
+const moviePopupPresenter = new MoviePopupPresenter({
+  containerElement: document.body,
   moviesModel,
   commentsModel,
+});
+
+const catalogPresenter = new CatalogPresenter({
+  containerElement: catalogContainerElement,
+  filterModel: catalogFilterModel,
+  moviesModel,
+  moviePopupPresenter,
 });
 
 const catalogFilterPresenter = new CatalogFilterPresenter({

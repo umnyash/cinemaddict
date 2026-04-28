@@ -6,16 +6,14 @@ export default class MoviePopupPresenter {
   #containerElement = null;
   #moviesModel = null;
   #commentsModel = null;
-  #onPopupClose = null;
 
   #movieId = null;
   #popupComponent = null;
 
-  constructor({ containerElement, moviesModel, commentsModel, onPopupClose }) {
+  constructor({ containerElement, moviesModel, commentsModel }) {
     this.#containerElement = containerElement;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
-    this.#onPopupClose = onPopupClose;
 
     this.#moviesModel.addObserver(this.#moviesModelEventHandler);
   }
@@ -28,28 +26,11 @@ export default class MoviePopupPresenter {
     return this.#commentsModel.get(this.#movieId, this.#movie.commentsCount);
   }
 
-  init(movieId) {
-    const isCurrentMovie = this.#movieId === movieId;
-    this.#movieId = movieId;
-
-    if (!this.#popupComponent) {
-      this.#render();
-      return;
-    }
-
-    if (isCurrentMovie) {
-      this.#popupComponent.updateElement({
-        isWatchlisted: this.#movie.isWatchlisted,
-        isWatched: this.#movie.isWatched,
-        isFavorited: this.#movie.isFavorited,
-      });
-    } else {
-      remove(this.#popupComponent);
-      this.#render({ isOpen: true });
-    }
+  get #isOpen() {
+    return this.#popupComponent !== null;
   }
 
-  open() {
+  #open() {
     requestAnimationFrame(() => {
       this.#popupComponent.open();
     });
@@ -57,11 +38,30 @@ export default class MoviePopupPresenter {
     document.addEventListener('keydown', this.#documentKeyDownHandler);
   }
 
+  show(movieId) {
+    const isCurrentMovie = this.#movieId === movieId;
+
+    if (isCurrentMovie) {
+      return;
+    }
+
+    this.#movieId = movieId;
+
+    if (this.#isOpen) {
+      remove(this.#popupComponent);
+      this.#render({ isOpen: true });
+    } else {
+      this.#render();
+      this.#open();
+    }
+  }
+
   async #close() {
     document.removeEventListener('keydown', this.#documentKeyDownHandler);
     await this.#popupComponent.close();
     remove(this.#popupComponent);
-    this.#onPopupClose();
+    this.#popupComponent = null;
+    this.#movieId = null;
   }
 
   #render({ isOpen = false } = {}) {
@@ -80,6 +80,14 @@ export default class MoviePopupPresenter {
     if (isOpen) {
       document.addEventListener('keydown', this.#documentKeyDownHandler);
     }
+  }
+
+  #update() {
+    this.#popupComponent.updateElement({
+      isWatchlisted: this.#movie.isWatchlisted,
+      isWatched: this.#movie.isWatched,
+      isFavorited: this.#movie.isFavorited,
+    });
   }
 
   #watchlistButtonClickHandler = () => {
@@ -121,6 +129,6 @@ export default class MoviePopupPresenter {
       return;
     }
 
-    this.init(this.#movieId);
+    this.#update();
   };
 }

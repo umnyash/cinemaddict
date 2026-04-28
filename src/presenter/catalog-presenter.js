@@ -3,7 +3,6 @@ import { MovieStatus } from '../constants.js';
 import { filterMovies, sortMoviesBy } from '../utils';
 
 import MovieCardPresenter from './movie-card-presenter.js';
-import MoviePopupPresenter from './movie-popup-presenter.js';
 
 import CatalogListView from '../view/catalog-list-view.js';
 import CatalogMessage, { MessageVariant } from '../view/catalog-message-view.js';
@@ -14,10 +13,8 @@ const MOVIES_COUNT_PER_STEP = 5;
 
 export default class CatalogPresenter {
   #containerElement = null;
-  #popupContainerElement = null;
   #moviesModel = null;
   #filterModel = null;
-  #commentsModel = null;
   #renderedMoviesCount = 0;
 
   #messageComponent = null;
@@ -29,12 +26,11 @@ export default class CatalogPresenter {
   #movieCardPresenters = new Map();
   #moviePopupPresenter = null;
 
-  constructor({ containerElement, popupContainerElement, moviesModel, filterModel, commentsModel }) {
+  constructor({ containerElement, moviesModel, filterModel, moviePopupPresenter }) {
     this.#containerElement = containerElement;
-    this.#popupContainerElement = popupContainerElement;
     this.#moviesModel = moviesModel;
     this.#filterModel = filterModel;
-    this.#commentsModel = commentsModel;
+    this.#moviePopupPresenter = moviePopupPresenter;
 
     this.#filterModel.addObserver(this.#filterModelEventHandler);
     this.#moviesModel.addObserver(this.#moviesModelEventHandler);
@@ -185,23 +181,6 @@ export default class CatalogPresenter {
     this.#destroySort();
   }
 
-  #showMoviePopup(movieId) {
-    if (this.#moviePopupPresenter) {
-      this.#moviePopupPresenter.init(movieId);
-      return;
-    }
-
-    this.#moviePopupPresenter = new MoviePopupPresenter({
-      containerElement: this.#popupContainerElement,
-      moviesModel: this.#moviesModel,
-      commentsModel: this.#commentsModel,
-      onPopupClose: this.#moviePopupCloseHandler,
-    });
-
-    this.#moviePopupPresenter.init(movieId);
-    this.#moviePopupPresenter.open();
-  }
-
   #sortChangeHandler = (value) => {
     this.#sortType = value;
     this.#renderedMoviesCount = 0;
@@ -218,15 +197,7 @@ export default class CatalogPresenter {
   };
 
   #movieCardLinkClickHandler = (movieId) => {
-    if (this.#moviePopupPresenter?.movieId === movieId) {
-      return;
-    }
-
-    this.#showMoviePopup(movieId);
-  };
-
-  #moviePopupCloseHandler = () => {
-    this.#moviePopupPresenter = null;
+    this.#moviePopupPresenter.show(movieId);
   };
 
   #filterModelEventHandler = () => {
