@@ -10,3 +10,4 @@ export {
 
 export { filterMovies, calcMovieCountsByStatus } from './movie-filter.js';
 export { sortMoviesBy } from './movie-sort.js';
+export { getTopMovies } from './movie-selectors.js';
