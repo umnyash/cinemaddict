@@ -1,10 +1,8 @@
-import { render } from './framework/render.js';
-import UserView from './view/user-view.js';
-
 import MoviesModel from './model/movies-model.js';
 import CommentsModel from './model/comments-model.js';
 import CatalogFilterModel from './model/catalog-filter-model.js';
 
+import UserPresenter from './presenter/user-presenter.js';
 import CatalogPresenter from './presenter/catalog-presenter.js';
 import CatalogFilterPresenter from './presenter/catalog-filter-presenter.js';
 import TopRatedMoviesPresenter from './presenter/top-rated-movies-presenter.js';
@@ -20,6 +18,10 @@ const movieSectionsContainerElement = document.body.querySelector('.page__sectio
 const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
 const catalogFilterModel = new CatalogFilterModel();
+
+const userPresenter = new UserPresenter({
+  containerElement: siteHeaderContainerElement,
+});
 
 const moviePopupPresenter = new MoviePopupPresenter({
   containerElement: document.body,
@@ -51,8 +53,7 @@ const moviesCountPresenter = new MoviesCountPresenter({
   moviesModel,
 });
 
-render(new UserView(), siteHeaderContainerElement);
-
+userPresenter.init();
 catalogPresenter.init();
 catalogFilterPresenter.init();
 topRatedMoviesPresenter.init();
