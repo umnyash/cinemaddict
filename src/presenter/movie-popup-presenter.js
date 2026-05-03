@@ -1,4 +1,5 @@
 import { render, remove } from '../framework';
+import { EventType } from '../constants.js';
 import { isEscapeEvent } from '../utils';
 import MoviePopupView from '../view/movie-popup-view.js';
 
@@ -91,21 +92,21 @@ export default class MoviePopupPresenter {
   }
 
   #watchlistButtonClickHandler = () => {
-    this.#moviesModel.updateMovie({
+    this.#moviesModel.updateMovie(EventType.MOVIE_WATCHLISTED_TOGGLE, {
       ...this.#movie,
       isWatchlisted: !this.#movie.isWatchlisted,
     });
   };
 
   #watchedButtonClickHandler = () => {
-    this.#moviesModel.updateMovie({
+    this.#moviesModel.updateMovie(EventType.MOVIE_WATCHED_TOGGLE, {
       ...this.#movie,
       isWatched: !this.#movie.isWatched,
     });
   };
 
   #favoriteButtonClickHandler = () => {
-    this.#moviesModel.updateMovie({
+    this.#moviesModel.updateMovie(EventType.MOVIE_FAVORITED_TOGGLE, {
       ...this.#movie,
       isFavorited: !this.#movie.isFavorited,
     });

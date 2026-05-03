@@ -1,4 +1,5 @@
 import { render, replace } from '../framework';
+import { EventType } from '../constants.js';
 import MovieCardView from '../view/movie-card-view.js';
 
 export default class MovieCardPresenter {
@@ -40,21 +41,21 @@ export default class MovieCardPresenter {
   };
 
   #watchlistButtonClickHandler = () => {
-    this.#onDataChange({
+    this.#onDataChange(EventType.MOVIE_WATCHLISTED_TOGGLE, {
       ...this.#movie,
       isWatchlisted: !this.#movie.isWatchlisted,
     });
   };
 
   #watchedButtonClickHandler = () => {
-    this.#onDataChange({
+    this.#onDataChange(EventType.MOVIE_WATCHED_TOGGLE, {
       ...this.#movie,
       isWatched: !this.#movie.isWatched,
     });
   };
 
   #favoriteButtonClickHandler = () => {
-    this.#onDataChange({
+    this.#onDataChange(EventType.MOVIE_FAVORITED_TOGGLE, {
       ...this.#movie,
       isFavorited: !this.#movie.isFavorited,
     });

@@ -1,5 +1,5 @@
 import { render, remove } from '../framework';
-import { MovieStatus } from '../constants.js';
+import { EventType, MovieStatus } from '../constants.js';
 import { filterMovies, sortMoviesBy } from '../utils';
 
 import MovieCardPresenter from './movie-card-presenter.js';
@@ -188,8 +188,8 @@ export default class CatalogPresenter {
     this.#renderMovies();
   };
 
-  #movieChangeHandler = (updatedMovie) => {
-    this.#moviesModel.updateMovie(updatedMovie);
+  #movieChangeHandler = (eventType, updatedMovie) => {
+    this.#moviesModel.updateMovie(eventType, updatedMovie);
   };
 
   #showMoreButtonClickHandler = () => {
@@ -207,8 +207,16 @@ export default class CatalogPresenter {
     this.#render();
   };
 
-  #moviesModelEventHandler = () => {
-    this.#clear();
-    this.#render();
+  #moviesModelEventHandler = (eventType, data) => {
+    switch (true) {
+      case eventType === EventType.MOVIE_WATCHLISTED_TOGGLE && this.#filter.status === MovieStatus.WATCHLISTED:
+      case eventType === EventType.MOVIE_WATCHED_TOGGLE && this.#filter.status === MovieStatus.WATCHED:
+      case eventType === EventType.MOVIE_FAVORITED_TOGGLE && this.#filter.status === MovieStatus.FAVORITED:
+        this.#clear();
+        this.#render();
+        break;
+      default:
+        this.#movieCardPresenters.get(data.id)?.init(data);
+    }
   };
 }

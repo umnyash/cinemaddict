@@ -53,15 +53,15 @@ export default class TopRatedMoviesPresenter {
     render(sectionComponent, this.#containerElement);
   }
 
-  #movieChangeHandler = (updatedMovie) => {
-    this.#moviesModel.updateMovie(updatedMovie);
+  #movieChangeHandler = (eventType, updatedMovie) => {
+    this.#moviesModel.updateMovie(eventType, updatedMovie);
   };
 
   #movieCardLinkClickHandler = (movieId) => {
     this.#moviePopupPresenter.show(movieId);
   };
 
-  #moviesModelEventHandler = (_event, data) => {
+  #moviesModelEventHandler = (_eventType, data) => {
     this.#movieCardPresenters.get(data.id)?.init(data);
   };
 }

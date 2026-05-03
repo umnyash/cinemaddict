@@ -1,3 +1,9 @@
+const EventType = {
+  MOVIE_WATCHLISTED_TOGGLE: 'movie/watchlisted-toggle',
+  MOVIE_WATCHED_TOGGLE: 'movie/watched-toggle',
+  MOVIE_FAVORITED_TOGGLE: 'movie/favorited-toggle',
+};
+
 const MovieStatus = {
   WATCHLISTED: 'watchlisted',
   WATCHED: 'watched',
@@ -9,4 +15,4 @@ const SortType = {
   RATING_DESC: 'rating-desc',
 };
 
-export { MovieStatus, SortType };
+export { EventType, MovieStatus, SortType };
