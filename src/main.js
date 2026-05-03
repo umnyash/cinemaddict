@@ -48,6 +48,7 @@ const topRatedMoviesPresenter = new TopRatedMoviesPresenter({
 
 const moviesCountPresenter = new MoviesCountPresenter({
   containerElement: siteFooterContainerElement,
+  moviesModel,
 });
 
 render(new UserView(), siteHeaderContainerElement);

@@ -1,11 +1,21 @@
 import { AbstractView } from '../framework';
+import { getDeclension } from '../utils';
 
-function createMoviesCountTemplate() {
-  return '<p class="site-footer__movies-count">130 291 movies inside</p>';
+function createMoviesCountTemplate(count) {
+  const label = `${getDeclension(count, { one: 'movie', many: 'movies' })} inside`;
+
+  return `<p class="site-footer__movies-count">${count} ${label}</p>`;
 }
 
 export default class MoviesCountView extends AbstractView {
+  #count = null;
+
+  constructor({ count }) {
+    super();
+    this.#count = count;
+  }
+
   _getTemplate() {
-    return createMoviesCountTemplate();
+    return createMoviesCountTemplate(this.#count);
   }
 }
