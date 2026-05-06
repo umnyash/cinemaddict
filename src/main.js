@@ -21,6 +21,7 @@ const catalogFilterModel = new CatalogFilterModel();
 
 const userPresenter = new UserPresenter({
   containerElement: siteHeaderContainerElement,
+  moviesModel,
 });
 
 const moviePopupPresenter = new MoviePopupPresenter({
