@@ -268,6 +268,12 @@ export default class MoviePopupView extends AbstractStatefulView {
     });
   }
 
+  #restoreEmotionFieldFocus() {
+    this.element
+      .querySelector(`[name="${CommentFormFieldName.EMOTION}"]:checked`)
+      .focus();
+  }
+
   #watchlistButtonClickHandler = () => {
     this.#onWatchlistButtonClick();
   };
@@ -287,6 +293,7 @@ export default class MoviePopupView extends AbstractStatefulView {
         break;
       case CommentFormFieldName.EMOTION:
         this.updateElement({ newCommentEmotionId: value });
+        this.#restoreEmotionFieldFocus();
         break;
     }
   };
