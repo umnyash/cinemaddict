@@ -1,7 +1,10 @@
 import { render, remove } from '../framework';
 import { EventType } from '../constants.js';
 import { isEscapeEvent } from '../utils';
+
 import MoviePopupView from '../view/movie-popup-view.js';
+import PopupInnerView from '../view/popup-inner-view.js';
+import MovieDetailsView from '../view/movie-details-view.js';
 
 export default class MoviePopupPresenter {
   #containerElement = null;
@@ -10,6 +13,8 @@ export default class MoviePopupPresenter {
 
   #movieId = null;
   #popupComponent = null;
+  #popupInnerComponent = null;
+  #movieComponent = null;
 
   constructor({ containerElement, moviesModel, commentsModel }) {
     this.#containerElement = containerElement;
@@ -61,21 +66,30 @@ export default class MoviePopupPresenter {
     document.removeEventListener('keydown', this.#documentKeyDownHandler);
     await this.#popupComponent.close();
     remove(this.#popupComponent);
+
     this.#popupComponent = null;
+    this.#popupInnerComponent = null;
+    this.#movieComponent = null;
     this.#movieId = null;
   }
 
   #render({ isOpen = false } = {}) {
-    this.#popupComponent = new MoviePopupView({
-      movie: this.#movie,
-      comments: this.#comments,
-      isOpen,
-      onWatchlistButtonClick: this.#watchlistButtonClickHandler,
-      onWatchedButtonClick: this.#watchedButtonClickHandler,
-      onFavoriteButtonClick: this.#favoriteButtonClickHandler,
+    this.#popupComponent = new MoviePopupView({ isOpen });
+
+    this.#popupInnerComponent = new PopupInnerView({
       onCloseButtonClick: this.#closeButtonClickHandler,
     });
 
+    this.#movieComponent = new MovieDetailsView({
+      movie: this.#movie,
+      comments: this.#comments,
+      onWatchlistButtonClick: this.#watchlistButtonClickHandler,
+      onWatchedButtonClick: this.#watchedButtonClickHandler,
+      onFavoriteButtonClick: this.#favoriteButtonClickHandler,
+    });
+
+    render(this.#movieComponent, this.#popupInnerComponent.element);
+    render(this.#popupInnerComponent, this.#popupComponent.element);
     render(this.#popupComponent, this.#containerElement);
 
     if (isOpen) {
@@ -83,8 +97,8 @@ export default class MoviePopupPresenter {
     }
   }
 
-  #update() {
-    this.#popupComponent.updateElement({
+  #updateMovie() {
+    this.#movieComponent.updateElement({
       isWatchlisted: this.#movie.isWatchlisted,
       isWatched: this.#movie.isWatched,
       isFavorited: this.#movie.isFavorited,
@@ -130,6 +144,6 @@ export default class MoviePopupPresenter {
       return;
     }
 
-    this.#update();
+    this.#updateMovie();
   };
 }
