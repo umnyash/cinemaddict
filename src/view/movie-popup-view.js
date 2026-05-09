@@ -5,14 +5,6 @@ function createMoviePopupTemplate() {
 }
 
 export default class MoviePopupView extends AbstractView {
-  constructor({ isOpen }) {
-    super();
-
-    if (isOpen) {
-      this.open();
-    }
-  }
-
   _getTemplate() {
     return createMoviePopupTemplate();
   }
@@ -33,5 +25,9 @@ export default class MoviePopupView extends AbstractView {
       this.element.addEventListener('transitionend', popupTransitionEndHandler);
       this.element.close();
     });
+  }
+
+  resetScroll() {
+    this.element.scrollTop = 0;
   }
 }
