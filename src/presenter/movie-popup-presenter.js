@@ -54,8 +54,9 @@ export default class MoviePopupPresenter {
     this.#movieId = movieId;
 
     if (this.#isOpen) {
-      remove(this.#popupComponent);
-      this.#render({ isOpen: true });
+      this.#destroyMovie();
+      this.#popupComponent.resetScroll();
+      this.#renderMovie();
     } else {
       this.#render();
       this.#open();
@@ -73,13 +74,19 @@ export default class MoviePopupPresenter {
     this.#movieId = null;
   }
 
-  #render({ isOpen = false } = {}) {
-    this.#popupComponent = new MoviePopupView({ isOpen });
+  #render() {
+    this.#popupComponent = new MoviePopupView();
 
     this.#popupInnerComponent = new PopupInnerView({
       onCloseButtonClick: this.#closeButtonClickHandler,
     });
 
+    this.#renderMovie();
+    render(this.#popupInnerComponent, this.#popupComponent.element);
+    render(this.#popupComponent, this.#containerElement);
+  }
+
+  #renderMovie() {
     this.#movieComponent = new MovieDetailsView({
       movie: this.#movie,
       comments: this.#comments,
@@ -89,12 +96,6 @@ export default class MoviePopupPresenter {
     });
 
     render(this.#movieComponent, this.#popupInnerComponent.element);
-    render(this.#popupInnerComponent, this.#popupComponent.element);
-    render(this.#popupComponent, this.#containerElement);
-
-    if (isOpen) {
-      document.addEventListener('keydown', this.#documentKeyDownHandler);
-    }
   }
 
   #updateMovie() {
@@ -103,6 +104,11 @@ export default class MoviePopupPresenter {
       isWatched: this.#movie.isWatched,
       isFavorited: this.#movie.isFavorited,
     });
+  }
+
+  #destroyMovie() {
+    remove(this.#movieComponent);
+    this.#movieComponent = null;
   }
 
   #watchlistButtonClickHandler = () => {
