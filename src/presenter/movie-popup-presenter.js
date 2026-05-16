@@ -22,6 +22,7 @@ export default class MoviePopupPresenter {
     this.#commentsModel = commentsModel;
 
     this.#moviesModel.addObserver(this.#moviesModelEventHandler);
+    this.#commentsModel.addObserver(this.#commentsModelEventHandler);
   }
 
   get #movie() {
@@ -93,6 +94,7 @@ export default class MoviePopupPresenter {
       onWatchlistButtonClick: this.#watchlistButtonClickHandler,
       onWatchedButtonClick: this.#watchedButtonClickHandler,
       onFavoriteButtonClick: this.#favoriteButtonClickHandler,
+      onCommentFormSubmit: this.#commentFormSubmitHandler,
     });
 
     render(this.#movieComponent, this.#popupInnerComponent.element);
@@ -132,6 +134,10 @@ export default class MoviePopupPresenter {
     });
   };
 
+  #commentFormSubmitHandler = (commentData) => {
+    this.#commentsModel.createComment(this.#movieId, commentData);
+  };
+
   #closeButtonClickHandler = () => {
     this.#close();
   };
@@ -143,13 +149,39 @@ export default class MoviePopupPresenter {
     }
   };
 
-  #moviesModelEventHandler = (_eventType, updatedMovie) => {
+  #moviesModelEventHandler = (eventType, updatedMovie) => {
     const isCurrentMovie = this.#movieId === updatedMovie.id;
 
     if (!isCurrentMovie) {
       return;
     }
 
-    this.#updateMovie();
+    switch (eventType) {
+      case EventType.MOVIE_WATCHLISTED_TOGGLE:
+      case EventType.MOVIE_WATCHED_TOGGLE:
+      case EventType.MOVIE_FAVORITED_TOGGLE:
+        this.#updateMovie();
+        break;
+      default:
+        this.#destroyMovie();
+        this.#renderMovie();
+    }
+  };
+
+  #commentsModelEventHandler = (eventType, movieId) => {
+    const isCurrentMovie = this.#movieId === movieId;
+
+    if (!isCurrentMovie) {
+      return;
+    }
+
+    switch (eventType) {
+      case EventType.COMMENT_CREATE:
+        this.#moviesModel.updateMovie(eventType, {
+          ...this.#movie,
+          commentsCount: this.#movie.commentsCount + 1,
+        });
+        break;
+    }
   };
 }

@@ -7,6 +7,7 @@ import {
   formatMovieRating,
   formatMovieReleaseDate,
   getDeclension,
+  isEnterEvent,
 } from '../utils';
 
 const CommentFormFieldName = {
@@ -175,6 +176,7 @@ export default class MovieDetailsView extends AbstractStatefulView {
   #onWatchlistButtonClick = null;
   #onWatchedButtonClick = null;
   #onFavoriteButtonClick = null;
+  #onCommentFormSubmit = null;
 
   constructor({
     movie,
@@ -182,6 +184,7 @@ export default class MovieDetailsView extends AbstractStatefulView {
     onWatchlistButtonClick,
     onWatchedButtonClick,
     onFavoriteButtonClick,
+    onCommentFormSubmit,
   }) {
     super();
     this.#movie = movie;
@@ -189,6 +192,7 @@ export default class MovieDetailsView extends AbstractStatefulView {
     this.#onWatchlistButtonClick = onWatchlistButtonClick;
     this.#onWatchedButtonClick = onWatchedButtonClick;
     this.#onFavoriteButtonClick = onFavoriteButtonClick;
+    this.#onCommentFormSubmit = onCommentFormSubmit;
 
     this._updateState({
       isWatchlisted: this.#movie.isWatchlisted,
@@ -210,6 +214,8 @@ export default class MovieDetailsView extends AbstractStatefulView {
   }
 
   _setHandlers() {
+    const commentFormElement = this.element.querySelector('.comment-form');
+
     this.element.querySelector('.icon-button--icon_list-add')
       .addEventListener('click', this.#watchlistButtonClickHandler);
 
@@ -219,8 +225,9 @@ export default class MovieDetailsView extends AbstractStatefulView {
     this.element.querySelector('.icon-button--icon_star')
       .addEventListener('click', this.#favoriteButtonClickHandler);
 
-    this.element.querySelector('.comment-form')
-      .addEventListener('input', this.#commentFormInputHandler);
+    commentFormElement.addEventListener('keydown', this.#commentFormKeydownHandler);
+    commentFormElement.addEventListener('input', this.#commentFormInputHandler);
+    commentFormElement.addEventListener('submit', this.#commentFormSubmitHandler);
   }
 
   #restoreEmotionFieldFocus() {
@@ -241,6 +248,15 @@ export default class MovieDetailsView extends AbstractStatefulView {
     this.#onFavoriteButtonClick();
   };
 
+  #commentFormKeydownHandler = (evt) => {
+    if ((evt.ctrlKey || evt.metaKey) && isEnterEvent(evt)) {
+      evt.preventDefault();
+
+      const formElement = evt.currentTarget;
+      formElement.requestSubmit();
+    }
+  };
+
   #commentFormInputHandler = ({ target: { name, value } }) => {
     switch (name) {
       case CommentFormFieldName.TEXT:
@@ -251,5 +267,14 @@ export default class MovieDetailsView extends AbstractStatefulView {
         this.#restoreEmotionFieldFocus();
         break;
     }
+  };
+
+  #commentFormSubmitHandler = (evt) => {
+    evt.preventDefault();
+
+    this.#onCommentFormSubmit({
+      emotionId: this._state.newCommentEmotionId,
+      text: this._state.newCommentText,
+    });
   };
 }

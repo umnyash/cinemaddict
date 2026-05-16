@@ -1,4 +1,5 @@
 import { render, remove } from '../framework';
+import { EventType } from '../constants.js';
 import { calcMovieCountsByStatus } from '../utils/movie-filter.js';
 import CatalogFilterView from '../view/catalog-filter-view.js';
 
@@ -33,7 +34,12 @@ export default class CatalogFilterPresenter {
     this.#filterModel.filter = filter;
   };
 
-  #moviesModelEventHandler = () => {
-    this.init();
+  #moviesModelEventHandler = (eventType) => {
+    if (eventType === EventType.MOVIE_WATCHLISTED_TOGGLE ||
+      eventType === EventType.MOVIE_WATCHED_TOGGLE ||
+      eventType === EventType.MOVIE_FAVORITED_TOGGLE
+    ) {
+      this.init();
+    }
   };
 }
