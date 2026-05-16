@@ -1,4 +1,5 @@
 const KeyCode = {
+  ENTER: 'Enter',
   ESCAPE: 'Escape',
 };
 
@@ -14,6 +15,10 @@ function getUniqueRandomArrayItems(array, count) {
   }
 
   return shuffle(array).slice(0, count);
+}
+
+function isEnterEvent(evt) {
+  return evt.code === KeyCode.ENTER;
 }
 
 function isEscapeEvent(evt) {
@@ -42,6 +47,7 @@ function updateArrayItemById(array, updatedItem) {
 export {
   getDeclension,
   getUniqueRandomArrayItems,
+  isEnterEvent,
   isEscapeEvent,
   updateArrayItemById,
 };

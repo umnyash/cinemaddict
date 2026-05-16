@@ -1,5 +1,11 @@
 export { formatCommentDate } from './comments.js';
-export { getDeclension, isEscapeEvent, updateArrayItemById } from './common.js';
+
+export {
+  getDeclension,
+  isEnterEvent,
+  isEscapeEvent,
+  updateArrayItemById,
+} from './common.js';
 
 export {
   formatMovieDuration,
