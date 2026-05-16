@@ -254,6 +254,25 @@ export default class MovieDetailsView extends AbstractStatefulView {
 
       const formElement = evt.currentTarget;
       formElement.requestSubmit();
+
+      // 2026-05-08
+      // Fix for Chromium browsers bug:
+      // - Google Chrome v.148.0.7778.168 (64-bit)
+      // - Microsoft Edge v.148.0.3967.70 (64-bit)
+      // - Opera v.131.0.5877.24
+      // - Yandex Browser 26.4.1.1026 (64-bit)
+      //
+      // When requestSubmit() is called without a selected radio button,
+      // native validation UI appears only after additional user interaction
+      // (mouse move or wheel scroll).
+      //
+      // The issue reproduces in a plain HTML form without CSS,
+      // so it is not caused by layout or radio styling.
+      //
+      // Firefox 150.0.3 (64-bit) does not reproduce this issue.
+      requestAnimationFrame(() => {
+        formElement.reportValidity();
+      });
     }
   };
 
