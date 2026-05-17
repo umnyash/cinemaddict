@@ -1,36 +1,23 @@
 import { render, remove } from '../framework';
-import { EventType } from '../constants.js';
 import { isEscapeEvent } from '../utils';
 
+import MovieDetailsPresenter from './movie-details-presenter.js';
 import MoviePopupView from '../view/movie-popup-view.js';
 import PopupInnerView from '../view/popup-inner-view.js';
-import MovieDetailsView from '../view/movie-details-view.js';
 
 export default class MoviePopupPresenter {
   #containerElement = null;
   #moviesModel = null;
   #commentsModel = null;
 
-  #movieId = null;
   #popupComponent = null;
   #popupInnerComponent = null;
-  #movieComponent = null;
+  #moviePresenter = null;
 
   constructor({ containerElement, moviesModel, commentsModel }) {
     this.#containerElement = containerElement;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
-
-    this.#moviesModel.addObserver(this.#moviesModelEventHandler);
-    this.#commentsModel.addObserver(this.#commentsModelEventHandler);
-  }
-
-  get #movie() {
-    return this.#moviesModel.getMovieById(this.#movieId);
-  }
-
-  get #comments() {
-    return this.#commentsModel.get(this.#movieId, this.#movie.commentsCount);
   }
 
   get #isOpen() {
@@ -46,20 +33,17 @@ export default class MoviePopupPresenter {
   }
 
   show(movieId) {
-    const isCurrentMovie = this.#movieId === movieId;
+    const isCurrentMovie = this.#moviePresenter?.movieId === movieId;
 
     if (isCurrentMovie) {
       return;
     }
 
-    this.#movieId = movieId;
-
     if (this.#isOpen) {
-      this.#destroyMovie();
+      this.#moviePresenter.init(movieId);
       this.#popupComponent.resetScroll();
-      this.#renderMovie();
     } else {
-      this.#render();
+      this.#render(movieId);
       this.#open();
     }
   }
@@ -71,72 +55,30 @@ export default class MoviePopupPresenter {
 
     this.#popupComponent = null;
     this.#popupInnerComponent = null;
-    this.#movieComponent = null;
-    this.#movieId = null;
+    this.#moviePresenter = null;
   }
 
-  #render() {
+  #render(movieId) {
     this.#popupComponent = new MoviePopupView();
 
     this.#popupInnerComponent = new PopupInnerView({
       onCloseButtonClick: this.#closeButtonClickHandler,
     });
 
-    this.#renderMovie();
+    this.#renderMovie(movieId);
     render(this.#popupInnerComponent, this.#popupComponent.element);
     render(this.#popupComponent, this.#containerElement);
   }
 
-  #renderMovie() {
-    this.#movieComponent = new MovieDetailsView({
-      movie: this.#movie,
-      comments: this.#comments,
-      onWatchlistButtonClick: this.#watchlistButtonClickHandler,
-      onWatchedButtonClick: this.#watchedButtonClickHandler,
-      onFavoriteButtonClick: this.#favoriteButtonClickHandler,
-      onCommentFormSubmit: this.#commentFormSubmitHandler,
+  #renderMovie(movieId) {
+    this.#moviePresenter = new MovieDetailsPresenter({
+      containerElement: this.#popupInnerComponent.element,
+      moviesModel: this.#moviesModel,
+      commentsModel: this.#commentsModel,
     });
 
-    render(this.#movieComponent, this.#popupInnerComponent.element);
+    this.#moviePresenter.init(movieId);
   }
-
-  #updateMovie() {
-    this.#movieComponent.updateElement({
-      isWatchlisted: this.#movie.isWatchlisted,
-      isWatched: this.#movie.isWatched,
-      isFavorited: this.#movie.isFavorited,
-    });
-  }
-
-  #destroyMovie() {
-    remove(this.#movieComponent);
-    this.#movieComponent = null;
-  }
-
-  #watchlistButtonClickHandler = () => {
-    this.#moviesModel.updateMovie(EventType.MOVIE_WATCHLISTED_TOGGLE, {
-      ...this.#movie,
-      isWatchlisted: !this.#movie.isWatchlisted,
-    });
-  };
-
-  #watchedButtonClickHandler = () => {
-    this.#moviesModel.updateMovie(EventType.MOVIE_WATCHED_TOGGLE, {
-      ...this.#movie,
-      isWatched: !this.#movie.isWatched,
-    });
-  };
-
-  #favoriteButtonClickHandler = () => {
-    this.#moviesModel.updateMovie(EventType.MOVIE_FAVORITED_TOGGLE, {
-      ...this.#movie,
-      isFavorited: !this.#movie.isFavorited,
-    });
-  };
-
-  #commentFormSubmitHandler = (commentData) => {
-    this.#commentsModel.createComment(this.#movieId, commentData);
-  };
 
   #closeButtonClickHandler = () => {
     this.#close();
@@ -146,42 +88,6 @@ export default class MoviePopupPresenter {
     if (isEscapeEvent(evt)) {
       evt.preventDefault();
       this.#close();
-    }
-  };
-
-  #moviesModelEventHandler = (eventType, updatedMovie) => {
-    const isCurrentMovie = this.#movieId === updatedMovie.id;
-
-    if (!isCurrentMovie) {
-      return;
-    }
-
-    switch (eventType) {
-      case EventType.MOVIE_WATCHLISTED_TOGGLE:
-      case EventType.MOVIE_WATCHED_TOGGLE:
-      case EventType.MOVIE_FAVORITED_TOGGLE:
-        this.#updateMovie();
-        break;
-      default:
-        this.#destroyMovie();
-        this.#renderMovie();
-    }
-  };
-
-  #commentsModelEventHandler = (eventType, movieId) => {
-    const isCurrentMovie = this.#movieId === movieId;
-
-    if (!isCurrentMovie) {
-      return;
-    }
-
-    switch (eventType) {
-      case EventType.COMMENT_CREATE:
-        this.#moviesModel.updateMovie(eventType, {
-          ...this.#movie,
-          commentsCount: this.#movie.commentsCount + 1,
-        });
-        break;
     }
   };
 }
