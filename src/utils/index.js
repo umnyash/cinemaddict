@@ -1,6 +1,7 @@
 export { formatCommentDate } from './comments.js';
 
 export {
+  escapeHtml,
   getDeclension,
   isEnterEvent,
   isEscapeEvent,
