@@ -2,6 +2,7 @@ import { AbstractStatefulView } from '../framework';
 import { emotions, emotionIds } from '../data';
 
 import {
+  escapeHtml,
   formatCommentDate,
   formatMovieDuration,
   formatMovieRating,
@@ -18,6 +19,7 @@ const CommentFormFieldName = {
 function createMovieDetailsCommentTemplate(comment) {
   const { text, emotionId, date, author: { name } } = comment;
   const formattedDate = formatCommentDate(date);
+  const escapedText = escapeHtml(text);
 
   return (
     `<li class="comment">
@@ -29,7 +31,7 @@ function createMovieDetailsCommentTemplate(comment) {
         alt="${emotions[emotionId].name} emoji."
         loading="lazy"
       >
-      <blockquote class="comment__text">${text}</blockquote>
+      <blockquote class="comment__text">${escapedText}</blockquote>
       <p class="comment__author">${name}</p>
       <time class="comment__date" datetime="${date}">${formattedDate}</time>
       <button class="comment__delete-button link" type="button">Delete</button>
