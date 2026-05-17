@@ -1,7 +1,13 @@
+import { encode } from 'html-entities';
+
 const KeyCode = {
   ENTER: 'Enter',
   ESCAPE: 'Escape',
 };
+
+function escapeHtml(text) {
+  return encode(text);
+}
 
 function getDeclension(count, { one, many }) {
   return count === 1 ? one : many;
@@ -45,6 +51,7 @@ function updateArrayItemById(array, updatedItem) {
 }
 
 export {
+  escapeHtml,
   getDeclension,
   getUniqueRandomArrayItems,
   isEnterEvent,
