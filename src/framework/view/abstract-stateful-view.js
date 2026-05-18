@@ -11,7 +11,7 @@ export default class AbstractStatefulView extends AbstractView {
    * Метод для обновления состояния и перерисовки элемента
    * @param {Object} stateUpdate Объект с обновлённой частью состояния
    */
-  updateElement(stateUpdate) {
+  _updateElement(stateUpdate) {
     this._updateState(stateUpdate);
     this.#rerenderElement();
     this._setHandlers();

@@ -165,7 +165,7 @@ export default class MovieCommentsView extends AbstractStatefulView {
         this._updateState({ newCommentText: value });
         break;
       case CommentFormFieldName.EMOTION:
-        this.updateElement({ newCommentEmotionId: value });
+        this._updateElement({ newCommentEmotionId: value });
         this.#restoreEmotionFieldFocus();
         break;
     }
