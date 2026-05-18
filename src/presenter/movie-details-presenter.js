@@ -1,7 +1,9 @@
-import { render, remove } from '../framework';
+import { render, replace, remove } from '../framework';
 import { EventType } from '../constants.js';
 
 import MovieDetailsView from '../view/movie-details-view.js';
+import MovieActionsView from '../view/movie-actions-view.js';
+import MovieCommentsView from '../view/movie-comments-view.js';
 
 export default class MovieDetailsPresenter {
   #containerElement = null;
@@ -10,6 +12,7 @@ export default class MovieDetailsPresenter {
 
   #movieId = null;
   #detailsComponent = null;
+  #actionsComponent = null;
 
   constructor({ containerElement, moviesModel, commentsModel }) {
     this.#containerElement = containerElement;
@@ -43,29 +46,43 @@ export default class MovieDetailsPresenter {
   }
 
   #render() {
-    this.#detailsComponent = new MovieDetailsView({
-      movie: this.#movie,
+    this.#detailsComponent = new MovieDetailsView({ movie: this.#movie });
+
+    const commentsComponent = new MovieCommentsView({
       comments: this.#comments,
-      onWatchlistButtonClick: this.#watchlistButtonClickHandler,
-      onWatchedButtonClick: this.#watchedButtonClickHandler,
-      onFavoriteButtonClick: this.#favoriteButtonClickHandler,
       onCommentFormSubmit: this.#commentFormSubmitHandler,
     });
 
+    this.#renderActions();
+    render(commentsComponent, this.#detailsComponent.element);
     render(this.#detailsComponent, this.#containerElement);
+  }
+
+  #renderActions() {
+    this.#actionsComponent = this.#createActionsComponent();
+    render(this.#actionsComponent, this.#detailsComponent.element);
+  }
+
+  #rerenderActions() {
+    const newActionsComponent = this.#createActionsComponent();
+    replace(newActionsComponent, this.#actionsComponent);
+    this.#actionsComponent = newActionsComponent;
+  }
+
+  #createActionsComponent() {
+    return new MovieActionsView({
+      isWatchlisted: this.#movie.isWatchlisted,
+      isWatched: this.#movie.isWatched,
+      isFavorited: this.#movie.isFavorited,
+      onWatchlistButtonClick: this.#watchlistButtonClickHandler,
+      onWatchedButtonClick: this.#watchedButtonClickHandler,
+      onFavoriteButtonClick: this.#favoriteButtonClickHandler,
+    });
   }
 
   #clear() {
     remove(this.#detailsComponent);
     this.#detailsComponent = null;
-  }
-
-  #update() {
-    this.#detailsComponent.updateElement({
-      isWatchlisted: this.#movie.isWatchlisted,
-      isWatched: this.#movie.isWatched,
-      isFavorited: this.#movie.isFavorited,
-    });
   }
 
   #watchlistButtonClickHandler = () => {
@@ -104,7 +121,7 @@ export default class MovieDetailsPresenter {
       case EventType.MOVIE_WATCHLISTED_TOGGLE:
       case EventType.MOVIE_WATCHED_TOGGLE:
       case EventType.MOVIE_FAVORITED_TOGGLE:
-        this.#update();
+        this.#rerenderActions();
         break;
       default:
         this.#clear();
