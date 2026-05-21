@@ -3,6 +3,7 @@ const EventType = {
   MOVIE_WATCHLISTED_TOGGLE: 'movie/watchlisted-toggle',
   MOVIE_WATCHED_TOGGLE: 'movie/watched-toggle',
   MOVIE_FAVORITED_TOGGLE: 'movie/favorited-toggle',
+  MOVIE_COMMENTS_UPDATE: 'movie/comments-update',
 };
 
 const MovieStatus = {

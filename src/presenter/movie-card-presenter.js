@@ -1,19 +1,28 @@
 import { render, replace } from '../framework';
-import { EventType } from '../constants.js';
 import MovieCardView from '../view/movie-card-view.js';
 
 export default class MovieCardPresenter {
   #containerElement = null;
   #onLinkClick = null;
-  #onDataChange = null;
+  #onWatchlistButtonClick = null;
+  #onWatchedButtonClick = null;
+  #onFavoriteButtonClick = null;
 
   #movie = null;
   #cardComponent = null;
 
-  constructor({ containerElement, onLinkClick, onDataChange }) {
+  constructor({
+    containerElement,
+    onLinkClick,
+    onWatchlistButtonClick,
+    onWatchedButtonClick,
+    onFavoriteButtonClick,
+  }) {
     this.#containerElement = containerElement;
     this.#onLinkClick = onLinkClick;
-    this.#onDataChange = onDataChange;
+    this.onWatchlistButtonClick = onWatchlistButtonClick;
+    this.onWatchedButtonClick = onWatchedButtonClick;
+    this.onFavoriteButtonClick = onFavoriteButtonClick;
   }
 
   init(movie) {
@@ -41,23 +50,14 @@ export default class MovieCardPresenter {
   };
 
   #watchlistButtonClickHandler = () => {
-    this.#onDataChange(EventType.MOVIE_WATCHLISTED_TOGGLE, {
-      ...this.#movie,
-      isWatchlisted: !this.#movie.isWatchlisted,
-    });
+    this.onWatchlistButtonClick(this.#movie.id);
   };
 
   #watchedButtonClickHandler = () => {
-    this.#onDataChange(EventType.MOVIE_WATCHED_TOGGLE, {
-      ...this.#movie,
-      isWatched: !this.#movie.isWatched,
-    });
+    this.onWatchedButtonClick(this.#movie.id);
   };
 
   #favoriteButtonClickHandler = () => {
-    this.#onDataChange(EventType.MOVIE_FAVORITED_TOGGLE, {
-      ...this.#movie,
-      isFavorited: !this.#movie.isFavorited,
-    });
+    this.onFavoriteButtonClick(this.#movie.id);
   };
 }

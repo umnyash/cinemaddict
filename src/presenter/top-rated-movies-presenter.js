@@ -33,7 +33,9 @@ export default class TopRatedMoviesPresenter {
     const movieCardPresenter = new MovieCardPresenter({
       containerElement: containerElement.element,
       onLinkClick: this.#movieCardLinkClickHandler,
-      onDataChange: this.#movieChangeHandler,
+      onWatchlistButtonClick: this.#movieWatchlistButtonClickHandler,
+      onWatchedButtonClick: this.#movieWatchedButtonClickHandler,
+      onFavoriteButtonClick: this.#movieFavoriteButtonClickHandler,
     });
 
     movieCardPresenter.init(movie);
@@ -52,12 +54,20 @@ export default class TopRatedMoviesPresenter {
     render(sectionComponent, this.#containerElement);
   }
 
-  #movieChangeHandler = (eventType, updatedMovie) => {
-    this.#moviesModel.updateMovie(eventType, updatedMovie);
-  };
-
   #movieCardLinkClickHandler = (movieId) => {
     this.#moviePopupPresenter.show(movieId);
+  };
+
+  #movieWatchlistButtonClickHandler = (movieId) => {
+    this.#moviesModel.toggleWatchlistedStatus(movieId);
+  };
+
+  #movieWatchedButtonClickHandler = (movieId) => {
+    this.#moviesModel.toggleWatchedStatus(movieId);
+  };
+
+  #movieFavoriteButtonClickHandler = (movieId) => {
+    this.#moviesModel.toggleFavoritedStatus(movieId);
   };
 
   #moviesModelEventHandler = (_eventType, data) => {
