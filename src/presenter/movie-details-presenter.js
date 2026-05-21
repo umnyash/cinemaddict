@@ -86,24 +86,15 @@ export default class MovieDetailsPresenter {
   }
 
   #watchlistButtonClickHandler = () => {
-    this.#moviesModel.updateMovie(EventType.MOVIE_WATCHLISTED_TOGGLE, {
-      ...this.#movie,
-      isWatchlisted: !this.#movie.isWatchlisted,
-    });
+    this.#moviesModel.toggleWatchlistedStatus(this.#movieId);
   };
 
   #watchedButtonClickHandler = () => {
-    this.#moviesModel.updateMovie(EventType.MOVIE_WATCHED_TOGGLE, {
-      ...this.#movie,
-      isWatched: !this.#movie.isWatched,
-    });
+    this.#moviesModel.toggleWatchedStatus(this.#movieId);
   };
 
   #favoriteButtonClickHandler = () => {
-    this.#moviesModel.updateMovie(EventType.MOVIE_FAVORITED_TOGGLE, {
-      ...this.#movie,
-      isFavorited: !this.#movie.isFavorited,
-    });
+    this.#moviesModel.toggleFavoritedStatus(this.#movieId);
   };
 
   #commentFormSubmitHandler = (commentData) => {
@@ -129,20 +120,7 @@ export default class MovieDetailsPresenter {
     }
   };
 
-  #commentsModelEventHandler = (eventType, movieId) => {
-    const isCurrentMovie = this.#movieId === movieId;
-
-    if (!isCurrentMovie) {
-      return;
-    }
-
-    switch (eventType) {
-      case EventType.COMMENT_CREATE:
-        this.#moviesModel.updateMovie(eventType, {
-          ...this.#movie,
-          commentsCount: this.#movie.commentsCount + 1,
-        });
-        break;
-    }
+  #commentsModelEventHandler = (eventType, { movieId, comments }) => {
+    this.#moviesModel.updateCommentsCount(movieId, comments.length);
   };
 }

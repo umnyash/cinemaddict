@@ -86,7 +86,9 @@ export default class CatalogPresenter {
     const movieCardPresenter = new MovieCardPresenter({
       containerElement: this.#movieListComponent.element,
       onLinkClick: this.#movieCardLinkClickHandler,
-      onDataChange: this.#movieChangeHandler,
+      onWatchlistButtonClick: this.#movieWatchlistButtonClickHandler,
+      onWatchedButtonClick: this.#movieWatchedButtonClickHandler,
+      onFavoriteButtonClick: this.#movieFavoriteButtonClickHandler,
     });
 
     movieCardPresenter.init(movie);
@@ -188,16 +190,24 @@ export default class CatalogPresenter {
     this.#renderMovies();
   };
 
-  #movieChangeHandler = (eventType, updatedMovie) => {
-    this.#moviesModel.updateMovie(eventType, updatedMovie);
-  };
-
   #showMoreButtonClickHandler = () => {
     this.#renderNextMovies();
   };
 
   #movieCardLinkClickHandler = (movieId) => {
     this.#moviePopupPresenter.show(movieId);
+  };
+
+  #movieWatchlistButtonClickHandler = (movieId) => {
+    this.#moviesModel.toggleWatchlistedStatus(movieId);
+  };
+
+  #movieWatchedButtonClickHandler = (movieId) => {
+    this.#moviesModel.toggleWatchedStatus(movieId);
+  };
+
+  #movieFavoriteButtonClickHandler = (movieId) => {
+    this.#moviesModel.toggleFavoritedStatus(movieId);
   };
 
   #filterModelEventHandler = () => {

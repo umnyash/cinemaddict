@@ -26,6 +26,10 @@ export default class CommentsModel extends Observable {
     };
 
     this.#comments.get(movieId).push(newComment);
-    this._notify(EventType.COMMENT_CREATE, movieId);
+
+    this._notify(EventType.COMMENT_CREATE, {
+      movieId,
+      comments: this.#comments.get(movieId),
+    });
   }
 }
