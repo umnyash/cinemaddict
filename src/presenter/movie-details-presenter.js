@@ -20,7 +20,6 @@ export default class MovieDetailsPresenter {
     this.#commentsModel = commentsModel;
 
     this.#moviesModel.addObserver(this.#moviesModelEventHandler);
-    this.#commentsModel.addObserver(this.#commentsModelEventHandler);
   }
 
   get movieId() {
@@ -118,9 +117,5 @@ export default class MovieDetailsPresenter {
         this.#clear();
         this.#render();
     }
-  };
-
-  #commentsModelEventHandler = (eventType, { movieId, comments }) => {
-    this.#moviesModel.updateCommentsCount(movieId, comments.length);
   };
 }
