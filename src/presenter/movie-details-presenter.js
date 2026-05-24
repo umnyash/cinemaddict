@@ -1,9 +1,10 @@
 import { render, replace, remove } from '../framework';
 import { EventType } from '../constants.js';
 
+import MovieCommentsPresenter from './movie-comments-presenter.js';
+
 import MovieDetailsView from '../view/movie-details-view.js';
 import MovieActionsView from '../view/movie-actions-view.js';
-import MovieCommentsView from '../view/movie-comments-view.js';
 
 export default class MovieDetailsPresenter {
   #containerElement = null;
@@ -30,10 +31,6 @@ export default class MovieDetailsPresenter {
     return this.#moviesModel.getMovieById(this.#movieId);
   }
 
-  get #comments() {
-    return this.#commentsModel.get(this.#movieId, this.#movie.commentsCount);
-  }
-
   init(movieId) {
     this.#movieId = movieId;
 
@@ -47,13 +44,15 @@ export default class MovieDetailsPresenter {
   #render() {
     this.#detailsComponent = new MovieDetailsView({ movie: this.#movie });
 
-    const commentsComponent = new MovieCommentsView({
-      comments: this.#comments,
-      onCommentFormSubmit: this.#commentFormSubmitHandler,
+    const commentsPresenter = new MovieCommentsPresenter({
+      containerElement: this.#detailsComponent.element,
+      commentsModel: this.#commentsModel,
+      movieId: this.#movieId,
+      initialCommentsCount: this.#movie.commentsCount,
     });
 
     this.#renderActions();
-    render(commentsComponent, this.#detailsComponent.element);
+    commentsPresenter.init();
     render(this.#detailsComponent, this.#containerElement);
   }
 
@@ -94,10 +93,6 @@ export default class MovieDetailsPresenter {
 
   #favoriteButtonClickHandler = () => {
     this.#moviesModel.toggleFavoritedStatus(this.#movieId);
-  };
-
-  #commentFormSubmitHandler = (commentData) => {
-    this.#commentsModel.createComment(this.#movieId, commentData);
   };
 
   #moviesModelEventHandler = (eventType, updatedMovie) => {
