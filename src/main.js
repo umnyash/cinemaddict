@@ -19,6 +19,12 @@ const moviesModel = new MoviesModel();
 const commentsModel = new CommentsModel();
 const catalogFilterModel = new CatalogFilterModel();
 
+const commentsModelEventHandler = (_eventType, { movieId, comments }) => {
+  moviesModel.updateCommentsCount(movieId, comments.length);
+};
+
+commentsModel.addObserver(commentsModelEventHandler);
+
 const userPresenter = new UserPresenter({
   containerElement: siteHeaderContainerElement,
   moviesModel,
