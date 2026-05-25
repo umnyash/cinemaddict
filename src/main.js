@@ -6,6 +6,7 @@ import UserPresenter from './presenter/user-presenter.js';
 import CatalogPresenter from './presenter/catalog-presenter.js';
 import CatalogFilterPresenter from './presenter/catalog-filter-presenter.js';
 import TopRatedMoviesPresenter from './presenter/top-rated-movies-presenter.js';
+import MostCommentedMoviesPresenter from './presenter/most-commented-movies-presenter.js';
 import MoviesCountPresenter from './presenter/movies-count-presenter.js';
 import MoviePopupPresenter from './presenter/movie-popup-presenter.js';
 
@@ -55,6 +56,12 @@ const topRatedMoviesPresenter = new TopRatedMoviesPresenter({
   moviePopupPresenter,
 });
 
+const mostCommentedMoviesPresenter = new MostCommentedMoviesPresenter({
+  containerElement: movieSectionsContainerElement,
+  moviesModel,
+  moviePopupPresenter,
+});
+
 const moviesCountPresenter = new MoviesCountPresenter({
   containerElement: siteFooterContainerElement,
   moviesModel,
@@ -64,4 +71,5 @@ userPresenter.init();
 catalogPresenter.init();
 catalogFilterPresenter.init();
 topRatedMoviesPresenter.init();
+mostCommentedMoviesPresenter.init();
 moviesCountPresenter.init();
