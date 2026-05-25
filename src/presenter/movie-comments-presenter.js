@@ -1,4 +1,4 @@
-import { render } from '../framework';
+import { render, remove, RenderPosition } from '../framework';
 
 import MovieCommentsView from '../view/movie-comments-view.js';
 import CommentsHeadingView from '../view/comments-heading-view.js';
@@ -11,6 +11,7 @@ export default class MovieCommentsPresenter {
   #movieId = null;
   #initialCommentsCount = null;
 
+  #commentsComponent = null;
   #headingComponent = null;
   #listComponent = null;
   #formComponent = null;
@@ -20,6 +21,8 @@ export default class MovieCommentsPresenter {
     this.#commentsModel = commentsModel;
     this.#movieId = movieId;
     this.#initialCommentsCount = initialCommentsCount;
+
+    this.#commentsModel.addObserver(this.#commentsModelEventHandler);
   }
 
   get #comments() {
@@ -27,22 +30,32 @@ export default class MovieCommentsPresenter {
   }
 
   #render() {
-    const commentsComponent = new MovieCommentsView();
-    this.#headingComponent = new CommentsHeadingView({ commentsCount: this.#comments.length });
+    this.#commentsComponent = new MovieCommentsView();
 
     this.#formComponent = new CommentFormView({
-      onCommentFormSubmit: this.#commentFormSubmitHandler,
+      onCommentFormSubmit: this.#commentFormSubmitHandler
     });
 
-    render(this.#headingComponent, commentsComponent.element);
+    this.#renderComments(this.#comments);
+    render(this.#formComponent, this.#commentsComponent.element);
+    render(this.#commentsComponent, this.#containerElement);
+  }
 
-    if (this.#comments.length) {
-      this.#listComponent = new CommentListView({ comments: this.#comments });
-      render(this.#listComponent, commentsComponent.element);
+  #renderComments(comments) {
+    if (comments.length) {
+      this.#listComponent = new CommentListView({ comments });
+      render(this.#listComponent, this.#commentsComponent.element, RenderPosition.AFTERBEGIN);
     }
 
-    render(this.#formComponent, commentsComponent.element);
-    render(commentsComponent, this.#containerElement);
+    this.#headingComponent = new CommentsHeadingView({ commentsCount: comments.length });
+    render(this.#headingComponent, this.#commentsComponent.element, RenderPosition.AFTERBEGIN);
+  }
+
+  #clearComments() {
+    remove(this.#headingComponent);
+    remove(this.#listComponent);
+    this.#headingComponent = null;
+    this.#listComponent = null;
   }
 
   init() {
@@ -51,5 +64,15 @@ export default class MovieCommentsPresenter {
 
   #commentFormSubmitHandler = (commentData) => {
     this.#commentsModel.createComment(this.#movieId, commentData);
+  };
+
+  #commentsModelEventHandler = (_eventType, { movieId, comments }) => {
+    if (this.#movieId !== movieId) {
+      return;
+    }
+
+    this.#formComponent.reset();
+    this.#clearComments();
+    this.#renderComments(comments);
   };
 }

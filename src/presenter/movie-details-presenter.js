@@ -108,9 +108,6 @@ export default class MovieDetailsPresenter {
       case EventType.MOVIE_FAVORITED_TOGGLE:
         this.#rerenderActions();
         break;
-      default:
-        this.#clear();
-        this.#render();
     }
   };
 }
