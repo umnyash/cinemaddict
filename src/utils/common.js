@@ -40,6 +40,16 @@ function shuffle(array) {
   return array;
 }
 
+function deleteArrayItemById(array, itemId) {
+  const itemIndex = array.findIndex(({ id }) => id === itemId);
+
+  if (itemIndex === -1) {
+    throw new Error(`Can't delete item. Id ${itemId} not found`);
+  }
+
+  array.splice(itemIndex, 1);
+}
+
 function updateArrayItemById(array, updatedItem) {
   const index = array.findIndex(({ id }) => id === updatedItem.id);
 
@@ -56,5 +66,6 @@ export {
   getUniqueRandomArrayItems,
   isEnterEvent,
   isEscapeEvent,
+  deleteArrayItemById,
   updateArrayItemById,
 };
