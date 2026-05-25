@@ -1,4 +1,5 @@
 import { render, remove, RenderPosition } from '../framework';
+import { EventType } from '../constants.js';
 
 import MovieCommentsView from '../view/movie-comments-view.js';
 import CommentsHeadingView from '../view/comments-heading-view.js';
@@ -43,7 +44,11 @@ export default class MovieCommentsPresenter {
 
   #renderComments(comments) {
     if (comments.length) {
-      this.#listComponent = new CommentListView({ comments });
+      this.#listComponent = new CommentListView({
+        comments,
+        onCommentDeleteButtonClick: this.#commentDeleteButtonClickHandler,
+      });
+
       render(this.#listComponent, this.#commentsComponent.element, RenderPosition.AFTERBEGIN);
     }
 
@@ -62,16 +67,23 @@ export default class MovieCommentsPresenter {
     this.#render();
   }
 
+  #commentDeleteButtonClickHandler = (commentId) => {
+    this.#commentsModel.deleteComment(this.#movieId, commentId);
+  };
+
   #commentFormSubmitHandler = (commentData) => {
     this.#commentsModel.createComment(this.#movieId, commentData);
   };
 
-  #commentsModelEventHandler = (_eventType, { movieId, comments }) => {
+  #commentsModelEventHandler = (eventType, { movieId, comments }) => {
     if (this.#movieId !== movieId) {
       return;
     }
 
-    this.#formComponent.reset();
+    if (eventType === EventType.COMMENT_CREATE) {
+      this.#formComponent.reset();
+    }
+
     this.#clearComments();
     this.#renderComments(comments);
   };
