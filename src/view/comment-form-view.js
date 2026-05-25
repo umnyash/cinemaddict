@@ -56,17 +56,18 @@ function createCommentFormTemplate({ currentEmotionId, text }) {
 }
 
 export default class CommentForm extends AbstractStatefulView {
+  #emptyState = {
+    currentEmotionId: null,
+    text: '',
+  };
+
   #onCommentFormSubmit = null;
 
   constructor({ onCommentFormSubmit }) {
     super();
     this.#onCommentFormSubmit = onCommentFormSubmit;
 
-    this._updateState({
-      currentEmotionId: null,
-      text: '',
-    });
-
+    this._updateState(this.#emptyState);
     this._setHandlers();
   }
 
@@ -78,6 +79,10 @@ export default class CommentForm extends AbstractStatefulView {
     this.element.addEventListener('keydown', this.#commentFormKeydownHandler);
     this.element.addEventListener('input', this.#commentFormInputHandler);
     this.element.addEventListener('submit', this.#commentFormSubmitHandler);
+  }
+
+  reset() {
+    this._updateElement(this.#emptyState);
   }
 
   #restoreEmotionFieldFocus() {
