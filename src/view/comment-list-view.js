@@ -3,7 +3,7 @@ import { emotions } from '../data';
 import { escapeHtml, formatCommentDate } from '../utils';
 
 function createCommentListItemTemplate(comment) {
-  const { text, emotionId, date, author: { name } } = comment;
+  const { id, text, emotionId, date, author: { name } } = comment;
   const formattedDate = formatCommentDate(date);
   const escapedText = escapeHtml(text);
 
@@ -20,7 +20,7 @@ function createCommentListItemTemplate(comment) {
       <blockquote class="comment__text">${escapedText}</blockquote>
       <p class="comment__author">${name}</p>
       <time class="comment__date" datetime="${date}">${formattedDate}</time>
-      <button class="comment__delete-button link" type="button">Delete</button>
+      <button class="comment__delete-button link" type="button" data-comment-id="${id}">Delete</button>
     </li>`
   );
 }
@@ -35,13 +35,23 @@ function createCommentListTemplate(comments) {
 
 export default class CommentListView extends AbstractView {
   #comments = null;
+  #onCommentDeleteButtonClick = null;
 
-  constructor({ comments }) {
+  constructor({ comments, onCommentDeleteButtonClick }) {
     super();
     this.#comments = comments;
+    this.#onCommentDeleteButtonClick = onCommentDeleteButtonClick;
+
+    this.element.addEventListener('click', this.#listClickHandler);
   }
 
   _getTemplate() {
     return createCommentListTemplate(this.#comments);
   }
+
+  #listClickHandler = ({ target }) => {
+    if (target.classList.contains('comment__delete-button')) {
+      this.#onCommentDeleteButtonClick(target.dataset.commentId);
+    }
+  };
 }
