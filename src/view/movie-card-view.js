@@ -122,6 +122,10 @@ export default class MovieCardView extends AbstractView {
     return createMovieCardTemplate(this.movie);
   }
 
+  shake(callback) {
+    super.shake(callback, this.#actionsElement);
+  }
+
   #linkClickHandler = (evt) => {
     evt.preventDefault();
     this.#onLinkClick();

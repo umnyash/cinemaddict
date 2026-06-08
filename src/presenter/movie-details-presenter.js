@@ -83,16 +83,28 @@ export default class MovieDetailsPresenter {
     this.#detailsComponent = null;
   }
 
-  #watchlistButtonClickHandler = () => {
-    this.#moviesModel.toggleWatchlistedStatus(this.#movieId);
+  #watchlistButtonClickHandler = async () => {
+    try {
+      await this.#moviesModel.toggleWatchlistedStatus(this.#movieId);
+    } catch {
+      this.#actionsComponent.shake();
+    }
   };
 
-  #watchedButtonClickHandler = () => {
-    this.#moviesModel.toggleWatchedStatus(this.#movieId);
+  #watchedButtonClickHandler = async () => {
+    try {
+      await this.#moviesModel.toggleWatchedStatus(this.#movieId);
+    } catch {
+      this.#actionsComponent.shake();
+    }
   };
 
-  #favoriteButtonClickHandler = () => {
-    this.#moviesModel.toggleFavoritedStatus(this.#movieId);
+  #favoriteButtonClickHandler = async () => {
+    try {
+      await this.#moviesModel.toggleFavoritedStatus(this.#movieId);
+    } catch {
+      this.#actionsComponent.shake();
+    }
   };
 
   #moviesModelEventHandler = (eventType, updatedMovie) => {

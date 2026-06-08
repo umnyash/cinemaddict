@@ -74,16 +74,28 @@ export default class TopRatedMoviesPresenter {
     this.#moviePopupPresenter.show(movieId);
   };
 
-  #movieWatchlistButtonClickHandler = (movieId) => {
-    this.#moviesModel.toggleWatchlistedStatus(movieId);
+  #movieWatchlistButtonClickHandler = async (movieId) => {
+    try {
+      await this.#moviesModel.toggleWatchlistedStatus(movieId);
+    } catch {
+      this.#movieCardPresenters.get(movieId).setFailed();
+    }
   };
 
-  #movieWatchedButtonClickHandler = (movieId) => {
-    this.#moviesModel.toggleWatchedStatus(movieId);
+  #movieWatchedButtonClickHandler = async (movieId) => {
+    try {
+      await this.#moviesModel.toggleWatchedStatus(movieId);
+    } catch {
+      this.#movieCardPresenters.get(movieId).setFailed();
+    }
   };
 
-  #movieFavoriteButtonClickHandler = (movieId) => {
-    this.#moviesModel.toggleFavoritedStatus(movieId);
+  #movieFavoriteButtonClickHandler = async (movieId) => {
+    try {
+      await this.#moviesModel.toggleFavoritedStatus(movieId);
+    } catch {
+      this.#movieCardPresenters.get(movieId).setFailed();
+    }
   };
 
   #moviesModelEventHandler = (eventType, data) => {

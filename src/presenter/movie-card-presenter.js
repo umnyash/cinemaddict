@@ -45,6 +45,10 @@ export default class MovieCardPresenter {
     this.#cardComponent = newCardComponent;
   }
 
+  setFailed() {
+    this.#cardComponent.shake();
+  }
+
   #linkClickHandler = () => {
     this.#onLinkClick(this.#movie.id);
   };
