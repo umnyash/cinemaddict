@@ -48,28 +48,25 @@ export default class CatalogPresenter {
       : filteredMovies;
   }
 
+  get #messageVariant() {
+    switch (this.#filter.status) {
+      case MovieStatus.WATCHLISTED:
+        return MessageVariant.WatchlistEmpty;
+      case MovieStatus.WATCHED:
+        return MessageVariant.HistoryEmpty;
+      case MovieStatus.FAVORITED:
+        return MessageVariant.FavoritesEmpty;
+      default:
+        return MessageVariant.CatalogEmpty;
+    }
+  }
+
   init() {
     this.#render();
   }
 
   #renderMessage() {
-    let messageVariant;
-
-    switch (this.#filter.status) {
-      case MovieStatus.WATCHLISTED:
-        messageVariant = MessageVariant.WatchlistEmpty;
-        break;
-      case MovieStatus.WATCHED:
-        messageVariant = MessageVariant.HistoryEmpty;
-        break;
-      case MovieStatus.FAVORITED:
-        messageVariant = MessageVariant.FavoritesEmpty;
-        break;
-      default:
-        messageVariant = MessageVariant.CatalogEmpty;
-    }
-
-    this.#messageComponent = new CatalogMessage({ variant: messageVariant });
+    this.#messageComponent = new CatalogMessage({ variant: this.#messageVariant });
     render(this.#messageComponent, this.#containerElement);
   }
 
