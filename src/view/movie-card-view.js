@@ -88,6 +88,8 @@ export default class MovieCardView extends AbstractView {
   #onWatchedButtonClick = null;
   #onFavoriteButtonClick = null;
 
+  #actionsElement = null;
+
   constructor({
     movie,
     onLinkClick,
@@ -101,17 +103,18 @@ export default class MovieCardView extends AbstractView {
     this.#onWatchlistButtonClick = onWatchlistButtonClick;
     this.#onWatchedButtonClick = onWatchedButtonClick;
     this.#onFavoriteButtonClick = onFavoriteButtonClick;
+    this.#actionsElement = this.element.querySelector('.movie-card__actions');
 
     this.element.querySelector('.movie-card__link')
       .addEventListener('click', this.#linkClickHandler);
 
-    this.element.querySelector('.icon-button--icon_list-add')
+    this.#actionsElement.querySelector('.icon-button--icon_list-add')
       .addEventListener('click', this.#watchlistButtonClickHandler);
 
-    this.element.querySelector('.icon-button--icon_checkmark')
+    this.#actionsElement.querySelector('.icon-button--icon_checkmark')
       .addEventListener('click', this.#watchedButtonClickHandler);
 
-    this.element.querySelector('.icon-button--icon_star')
+    this.#actionsElement.querySelector('.icon-button--icon_star')
       .addEventListener('click', this.#favoriteButtonClickHandler);
   }
 
