@@ -1,9 +1,10 @@
 import { Observable } from '../framework';
-import { EventType } from '../constants.js';
+import { EventType, RequestStatus } from '../constants.js';
 
 export default class MoviesModel extends Observable {
   #apiService = null;
   #movies = [];
+  #loadingStatus = RequestStatus.PENDING;
 
   constructor({ apiService }) {
     super();
@@ -12,6 +13,10 @@ export default class MoviesModel extends Observable {
 
   get movies() {
     return this.#movies;
+  }
+
+  get loadingStatus() {
+    return this.#loadingStatus;
   }
 
   getMovieById(id) {
@@ -43,7 +48,13 @@ export default class MoviesModel extends Observable {
   }
 
   async init() {
-    this.#movies = await this.#apiService.getMovies();
+    try {
+      this.#movies = await this.#apiService.getMovies();
+      this.#loadingStatus = RequestStatus.SUCCESS;
+    } catch {
+      this.#loadingStatus = RequestStatus.ERROR;
+    }
+
     this._notify(EventType.MOVIES_LOAD);
   }
 }

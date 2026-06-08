@@ -9,11 +9,12 @@ const movieStatusButtons = [
 ];
 
 function createCatalogFilterMovieStatusButtonTemplate({ label, value }, currentValue, movieCountsByStatus) {
-  const labelTextTemplate = value
+  const labelTextTemplate = value && movieCountsByStatus
     ? `${label} <span class="checker__counter">${movieCountsByStatus[value]}</span>`
     : label;
 
   const isChecked = value ? value === currentValue : !currentValue;
+  const isDisabled = !movieCountsByStatus;
 
   return (
     `<label class="catalog-filter__button checker checker--simple checker--size_l">
@@ -23,6 +24,7 @@ function createCatalogFilterMovieStatusButtonTemplate({ label, value }, currentV
         value="${value}"
         type="radio"
         ${isChecked ? 'checked' : ''}
+        ${isDisabled ? 'disabled' : ''}
       >
       <span class="checker__label">${labelTextTemplate}</span>
     </label>`

@@ -1,5 +1,5 @@
 import { render, remove } from '../framework';
-import { EventType } from '../constants.js';
+import { EventType, RequestStatus } from '../constants.js';
 import { calcMovieCountsByStatus } from '../utils/movie-filter.js';
 import CatalogFilterView from '../view/catalog-filter-view.js';
 
@@ -18,12 +18,20 @@ export default class CatalogFilterPresenter {
     this.#moviesModel.addObserver(this.#moviesModelEventHandler);
   }
 
+  get #moviesLoadingStatus() {
+    return this.#moviesModel.loadingStatus;
+  }
+
   init() {
     remove(this.#filterComponent);
 
+    const movieCountsByStatus = this.#moviesLoadingStatus === RequestStatus.SUCCESS
+      ? calcMovieCountsByStatus(this.#moviesModel.movies)
+      : null;
+
     this.#filterComponent = new CatalogFilterView({
       filter: this.#filterModel.filter,
-      movieCountsByStatus: calcMovieCountsByStatus(this.#moviesModel.movies),
+      movieCountsByStatus,
       onFilterChange: this.#filterChangeHandler,
     });
 

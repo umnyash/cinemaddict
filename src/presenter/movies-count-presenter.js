@@ -1,5 +1,5 @@
 import { render } from '../framework';
-import { EventType } from '../constants.js';
+import { EventType, RequestStatus } from '../constants.js';
 import MoviesCountView from '../view/movies-count-view.js';
 
 export default class MoviesCountPresenter {
@@ -13,7 +13,15 @@ export default class MoviesCountPresenter {
     this.#moviesModel.addObserver(this.#moviesModelEventHandler);
   }
 
+  get #moviesLoadingStatus() {
+    return this.#moviesModel.loadingStatus;
+  }
+
   init() {
+    if (this.#moviesLoadingStatus !== RequestStatus.SUCCESS) {
+      return;
+    }
+
     const moviesCountComponent = new MoviesCountView({
       count: this.#moviesModel.movies.length
     });

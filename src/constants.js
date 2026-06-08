@@ -14,9 +14,15 @@ const MovieStatus = {
   FAVORITED: 'favorited',
 };
 
+const RequestStatus = {
+  PENDING: 'pending',
+  SUCCESS: 'success',
+  ERROR: 'error',
+};
+
 const SortType = {
   DATE_DESC: 'date-desc',
   RATING_DESC: 'rating-desc',
 };
 
-export { EventType, MovieStatus, SortType };
+export { EventType, MovieStatus, RequestStatus, SortType };

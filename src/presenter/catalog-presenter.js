@@ -1,5 +1,5 @@
 import { render, remove } from '../framework';
-import { EventType, MovieStatus } from '../constants.js';
+import { EventType, MovieStatus, RequestStatus } from '../constants.js';
 import { filterMovies, sortMoviesBy } from '../utils';
 
 import MovieCardPresenter from './movie-card-presenter.js';
@@ -48,7 +48,19 @@ export default class CatalogPresenter {
       : filteredMovies;
   }
 
+  get #moviesLoadingStatus() {
+    return this.#moviesModel.loadingStatus;
+  }
+
   get #messageVariant() {
+    if (this.#moviesLoadingStatus === RequestStatus.PENDING) {
+      return MessageVariant.Loading;
+    }
+
+    if (this.#moviesLoadingStatus === RequestStatus.ERROR) {
+      return MessageVariant.LoadFailed;
+    }
+
     switch (this.#filter.status) {
       case MovieStatus.WATCHLISTED:
         return MessageVariant.WatchlistEmpty;
@@ -139,13 +151,13 @@ export default class CatalogPresenter {
   }
 
   #render() {
-    if (!this.#movies.length) {
-      this.#renderMessage();
+    if (this.#moviesLoadingStatus === RequestStatus.SUCCESS && this.#movies.length) {
+      this.#renderSort();
+      this.#renderMovies();
       return;
     }
 
-    this.#renderSort();
-    this.#renderMovies();
+    this.#renderMessage();
   }
 
   #destroyMessage() {
