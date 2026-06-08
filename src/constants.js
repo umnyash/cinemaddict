@@ -5,6 +5,7 @@ const EventType = {
   MOVIE_WATCHED_TOGGLE: 'movie/watched-toggle',
   MOVIE_FAVORITED_TOGGLE: 'movie/favorited-toggle',
   MOVIE_COMMENTS_UPDATE: 'movie/comments-update',
+  MOVIES_LOAD: 'movies/load',
 };
 
 const MovieStatus = {

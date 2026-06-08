@@ -1,3 +1,5 @@
+import MoviesApiService from './services/movies-api-service.js';
+
 import MoviesModel from './model/movies-model.js';
 import CommentsModel from './model/comments-model.js';
 import CatalogFilterModel from './model/catalog-filter-model.js';
@@ -10,13 +12,19 @@ import MostCommentedMoviesPresenter from './presenter/most-commented-movies-pres
 import MoviesCountPresenter from './presenter/movies-count-presenter.js';
 import MoviePopupPresenter from './presenter/movie-popup-presenter.js';
 
+const END_POINT = 'https://24.objects.htmlacademy.pro/cinemaddict';
+const AUTHORIZATION = 'Basic umnyash';
+
 const siteHeaderContainerElement = document.body.querySelector('.site-header__container');
 const siteFooterContainerElement = document.body.querySelector('.site-footer__container');
 const catalogContainerElement = document.body.querySelector('.catalog__container');
 const catalogFilterContainerElement = catalogContainerElement.querySelector('.catalog__filter-wrapper');
 const movieSectionsContainerElement = document.body.querySelector('.page__sections');
 
-const moviesModel = new MoviesModel();
+const moviesModel = new MoviesModel({
+  apiService: new MoviesApiService(END_POINT, AUTHORIZATION),
+});
+
 const commentsModel = new CommentsModel();
 const catalogFilterModel = new CatalogFilterModel();
 
@@ -50,19 +58,19 @@ const catalogFilterPresenter = new CatalogFilterPresenter({
   moviesModel,
 });
 
-const topRatedMoviesPresenter = new TopRatedMoviesPresenter({
+new TopRatedMoviesPresenter({
   containerElement: movieSectionsContainerElement,
   moviesModel,
   moviePopupPresenter,
 });
 
-const mostCommentedMoviesPresenter = new MostCommentedMoviesPresenter({
+new MostCommentedMoviesPresenter({
   containerElement: movieSectionsContainerElement,
   moviesModel,
   moviePopupPresenter,
 });
 
-const moviesCountPresenter = new MoviesCountPresenter({
+new MoviesCountPresenter({
   containerElement: siteFooterContainerElement,
   moviesModel,
 });
@@ -70,6 +78,5 @@ const moviesCountPresenter = new MoviesCountPresenter({
 userPresenter.init();
 catalogPresenter.init();
 catalogFilterPresenter.init();
-topRatedMoviesPresenter.init();
-mostCommentedMoviesPresenter.init();
-moviesCountPresenter.init();
+
+moviesModel.init();

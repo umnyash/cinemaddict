@@ -222,6 +222,7 @@ export default class CatalogPresenter {
       case eventType === EventType.MOVIE_WATCHLISTED_TOGGLE && this.#filter.status === MovieStatus.WATCHLISTED:
       case eventType === EventType.MOVIE_WATCHED_TOGGLE && this.#filter.status === MovieStatus.WATCHED:
       case eventType === EventType.MOVIE_FAVORITED_TOGGLE && this.#filter.status === MovieStatus.FAVORITED:
+      case eventType === EventType.MOVIES_LOAD:
         this.#clear();
         this.#render();
         break;

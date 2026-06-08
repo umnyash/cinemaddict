@@ -1,11 +1,14 @@
 import { Observable } from '../framework';
 import { EventType } from '../constants.js';
-import { generateMockMovies } from '../mocks';
-
-const MOVIES_COUNT = 13;
 
 export default class MoviesModel extends Observable {
-  #movies = generateMockMovies(MOVIES_COUNT);
+  #apiService = null;
+  #movies = [];
+
+  constructor({ apiService }) {
+    super();
+    this.#apiService = apiService;
+  }
 
   get movies() {
     return this.#movies;
@@ -37,5 +40,10 @@ export default class MoviesModel extends Observable {
     const movie = this.#movies.find(({ id }) => id === movieId);
     movie.commentsCount = count;
     this._notify(EventType.MOVIE_COMMENTS_UPDATE, movie);
+  }
+
+  async init() {
+    this.#movies = await this.#apiService.getMovies();
+    this._notify(EventType.MOVIES_LOAD);
   }
 }

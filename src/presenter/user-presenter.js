@@ -42,7 +42,7 @@ export default class UserPresenter {
   }
 
   #moviesModelEventHandler = (eventType) => {
-    if (eventType === EventType.MOVIE_WATCHED_TOGGLE) {
+    if (eventType === EventType.MOVIE_WATCHED_TOGGLE || eventType === EventType.MOVIES_LOAD) {
       this.init();
     }
   };

@@ -37,7 +37,8 @@ export default class CatalogFilterPresenter {
   #moviesModelEventHandler = (eventType) => {
     if (eventType === EventType.MOVIE_WATCHLISTED_TOGGLE ||
       eventType === EventType.MOVIE_WATCHED_TOGGLE ||
-      eventType === EventType.MOVIE_FAVORITED_TOGGLE
+      eventType === EventType.MOVIE_FAVORITED_TOGGLE ||
+      eventType === EventType.MOVIES_LOAD
     ) {
       this.init();
     }

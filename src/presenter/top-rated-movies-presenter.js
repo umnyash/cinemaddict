@@ -1,4 +1,5 @@
 import { render } from '../framework';
+import { EventType } from '../constants.js';
 import { getTopMovies } from '../utils';
 import MovieCardPresenter from './movie-card-presenter.js';
 import MovieListView from '../view/movie-list-view.js';
@@ -71,7 +72,12 @@ export default class TopRatedMoviesPresenter {
     this.#moviesModel.toggleFavoritedStatus(movieId);
   };
 
-  #moviesModelEventHandler = (_eventType, data) => {
+  #moviesModelEventHandler = (eventType, data) => {
+    if (eventType === EventType.MOVIES_LOAD) {
+      this.init();
+      return;
+    }
+
     this.#movieCardPresenters.get(data.id)?.init(data);
   };
 }

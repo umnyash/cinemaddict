@@ -1,4 +1,5 @@
 import { render } from '../framework';
+import { EventType } from '../constants.js';
 import MoviesCountView from '../view/movies-count-view.js';
 
 export default class MoviesCountPresenter {
@@ -8,6 +9,8 @@ export default class MoviesCountPresenter {
   constructor({ containerElement, moviesModel }) {
     this.#containerElement = containerElement;
     this.#moviesModel = moviesModel;
+
+    this.#moviesModel.addObserver(this.#moviesModelEventHandler);
   }
 
   init() {
@@ -17,4 +20,10 @@ export default class MoviesCountPresenter {
 
     render(moviesCountComponent, this.#containerElement);
   }
+
+  #moviesModelEventHandler = (eventType) => {
+    if (eventType === EventType.MOVIES_LOAD) {
+      this.init();
+    }
+  };
 }

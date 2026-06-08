@@ -89,6 +89,7 @@ export default class TopRatedMoviesPresenter {
   #moviesModelEventHandler = (eventType, data) => {
     switch (eventType) {
       case EventType.MOVIE_COMMENTS_UPDATE:
+      case EventType.MOVIES_LOAD:
         this.init();
         break;
       default:
