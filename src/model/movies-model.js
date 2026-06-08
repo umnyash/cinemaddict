@@ -1,5 +1,20 @@
 import { Observable } from '../framework';
-import { EventType, RequestStatus } from '../constants.js';
+import { EventType, MovieStatus, RequestStatus } from '../constants.js';
+
+const movieStatusMap = {
+  [MovieStatus.WATCHLISTED]: {
+    property: 'isWatchlisted',
+    eventType: EventType.MOVIE_WATCHLISTED_TOGGLE,
+  },
+  [MovieStatus.WATCHED]: {
+    property: 'isWatched',
+    eventType: EventType.MOVIE_WATCHED_TOGGLE,
+  },
+  [MovieStatus.FAVORITED]: {
+    property: 'isFavorited',
+    eventType: EventType.MOVIE_FAVORITED_TOGGLE,
+  },
+};
 
 export default class MoviesModel extends Observable {
   #apiService = null;
@@ -23,22 +38,16 @@ export default class MoviesModel extends Observable {
     return this.#movies.find((movie) => movie.id === id) ?? null;
   }
 
-  toggleFavoritedStatus(movieId) {
-    const movie = this.#movies.find(({ id }) => id === movieId);
-    movie.isFavorited = !movie.isFavorited;
-    this._notify(EventType.MOVIE_FAVORITED_TOGGLE, movie);
+  async toggleFavoritedStatus(movieId) {
+    await this.#toggleStatus(movieId, MovieStatus.FAVORITED);
   }
 
-  toggleWatchedStatus(movieId) {
-    const movie = this.#movies.find(({ id }) => id === movieId);
-    movie.isWatched = !movie.isWatched;
-    this._notify(EventType.MOVIE_WATCHED_TOGGLE, movie);
+  async toggleWatchedStatus(movieId) {
+    await this.#toggleStatus(movieId, MovieStatus.WATCHED);
   }
 
-  toggleWatchlistedStatus(movieId) {
-    const movie = this.#movies.find(({ id }) => id === movieId);
-    movie.isWatchlisted = !movie.isWatchlisted;
-    this._notify(EventType.MOVIE_WATCHLISTED_TOGGLE, movie);
+  async toggleWatchlistedStatus(movieId) {
+    await this.#toggleStatus(movieId, MovieStatus.WATCHLISTED);
   }
 
   updateCommentsCount(movieId, count) {
@@ -56,5 +65,28 @@ export default class MoviesModel extends Observable {
     }
 
     this._notify(EventType.MOVIES_LOAD);
+  }
+
+  async #toggleStatus(movieId, status) {
+    const movieIndex = this.#movies.findIndex(({ id }) => id === movieId);
+
+    if (movieIndex === -1) {
+      throw new Error(`Can't toggle ${status} status of non-existent movie (id: ${movieId})`);
+    }
+
+    const movie = this.#movies[movieIndex];
+    const { property, eventType } = movieStatusMap[status];
+
+    try {
+      const updatedMovie = await this.#apiService.updateMovie({
+        ...movie,
+        [property]: !movie[property],
+      });
+
+      this.#movies[movieIndex] = updatedMovie;
+      this._notify(eventType, updatedMovie);
+    } catch {
+      throw new Error(`Failed to toggle movie ${status} status (id: ${movieId})`);
+    }
   }
 }
