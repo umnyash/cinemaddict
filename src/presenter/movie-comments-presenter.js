@@ -10,24 +10,22 @@ export default class MovieCommentsPresenter {
   #containerElement = null;
   #commentsModel = null;
   #movieId = null;
-  #initialCommentsCount = null;
 
   #commentsComponent = null;
   #headingComponent = null;
   #listComponent = null;
   #formComponent = null;
 
-  constructor({ containerElement, commentsModel, movieId, initialCommentsCount }) {
+  constructor({ containerElement, commentsModel, movieId }) {
     this.#containerElement = containerElement;
     this.#commentsModel = commentsModel;
     this.#movieId = movieId;
-    this.#initialCommentsCount = initialCommentsCount;
 
     this.#commentsModel.addObserver(this.#commentsModelEventHandler);
   }
 
   get #comments() {
-    return this.#commentsModel.get(this.#movieId, this.#initialCommentsCount);
+    return this.#commentsModel.comments;
   }
 
   #render() {
@@ -64,6 +62,7 @@ export default class MovieCommentsPresenter {
   }
 
   init() {
+    this.#commentsModel.init(this.#movieId);
     this.#render();
   }
 

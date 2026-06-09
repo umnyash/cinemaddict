@@ -48,7 +48,6 @@ export default class MovieDetailsPresenter {
       containerElement: this.#detailsComponent.element,
       commentsModel: this.#commentsModel,
       movieId: this.#movieId,
-      initialCommentsCount: this.#movie.commentsCount,
     });
 
     this.#renderActions();

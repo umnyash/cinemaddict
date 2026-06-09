@@ -1,3 +1,4 @@
+import CommentsApiService from './services/comments-api-service.js';
 import MoviesApiService from './services/movies-api-service.js';
 
 import MoviesModel from './model/movies-model.js';
@@ -25,7 +26,10 @@ const moviesModel = new MoviesModel({
   apiService: new MoviesApiService(END_POINT, AUTHORIZATION),
 });
 
-const commentsModel = new CommentsModel();
+const commentsModel = new CommentsModel({
+  apiService: new CommentsApiService(END_POINT, AUTHORIZATION),
+});
+
 const catalogFilterModel = new CatalogFilterModel();
 
 const commentsModelEventHandler = (_eventType, { movieId, comments }) => {
