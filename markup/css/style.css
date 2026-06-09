@@ -406,6 +406,13 @@
   margin: 0 0 32px;
 }
 
+.comments__message {
+  margin: 0 0 40px;
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
 .comments__list {
   margin: 0 0 40px 7px;
 }
