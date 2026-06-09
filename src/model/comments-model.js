@@ -1,5 +1,5 @@
 import { Observable } from '../framework';
-import { EventType } from '../constants.js';
+import { EventType, RequestStatus } from '../constants.js';
 import { deleteArrayItemById } from '../utils';
 
 const mockAuthor = {
@@ -10,6 +10,7 @@ export default class CommentsModel extends Observable {
   #apiService = null;
   #comments = [];
   #movieId = null;
+  #loadingStatus = null;
 
   constructor({ apiService }) {
     super();
@@ -18,6 +19,10 @@ export default class CommentsModel extends Observable {
 
   get comments() {
     return this.#comments;
+  }
+
+  get loadingStatus() {
+    return this.#loadingStatus;
   }
 
   createComment(movieId, commentData) {
@@ -46,9 +51,16 @@ export default class CommentsModel extends Observable {
   }
 
   async init(movieId) {
+    this.#loadingStatus = RequestStatus.PENDING;
     this.#comments = [];
     this.#movieId = movieId;
-    this.#comments = await this.#apiService.getCommentsByMovieId(movieId);
+
+    try {
+      this.#comments = await this.#apiService.getCommentsByMovieId(movieId);
+      this.#loadingStatus = RequestStatus.SUCCESS;
+    } catch {
+      this.#loadingStatus = RequestStatus.ERROR;
+    }
 
     this._notify(EventType.COMMENTS_LOAD, {
       movieId,

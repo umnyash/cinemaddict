@@ -1,7 +1,11 @@
 import { AbstractView } from '../framework';
 
 function createCommentsHeadingTemplate(commentsCount) {
-  return `<h3 class="comments__title title title--size_m">Comments ${commentsCount}</h3>`;
+  const text = commentsCount !== null
+    ? `Comments ${commentsCount}`
+    : 'Comments';
+
+  return `<h3 class="comments__title title title--size_m">${text}</h3>`;
 }
 
 export default class CommentsHeadingView extends AbstractView {

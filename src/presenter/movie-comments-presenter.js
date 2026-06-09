@@ -1,8 +1,9 @@
 import { render, remove, RenderPosition } from '../framework';
-import { EventType } from '../constants.js';
+import { EventType, RequestStatus } from '../constants.js';
 
 import MovieCommentsView from '../view/movie-comments-view.js';
 import CommentsHeadingView from '../view/comments-heading-view.js';
+import CommentsMessageView, { MessageVariant } from '../view/comments-message-view.js';
 import CommentListView from '../view/comment-list-view.js';
 import CommentFormView from '../view/comment-form-view.js';
 
@@ -13,6 +14,7 @@ export default class MovieCommentsPresenter {
 
   #commentsComponent = null;
   #headingComponent = null;
+  #messageComponent = null;
   #listComponent = null;
   #formComponent = null;
 
@@ -28,6 +30,10 @@ export default class MovieCommentsPresenter {
     return this.#commentsModel.comments;
   }
 
+  get #loadingStatus() {
+    return this.#commentsModel.loadingStatus;
+  }
+
   #render() {
     this.#commentsComponent = new MovieCommentsView();
 
@@ -40,6 +46,16 @@ export default class MovieCommentsPresenter {
     render(this.#commentsComponent, this.#containerElement);
   }
 
+  #renderMessage() {
+    this.#messageComponent = new CommentsMessageView({
+      variant: this.#loadingStatus === RequestStatus.ERROR
+        ? MessageVariant.LOAD_FAILED
+        : MessageVariant.LOADING,
+    });
+
+    render(this.#messageComponent, this.#commentsComponent.element, RenderPosition.AFTERBEGIN);
+  }
+
   #renderCommentList(comments) {
     this.#listComponent = new CommentListView({
       comments,
@@ -50,18 +66,27 @@ export default class MovieCommentsPresenter {
   }
 
   #renderComments(comments) {
-    if (comments.length) {
+    if (this.#loadingStatus !== RequestStatus.SUCCESS) {
+      this.#renderMessage();
+    } else if (comments.length) {
       this.#renderCommentList(comments);
     }
 
-    this.#headingComponent = new CommentsHeadingView({ commentsCount: comments.length });
+    this.#headingComponent = new CommentsHeadingView({
+      commentsCount: this.#loadingStatus === RequestStatus.SUCCESS
+        ? comments.length
+        : null,
+    });
+
     render(this.#headingComponent, this.#commentsComponent.element, RenderPosition.AFTERBEGIN);
   }
 
   #clearComments() {
     remove(this.#headingComponent);
+    remove(this.#messageComponent);
     remove(this.#listComponent);
     this.#headingComponent = null;
+    this.#messageComponent = null;
     this.#listComponent = null;
   }
 
