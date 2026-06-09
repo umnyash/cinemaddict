@@ -40,14 +40,18 @@ export default class MovieCommentsPresenter {
     render(this.#commentsComponent, this.#containerElement);
   }
 
+  #renderCommentList(comments) {
+    this.#listComponent = new CommentListView({
+      comments,
+      onCommentDeleteButtonClick: this.#commentDeleteButtonClickHandler,
+    });
+
+    render(this.#listComponent, this.#commentsComponent.element, RenderPosition.AFTERBEGIN);
+  }
+
   #renderComments(comments) {
     if (comments.length) {
-      this.#listComponent = new CommentListView({
-        comments,
-        onCommentDeleteButtonClick: this.#commentDeleteButtonClickHandler,
-      });
-
-      render(this.#listComponent, this.#commentsComponent.element, RenderPosition.AFTERBEGIN);
+      this.#renderCommentList(comments);
     }
 
     this.#headingComponent = new CommentsHeadingView({ commentsCount: comments.length });
