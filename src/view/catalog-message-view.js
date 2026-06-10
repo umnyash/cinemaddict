@@ -22,7 +22,7 @@ function createCatalogMessageTemplate(variant) {
   return `<p class="catalog__message title title--size_s">${messages[variant]}</p>`;
 }
 
-export default class CatalogMessage extends AbstractView {
+export default class CatalogMessageView extends AbstractView {
   #variant = null;
 
   constructor({ variant }) {

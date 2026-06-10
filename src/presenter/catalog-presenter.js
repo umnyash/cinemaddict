@@ -5,7 +5,7 @@ import { filterMovies, sortMoviesBy } from '../utils';
 import MovieCardPresenter from './movie-card-presenter.js';
 
 import CatalogListView from '../view/catalog-list-view.js';
-import CatalogMessage, { MessageVariant } from '../view/catalog-message-view.js';
+import CatalogMessageView, { MessageVariant } from '../view/catalog-message-view.js';
 import CatalogShowMoreButtonView from '../view/catalog-show-more-button-view.js';
 import CatalogSortView from '../view/catalog-sort-view.js';
 
@@ -78,7 +78,7 @@ export default class CatalogPresenter {
   }
 
   #renderMessage() {
-    this.#messageComponent = new CatalogMessage({ variant: this.#messageVariant });
+    this.#messageComponent = new CatalogMessageView({ variant: this.#messageVariant });
     render(this.#messageComponent, this.#containerElement);
   }
 
