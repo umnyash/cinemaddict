@@ -34,6 +34,16 @@ export default class MovieCommentsPresenter {
     return this.#commentsModel.loadingStatus;
   }
 
+  destroy() {
+    this.#commentsModel.removeObserver(this.#commentsModelEventHandler);
+    remove(this.#commentsComponent);
+    this.#commentsComponent = null;
+    this.#headingComponent = null;
+    this.#messageComponent = null;
+    this.#listComponent = null;
+    this.#formComponent = null;
+  }
+
   #render() {
     this.#commentsComponent = new MovieCommentsView();
 

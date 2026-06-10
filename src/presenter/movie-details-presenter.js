@@ -15,6 +15,8 @@ export default class MovieDetailsPresenter {
   #detailsComponent = null;
   #actionsComponent = null;
 
+  #commentsPresenter = null;
+
   constructor({ containerElement, moviesModel, commentsModel }) {
     this.#containerElement = containerElement;
     this.#moviesModel = moviesModel;
@@ -35,23 +37,32 @@ export default class MovieDetailsPresenter {
     this.#movieId = movieId;
 
     if (this.#detailsComponent) {
-      this.#clear();
+      this.destroy();
     }
 
     this.#render();
   }
 
+  destroy() {
+    this.#commentsPresenter.destroy();
+    this.#commentsPresenter = null;
+    this.#moviesModel.removeObserver(this.#moviesModelEventHandler);
+    remove(this.#detailsComponent);
+    this.#detailsComponent = null;
+    this.#actionsComponent = null;
+  }
+
   #render() {
     this.#detailsComponent = new MovieDetailsView({ movie: this.#movie });
 
-    const commentsPresenter = new MovieCommentsPresenter({
+    this.#commentsPresenter = new MovieCommentsPresenter({
       containerElement: this.#detailsComponent.element,
       commentsModel: this.#commentsModel,
       movieId: this.#movieId,
     });
 
     this.#renderActions();
-    commentsPresenter.init();
+    this.#commentsPresenter.init();
     render(this.#detailsComponent, this.#containerElement);
   }
 
@@ -75,11 +86,6 @@ export default class MovieDetailsPresenter {
       onWatchedButtonClick: this.#watchedButtonClickHandler,
       onFavoriteButtonClick: this.#favoriteButtonClickHandler,
     });
-  }
-
-  #clear() {
-    remove(this.#detailsComponent);
-    this.#detailsComponent = null;
   }
 
   #watchlistButtonClickHandler = async () => {

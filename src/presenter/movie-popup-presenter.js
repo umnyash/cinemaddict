@@ -52,6 +52,7 @@ export default class MoviePopupPresenter {
     document.removeEventListener('keydown', this.#documentKeyDownHandler);
     await this.#popupComponent.close();
     remove(this.#popupComponent);
+    this.#moviePresenter.destroy();
 
     this.#popupComponent = null;
     this.#popupInnerComponent = null;
