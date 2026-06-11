@@ -1,10 +1,5 @@
 import { Observable } from '../framework';
 import { EventType, RequestStatus } from '../constants.js';
-import { deleteArrayItemById } from '../utils';
-
-const mockAuthor = {
-  name: 'Rusik',
-};
 
 export default class CommentsModel extends Observable {
   #apiService = null;
@@ -25,29 +20,41 @@ export default class CommentsModel extends Observable {
     return this.#loadingStatus;
   }
 
-  createComment(movieId, commentData) {
-    const newComment = {
-      id: crypto.randomUUID(),
-      date: new Date().toISOString(),
-      author: mockAuthor,
-      ...commentData,
-    };
+  async createComment(movieId, commentData) {
+    try {
+      const comments = await this.#apiService.createComment(movieId, commentData);
 
-    this.#comments.push(newComment);
+      if (this.#movieId === movieId) {
+        this.#loadingStatus = RequestStatus.SUCCESS;
+        this.#comments = comments;
+      }
 
-    this._notify(EventType.COMMENT_CREATE, {
-      movieId,
-      comments: this.#comments,
-    });
+      this._notify(EventType.COMMENT_CREATE, { movieId, comments });
+    } catch {
+      throw new Error('Can\'t create comment');
+    }
   }
 
-  deleteComment(movieId, commentId) {
-    deleteArrayItemById(this.#comments, commentId);
+  async deleteComment(movieId, commentId) {
+    const commentIndex = this.#comments.findIndex(({ id }) => id === commentId);
 
-    this._notify(EventType.COMMENT_DELETE, {
-      movieId,
-      comments: this.#comments,
-    });
+    if (commentIndex === -1) {
+      throw new Error(`Can't delete unexisting event (id: ${commentId})`);
+    }
+
+    try {
+      const comments = [...this.#comments];
+      await this.#apiService.deleteComment(commentId);
+      comments.splice(commentIndex, 1);
+
+      if (this.#movieId === movieId) {
+        this.#comments = comments;
+      }
+
+      this._notify(EventType.COMMENT_DELETE, { movieId, comments });
+    } catch {
+      throw new Error(`Can't delete comment (id: ${commentId})`);
+    }
   }
 
   async init(movieId) {

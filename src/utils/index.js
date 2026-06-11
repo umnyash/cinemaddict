@@ -5,7 +5,6 @@ export {
   getDeclension,
   isEnterEvent,
   isEscapeEvent,
-  deleteArrayItemById,
   updateArrayItemById,
 } from './common.js';
 
