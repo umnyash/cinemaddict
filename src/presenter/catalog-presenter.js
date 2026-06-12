@@ -54,22 +54,22 @@ export default class CatalogPresenter {
 
   get #messageVariant() {
     if (this.#moviesLoadingStatus === RequestStatus.PENDING) {
-      return MessageVariant.Loading;
+      return MessageVariant.LOADING;
     }
 
     if (this.#moviesLoadingStatus === RequestStatus.ERROR) {
-      return MessageVariant.LoadFailed;
+      return MessageVariant.LOAD_FAILED;
     }
 
     switch (this.#filter.status) {
       case MovieStatus.WATCHLISTED:
-        return MessageVariant.WatchlistEmpty;
+        return MessageVariant.WATCHLIST_EMPTY;
       case MovieStatus.WATCHED:
-        return MessageVariant.HistoryEmpty;
+        return MessageVariant.HISTORY_EMPTY;
       case MovieStatus.FAVORITED:
-        return MessageVariant.FavoritesEmpty;
+        return MessageVariant.FAVORITES_EMPTY;
       default:
-        return MessageVariant.CatalogEmpty;
+        return MessageVariant.CATALOG_EMPTY;
     }
   }
 
