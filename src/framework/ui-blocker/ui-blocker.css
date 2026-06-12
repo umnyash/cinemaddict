@@ -1,0 +1,44 @@
+.ui-blocker {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: none;
+  place-content: center;
+  background-color: rgb(18, 18, 19, 0.3);
+  cursor: wait;
+}
+
+.ui-blocker::before {
+  content: "";
+  width: 65px;
+  height: 65px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 6px solid #ffe800;
+  animation: sweep 1s linear alternate infinite, rotate 0.8s linear infinite;
+}
+
+.ui-blocker--on {
+  display: grid;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes sweep {
+  0% {
+    clip-path: polygon(0% 0%, 0% 0%, 0% 0%, 50% 50%, 0% 0%, 0% 0%, 0% 0%);
+  }
+  50% {
+    clip-path: polygon(0% 0%, 0% 100%, 0% 100%, 50% 50%, 100% 0%, 100% 0%, 0% 0%);
+  }
+  100% {
+    clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 50% 50%, 100% 100%, 100% 0%, 0% 0%);
+  }
+}
