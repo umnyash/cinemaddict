@@ -7,7 +7,12 @@ const CommentFormFieldName = {
   TEXT: 'text',
 };
 
-function createCommentFormEmotionsTemplate(currentEmotionId) {
+const emptyComment = {
+  currentEmotionId: null,
+  text: '',
+};
+
+function createCommentFormEmotionsTemplate(currentEmotionId, isDisabled) {
   return (
     `<fieldset class="comment-form__emotions">
       <legend class="visually-hidden">Emotion:</legend>
@@ -20,6 +25,7 @@ function createCommentFormEmotionsTemplate(currentEmotionId) {
             type="radio"
             required
             ${id === currentEmotionId ? 'checked' : ''}
+            ${isDisabled ? 'disabled' : ''}
           >
           <img
             class="checker__label"
@@ -34,31 +40,31 @@ function createCommentFormEmotionsTemplate(currentEmotionId) {
   );
 }
 
-function createCommentFormTextFieldTemplate(text) {
+function createCommentFormTextFieldTemplate(text, isDisabled) {
   return (
     `<label class="comment-form__field text-area">
-      <textarea class="text-area__control" name="${CommentFormFieldName.TEXT}" rows="1" placeholder="Good movie!" required>${text}</textarea>
+      <textarea class="text-area__control" name="${CommentFormFieldName.TEXT}" rows="1" placeholder="Good movie!" required ${isDisabled ? 'disabled' : ''}>${text}</textarea>
       <span class="text-area__label">Select reaction below and write comment here</span>
     </label>`
   );
 }
 
-function createCommentFormTemplate({ currentEmotionId, text }) {
+function createCommentFormTemplate({ currentEmotionId, text, isDisabled }) {
   return (
     `<form class="comment-form" action="https://echo.htmlacademy.ru/courses" method="post">
       <div class="comment-form__emotion-wrapper" aria-hidden="true">
         ${currentEmotionId ? `<img class="comment-form__emotion" src="${emotions[currentEmotionId].iconUrl}" width="55" height="55" alt="">` : ''}
       </div>
-      ${createCommentFormTextFieldTemplate(text)}
-      ${createCommentFormEmotionsTemplate(currentEmotionId)}
+      ${createCommentFormTextFieldTemplate(text, isDisabled)}
+      ${createCommentFormEmotionsTemplate(currentEmotionId, isDisabled)}
     </form>`
   );
 }
 
 export default class CommentForm extends AbstractStatefulView {
-  #emptyState = {
-    currentEmotionId: null,
-    text: '',
+  #initialState = {
+    ...emptyComment,
+    isDisabled: false,
   };
 
   #onCommentFormSubmit = null;
@@ -67,7 +73,7 @@ export default class CommentForm extends AbstractStatefulView {
     super();
     this.#onCommentFormSubmit = onCommentFormSubmit;
 
-    this._updateState(this.#emptyState);
+    this._updateState(this.#initialState);
     this._setHandlers();
   }
 
@@ -81,8 +87,16 @@ export default class CommentForm extends AbstractStatefulView {
     this.element.addEventListener('submit', this.#commentFormSubmitHandler);
   }
 
+  disable() {
+    this._updateElement({ isDisabled: true });
+  }
+
+  enable() {
+    this._updateElement({ isDisabled: false });
+  }
+
   reset() {
-    this._updateElement(this.#emptyState);
+    this._updateElement(this.#initialState);
   }
 
   #restoreEmotionFieldFocus() {

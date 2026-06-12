@@ -125,9 +125,12 @@ export default class MovieCommentsPresenter {
 
   #commentFormSubmitHandler = async (commentData) => {
     try {
+      this.#formComponent.disable();
       await this.#commentsModel.createComment(this.#movieId, commentData);
     } catch {
-      this.#formComponent.shake();
+      this.#formComponent.shake(() => {
+        this.#formComponent.enable();
+      });
     }
   };
 
