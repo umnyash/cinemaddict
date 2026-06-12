@@ -38,6 +38,11 @@ export default class MovieCommentsPresenter {
     return this.#commentsModel.loadingStatus;
   }
 
+  init() {
+    this.#commentsModel.init(this.#movieId);
+    this.#render();
+  }
+
   destroy() {
     this.#commentsModel.removeObserver(this.#commentsModelEventHandler);
     remove(this.#commentsComponent);
@@ -110,11 +115,6 @@ export default class MovieCommentsPresenter {
     this.#headingComponent = null;
     this.#messageComponent = null;
     this.#listComponent = null;
-  }
-
-  init() {
-    this.#commentsModel.init(this.#movieId);
-    this.#render();
   }
 
   #commentDeleteButtonClickHandler = async (commentId) => {

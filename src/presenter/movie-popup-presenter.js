@@ -26,14 +26,6 @@ export default class MoviePopupPresenter {
     return this.#popupComponent !== null;
   }
 
-  #open() {
-    requestAnimationFrame(() => {
-      this.#popupComponent.open();
-    });
-
-    document.addEventListener('keydown', this.#documentKeyDownHandler);
-  }
-
   show(movieId) {
     const isCurrentMovie = this.#moviePresenter?.movieId === movieId;
 
@@ -48,6 +40,14 @@ export default class MoviePopupPresenter {
       this.#render(movieId);
       this.#open();
     }
+  }
+
+  #open() {
+    requestAnimationFrame(() => {
+      this.#popupComponent.open();
+    });
+
+    document.addEventListener('keydown', this.#documentKeyDownHandler);
   }
 
   async #close() {
