@@ -5,6 +5,8 @@ import MovieDetailsPresenter from './movie-details-presenter.js';
 import MoviePopupView from '../view/movie-popup-view.js';
 import PopupInnerView from '../view/popup-inner-view.js';
 
+const MOVIE_ID_SEARCH_PARAM = 'movieId';
+
 export default class MoviePopupPresenter {
   #containerElement = null;
   #moviesModel = null;
@@ -33,6 +35,8 @@ export default class MoviePopupPresenter {
       return;
     }
 
+    this.#setMovieIdInUrl(movieId);
+
     if (this.#isOpen) {
       this.#moviePresenter.init(movieId);
       this.#popupComponent.resetScroll();
@@ -52,6 +56,7 @@ export default class MoviePopupPresenter {
 
   async #close() {
     document.removeEventListener('keydown', this.#documentKeyDownHandler);
+    this.#removeMovieIdFromUrl();
     await this.#popupComponent.close();
     remove(this.#popupComponent);
     this.#moviePresenter.destroy();
@@ -59,6 +64,18 @@ export default class MoviePopupPresenter {
     this.#popupComponent = null;
     this.#popupInnerComponent = null;
     this.#moviePresenter = null;
+  }
+
+  #setMovieIdInUrl(movieId) {
+    const url = new URL(location.href);
+    url.searchParams.set(MOVIE_ID_SEARCH_PARAM, movieId);
+    window.history.replaceState({}, '', url);
+  }
+
+  #removeMovieIdFromUrl() {
+    const url = new URL(location.href);
+    url.searchParams.delete(MOVIE_ID_SEARCH_PARAM);
+    history.replaceState({}, '', url);
   }
 
   #render(movieId) {
