@@ -13,11 +13,13 @@ export default class MoviePopupPresenter {
   #popupComponent = null;
   #popupInnerComponent = null;
   #moviePresenter = null;
+  #uiBlocker = null;
 
-  constructor({ containerElement, moviesModel, commentsModel }) {
+  constructor({ containerElement, moviesModel, commentsModel, uiBlocker }) {
     this.#containerElement = containerElement;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
+    this.#uiBlocker = uiBlocker;
   }
 
   get #isOpen() {
@@ -76,6 +78,7 @@ export default class MoviePopupPresenter {
       containerElement: this.#popupInnerComponent.element,
       moviesModel: this.#moviesModel,
       commentsModel: this.#commentsModel,
+      uiBlocker: this.#uiBlocker,
     });
 
     this.#moviePresenter.init(movieId);

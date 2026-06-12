@@ -12,15 +12,17 @@ export default class TopRatedMoviesPresenter {
   #containerElement = null;
   #moviesModel = null;
   #moviePopupPresenter = null;
+  #uiBlocker = null;
 
   #movies = [];
   #sectionComponent = null;
   #movieCardPresenters = new Map();
 
-  constructor({ containerElement, moviesModel, moviePopupPresenter }) {
+  constructor({ containerElement, moviesModel, moviePopupPresenter, uiBlocker }) {
     this.#containerElement = containerElement;
     this.#moviesModel = moviesModel;
     this.#moviePopupPresenter = moviePopupPresenter;
+    this.#uiBlocker = uiBlocker;
 
     this.#moviesModel.addObserver(this.#moviesModelEventHandler);
   }
@@ -75,26 +77,38 @@ export default class TopRatedMoviesPresenter {
   };
 
   #movieWatchlistButtonClickHandler = async (movieId) => {
+    this.#uiBlocker.block();
+
     try {
       await this.#moviesModel.toggleWatchlistedStatus(movieId);
     } catch {
       this.#movieCardPresenters.get(movieId).setFailed();
+    } finally {
+      this.#uiBlocker.unblock();
     }
   };
 
   #movieWatchedButtonClickHandler = async (movieId) => {
+    this.#uiBlocker.block();
+
     try {
       await this.#moviesModel.toggleWatchedStatus(movieId);
     } catch {
       this.#movieCardPresenters.get(movieId).setFailed();
+    } finally {
+      this.#uiBlocker.unblock();
     }
   };
 
   #movieFavoriteButtonClickHandler = async (movieId) => {
+    this.#uiBlocker.block();
+
     try {
       await this.#moviesModel.toggleFavoritedStatus(movieId);
     } catch {
       this.#movieCardPresenters.get(movieId).setFailed();
+    } finally {
+      this.#uiBlocker.unblock();
     }
   };
 

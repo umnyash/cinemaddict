@@ -12,6 +12,7 @@ export default class MovieCommentsPresenter {
   #containerElement = null;
   #commentsModel = null;
   #movieId = null;
+  #uiBlocker = null;
 
   #commentsComponent = null;
   #headingComponent = null;
@@ -20,10 +21,11 @@ export default class MovieCommentsPresenter {
   #commentComponents = new Map();
   #formComponent = null;
 
-  constructor({ containerElement, commentsModel, movieId }) {
+  constructor({ containerElement, commentsModel, movieId, uiBlocker }) {
     this.#containerElement = containerElement;
     this.#commentsModel = commentsModel;
     this.#movieId = movieId;
+    this.#uiBlocker = uiBlocker;
 
     this.#commentsModel.addObserver(this.#commentsModelEventHandler);
   }
@@ -116,14 +118,20 @@ export default class MovieCommentsPresenter {
   }
 
   #commentDeleteButtonClickHandler = async (commentId) => {
+    this.#uiBlocker.block();
+
     try {
       await this.#commentsModel.deleteComment(this.#movieId, commentId);
     } catch {
       this.#commentComponents.get(commentId).shake();
+    } finally {
+      this.#uiBlocker.unblock();
     }
   };
 
   #commentFormSubmitHandler = async (commentData) => {
+    this.#uiBlocker.block();
+
     try {
       this.#formComponent.disable();
       await this.#commentsModel.createComment(this.#movieId, commentData);
@@ -131,6 +139,8 @@ export default class MovieCommentsPresenter {
       this.#formComponent.shake(() => {
         this.#formComponent.enable();
       });
+    } finally {
+      this.#uiBlocker.unblock();
     }
   };
 

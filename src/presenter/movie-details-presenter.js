@@ -10,6 +10,7 @@ export default class MovieDetailsPresenter {
   #containerElement = null;
   #moviesModel = null;
   #commentsModel = null;
+  #uiBlocker = null;
 
   #movieId = null;
   #detailsComponent = null;
@@ -17,10 +18,11 @@ export default class MovieDetailsPresenter {
 
   #commentsPresenter = null;
 
-  constructor({ containerElement, moviesModel, commentsModel }) {
+  constructor({ containerElement, moviesModel, commentsModel, uiBlocker }) {
     this.#containerElement = containerElement;
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
+    this.#uiBlocker = uiBlocker;
 
     this.#moviesModel.addObserver(this.#moviesModelEventHandler);
   }
@@ -59,6 +61,7 @@ export default class MovieDetailsPresenter {
       containerElement: this.#detailsComponent.element,
       commentsModel: this.#commentsModel,
       movieId: this.#movieId,
+      uiBlocker: this.#uiBlocker,
     });
 
     this.#renderActions();
@@ -89,26 +92,38 @@ export default class MovieDetailsPresenter {
   }
 
   #watchlistButtonClickHandler = async () => {
+    this.#uiBlocker.block();
+
     try {
       await this.#moviesModel.toggleWatchlistedStatus(this.#movieId);
     } catch {
       this.#actionsComponent.shake();
+    } finally {
+      this.#uiBlocker.unblock();
     }
   };
 
   #watchedButtonClickHandler = async () => {
+    this.#uiBlocker.block();
+
     try {
       await this.#moviesModel.toggleWatchedStatus(this.#movieId);
     } catch {
       this.#actionsComponent.shake();
+    } finally {
+      this.#uiBlocker.unblock();
     }
   };
 
   #favoriteButtonClickHandler = async () => {
+    this.#uiBlocker.block();
+
     try {
       await this.#moviesModel.toggleFavoritedStatus(this.#movieId);
     } catch {
       this.#actionsComponent.shake();
+    } finally {
+      this.#uiBlocker.unblock();
     }
   };
 

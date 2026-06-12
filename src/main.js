@@ -1,3 +1,4 @@
+import { UiBlocker } from './framework/index.js';
 import CommentsApiService from './services/comments-api-service.js';
 import MoviesApiService from './services/movies-api-service.js';
 
@@ -21,6 +22,11 @@ const siteFooterContainerElement = document.body.querySelector('.site-footer__co
 const catalogContainerElement = document.body.querySelector('.catalog__container');
 const catalogFilterContainerElement = catalogContainerElement.querySelector('.catalog__filter-wrapper');
 const movieSectionsContainerElement = document.body.querySelector('.page__sections');
+
+const uiBlocker = new UiBlocker({
+  delay: 350,
+  minDuration: 1000,
+});
 
 const moviesModel = new MoviesModel({
   apiService: new MoviesApiService(END_POINT, AUTHORIZATION),
@@ -47,6 +53,7 @@ const moviePopupPresenter = new MoviePopupPresenter({
   containerElement: document.body,
   moviesModel,
   commentsModel,
+  uiBlocker,
 });
 
 const catalogPresenter = new CatalogPresenter({
@@ -54,6 +61,7 @@ const catalogPresenter = new CatalogPresenter({
   filterModel: catalogFilterModel,
   moviesModel,
   moviePopupPresenter,
+  uiBlocker,
 });
 
 const catalogFilterPresenter = new CatalogFilterPresenter({
@@ -66,12 +74,14 @@ new TopRatedMoviesPresenter({
   containerElement: movieSectionsContainerElement,
   moviesModel,
   moviePopupPresenter,
+  uiBlocker,
 });
 
 new MostCommentedMoviesPresenter({
   containerElement: movieSectionsContainerElement,
   moviesModel,
   moviePopupPresenter,
+  uiBlocker,
 });
 
 new MoviesCountPresenter({
