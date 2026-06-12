@@ -17,6 +17,7 @@ export default class MovieCommentsPresenter {
   #headingComponent = null;
   #messageComponent = null;
   #listComponent = null;
+  #commentComponents = new Map();
   #formComponent = null;
 
   constructor({ containerElement, commentsModel, movieId }) {
@@ -76,6 +77,7 @@ export default class MovieCommentsPresenter {
         onDeleteButtonClick: this.#commentDeleteButtonClickHandler,
       });
 
+      this.#commentComponents.set(comment.id, commentComponent);
       render(commentComponent, this.#listComponent.element);
     });
 
@@ -102,6 +104,7 @@ export default class MovieCommentsPresenter {
     remove(this.#headingComponent);
     remove(this.#messageComponent);
     remove(this.#listComponent);
+    this.#commentComponents.clear();
     this.#headingComponent = null;
     this.#messageComponent = null;
     this.#listComponent = null;
@@ -112,12 +115,20 @@ export default class MovieCommentsPresenter {
     this.#render();
   }
 
-  #commentDeleteButtonClickHandler = (commentId) => {
-    this.#commentsModel.deleteComment(this.#movieId, commentId);
+  #commentDeleteButtonClickHandler = async (commentId) => {
+    try {
+      await this.#commentsModel.deleteComment(this.#movieId, commentId);
+    } catch {
+      this.#commentComponents.get(commentId).shake();
+    }
   };
 
-  #commentFormSubmitHandler = (commentData) => {
-    this.#commentsModel.createComment(this.#movieId, commentData);
+  #commentFormSubmitHandler = async (commentData) => {
+    try {
+      await this.#commentsModel.createComment(this.#movieId, commentData);
+    } catch {
+      this.#formComponent.shake();
+    }
   };
 
   #commentsModelEventHandler = (eventType, { movieId, comments }) => {
