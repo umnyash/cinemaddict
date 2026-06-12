@@ -5,6 +5,7 @@ import MovieCommentsView from '../view/movie-comments-view.js';
 import CommentsHeadingView from '../view/comments-heading-view.js';
 import CommentsMessageView, { MessageVariant } from '../view/comments-message-view.js';
 import CommentListView from '../view/comment-list-view.js';
+import CommentView from '../view/comment-view.js';
 import CommentFormView from '../view/comment-form-view.js';
 
 export default class MovieCommentsPresenter {
@@ -67,9 +68,15 @@ export default class MovieCommentsPresenter {
   }
 
   #renderCommentList(comments) {
-    this.#listComponent = new CommentListView({
-      comments,
-      onCommentDeleteButtonClick: this.#commentDeleteButtonClickHandler,
+    this.#listComponent = new CommentListView();
+
+    comments.forEach((comment) => {
+      const commentComponent = new CommentView({
+        comment,
+        onDeleteButtonClick: this.#commentDeleteButtonClickHandler,
+      });
+
+      render(commentComponent, this.#listComponent.element);
     });
 
     render(this.#listComponent, this.#commentsComponent.element, RenderPosition.AFTERBEGIN);
