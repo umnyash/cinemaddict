@@ -14,8 +14,8 @@ const messages = {
   [MessageVariant.LOAD_FAILED]: 'We couldn’t load movies. Please try again later',
   [MessageVariant.CATALOG_EMPTY]: 'There are no movies available yet',
   [MessageVariant.WATCHLIST_EMPTY]: 'Your watchlist is empty',
-  [MessageVariant.HISTORY_EMPTY]: 'You haven’t watched any movies yet',
-  [MessageVariant.FAVORITES_EMPTY]: 'You don’t have any favorite movies yet',
+  [MessageVariant.HISTORY_EMPTY]: 'Your history is empty',
+  [MessageVariant.FAVORITES_EMPTY]: 'Your favorites is empty',
 };
 
 function createCatalogMessageTemplate(variant) {
