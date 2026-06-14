@@ -1,4 +1,5 @@
 import { render, remove } from '../framework';
+import { EventType, RequestStatus } from '../constants.js';
 import { isEscapeEvent } from '../utils';
 
 import MovieDetailsPresenter from './movie-details-presenter.js';
@@ -22,6 +23,8 @@ export default class MoviePopupPresenter {
     this.#moviesModel = moviesModel;
     this.#commentsModel = commentsModel;
     this.#uiBlocker = uiBlocker;
+
+    this.#moviesModel.addObserver(this.#moviesModelEventHandler);
   }
 
   get #isOpen() {
@@ -109,6 +112,16 @@ export default class MoviePopupPresenter {
     if (isEscapeEvent(evt)) {
       evt.preventDefault();
       this.#close();
+    }
+  };
+
+  #moviesModelEventHandler = (eventType) => {
+    if (eventType === EventType.MOVIES_LOAD && this.#moviesModel.loadingStatus === RequestStatus.SUCCESS) {
+      const movieId = new URLSearchParams(location.search).get(MOVIE_ID_SEARCH_PARAM);
+
+      if (movieId) {
+        this.show(movieId);
+      }
     }
   };
 }

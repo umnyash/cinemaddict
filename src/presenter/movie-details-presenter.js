@@ -5,6 +5,7 @@ import MovieCommentsPresenter from './movie-comments-presenter.js';
 
 import MovieDetailsView from '../view/movie-details-view.js';
 import MovieActionsView from '../view/movie-actions-view.js';
+import MovieNotFoundView from '../view/movie-not-found-view.js';
 
 export default class MovieDetailsPresenter {
   #containerElement = null;
@@ -15,6 +16,7 @@ export default class MovieDetailsPresenter {
   #movieId = null;
   #detailsComponent = null;
   #actionsComponent = null;
+  #notFoundComponent = null;
 
   #commentsPresenter = null;
 
@@ -38,7 +40,7 @@ export default class MovieDetailsPresenter {
   init(movieId) {
     this.#movieId = movieId;
 
-    if (this.#detailsComponent) {
+    if (this.#detailsComponent || this.#notFoundComponent) {
       this.destroy();
     }
 
@@ -46,15 +48,23 @@ export default class MovieDetailsPresenter {
   }
 
   destroy() {
-    this.#commentsPresenter.destroy();
+    this.#commentsPresenter?.destroy();
     this.#commentsPresenter = null;
     this.#moviesModel.removeObserver(this.#moviesModelEventHandler);
     remove(this.#detailsComponent);
+    remove(this.#notFoundComponent);
     this.#detailsComponent = null;
     this.#actionsComponent = null;
+    this.#notFoundComponent = null;
   }
 
   #render() {
+    if (!this.#movie) {
+      this.#notFoundComponent = new MovieNotFoundView();
+      render(this.#notFoundComponent, this.#containerElement);
+      return;
+    }
+
     this.#detailsComponent = new MovieDetailsView({ movie: this.#movie });
 
     this.#commentsPresenter = new MovieCommentsPresenter({
