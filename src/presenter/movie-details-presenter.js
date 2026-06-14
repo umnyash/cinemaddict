@@ -127,19 +127,12 @@ export default class MovieDetailsPresenter {
     }
   };
 
-  #moviesModelEventHandler = (eventType, updatedMovie) => {
-    const isCurrentMovie = this.#movieId === updatedMovie.id;
-
-    if (!isCurrentMovie) {
-      return;
-    }
-
-    switch (eventType) {
-      case EventType.MOVIE_WATCHLISTED_TOGGLE:
-      case EventType.MOVIE_WATCHED_TOGGLE:
-      case EventType.MOVIE_FAVORITED_TOGGLE:
-        this.#rerenderActions();
-        break;
+  #moviesModelEventHandler = (eventType, data) => {
+    if ((eventType === EventType.MOVIE_WATCHLISTED_TOGGLE ||
+      eventType === EventType.MOVIE_WATCHED_TOGGLE ||
+      eventType === EventType.MOVIE_FAVORITED_TOGGLE) &&
+      this.#movieId === data.id) {
+      this.#rerenderActions();
     }
   };
 }
